@@ -15,9 +15,7 @@ use App\Http\Controllers\SiteviewController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
 
 Route::get('/dashboard', function () {
     return view('adminpages.dashboard');
