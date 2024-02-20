@@ -7,20 +7,35 @@
         <div class="row justify-content-between">
             <div class="col-lg-7">
                 <div class="intro-excerpt">
+                    @if (!empty($heroData->hero_heading))
                     <h1>{{ $heroData->hero_heading }}</h1>
-                    <p class="mb-4">{{  $heroData->hero_paragraph }}</p>
+                    @else
+                        No  heading
+                    @endif
+                   
+                    @if (!empty($heroData->hero_paragraph ))
+                    <p class="mb-4">{{ $heroData->hero_paragraph }}</p>
+                    @else
+                        No  paragraph
+                    @endif
+                    
                     <p><a href="" class="btn btn-secondary me-2">Shop now</a><a href="" class="btn btn-white-outline">Explore</a></p>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="hero-img-wrap">
+                    @if (!empty($heroData->hero_image ))
                     <img src="{{ asset('clientside/images/'.$heroData->hero_image) }}" class="img-fluid" width="90%">
+                    @else
+                        No  Image
+                    @endif
+         
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- End Hero Section --->
+<!-- End Hero Section -->
 
 
     <!-- Start Product Section -->
@@ -30,17 +45,17 @@
 
                 <!-- Start Column 1 -->
                 <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-                    <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-                    <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
+                    <h2 class="mb-4 section-title">Embark on literary journeys crafted with excellent narratives.</h2>
+                    <p class="mb-4">Lost in the library's embrace, she found solace among the books. Each spine a doorway to a new world, each page a whispered invitation to adventure. In that quiet sanctuary, she discovered the timeless magic of stories. </p>
                     <p><a href="{{ route('shop') }}" class="btn">Explore</a></p>
-                </div> 
+                </div>
                 <!-- End Column 1 -->
 
                 <!-- Start Column 2 -->
                 @foreach($items as $item)
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <a class="product-item" href="{{ route('cart') }}">
-                        <img src="{{ asset($item->image)}}" class="img-fluid product-thumbnail">
+                    <a class="product-item" href="{{ route('cart',['id']) }}">
+                        <img src="{{ asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
                         <h3 class="product-title">{{$item->name}}</h3>
                         <strong class="product-price">${{$item->price}}</strong>
                         <span class="icon-cross">
@@ -50,6 +65,9 @@
                 </div> 
                 @endforeach
                 <!-- End Column 2 -->
+
+
+
 
             </div>
         </div>
@@ -62,13 +80,13 @@
             <div class="row justify-content-between">
                 <div class="col-lg-6">
                     <h2 class="section-title">Why Choose Us</h2>
-                    <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+                    <p>Choose us for your literary journey because we believe in the power of stories to inspire, to transform, and to connect. Our curated collection offers a diverse tapestry of narratives, inviting you to explore new worlds, encounter fascinating characters, and experience the thrill of discovery with every turn of the page. With our passion for books and commitment to quality, we strive to enrich your reading experience and accompany you on your literary adventures.</p>
 
                     <div class="row my-5">
                         <div class="col-6 col-md-6">
                             <div class="feature">
                                 <div class="icon">
-                                    <img src="images/truck.svg" alt="Image" class="imf-fluid">
+                                    <img src="{{asset('clientside/images/truck.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
                                 <h3>Fast &amp; Free Shipping</h3>
                                 <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
@@ -78,7 +96,7 @@
                         <div class="col-6 col-md-6">
                             <div class="feature">
                                 <div class="icon">
-                                    <img src="images/bag.svg" alt="Image" class="imf-fluid">
+                                    <img src="{{asset('clientside/images/bag.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
                                 <h3>Easy to Shop</h3>
                                 <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
@@ -88,7 +106,7 @@
                         <div class="col-6 col-md-6">
                             <div class="feature">
                                 <div class="icon">
-                                    <img src="images/support.svg" alt="Image" class="imf-fluid">
+                                    <img src="{{asset('clientside/images/support.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
                                 <h3>24/7 Support</h3>
                                 <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
@@ -98,7 +116,7 @@
                         <div class="col-6 col-md-6">
                             <div class="feature">
                                 <div class="icon">
-                                    <img src="images/return.svg" alt="Image" class="imf-fluid">
+                                    <img src="{{asset('clientside/images/return.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
                                 <h3>Hassle Free Returns</h3>
                                 <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
@@ -131,23 +149,25 @@
                     </div>
                 </div>
                 <div class="col-lg-5 ps-lg-5">
-                    <h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-                    <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada</p>
-
+                    <h2 class="section-title mb-4">Echoes of Enchantment: Journeys Await</h2>
+                    <p>Welcome to BookWeb, where every page holds a new adventure and every story whispers secrets waiting to be discovered. Immerse yourself in a world of literary wonders, where the written word becomes a gateway to endless possibilities. From classics to contemporary masterpieces, our curated collection invites you to explore, escape, and embrace storytelling's magic. Let our books be your companions on the journey of imagination, enlightenment, and discovery. Embark on a reading experience like no other. Welcome to a world where stories come alive. Welcome to BookWeb.</p>
+                
                     <ul class="list-unstyled custom-list my-4">
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
+                        <li>Discover masterpieces old and new</li>
+                        <li>Escape to new worlds with us</li>
+                        <li>Immerse in storytelling's magic</li>
+                        <li>Experience discovery with every page</li>
                     </ul>
-                    <p><a herf="#" class="btn">Explore</a></p>
+                    <p><a href="#" class="btn">Explore</a></p>
                 </div>
+                
+                
             </div>
         </div>
     </div>
     <!-- End We Help Section -->
 
-    <!-- Start Popular Product -->
+    {{-- <!-- Start Popular Product -->
     <div class="popular-product">
         <div class="container">
             <div class="row">
@@ -194,11 +214,11 @@
             </div>
         </div>
     </div>
-    <!-- End Popular Product -->
+    <!-- End Popular Product --> --}}
 
    
 
-    <!-- Start Blog Section -->
+    {{-- <!-- Start Blog Section -->
     <div class="blog-section">
         <div class="container">
             <div class="row mb-5">
@@ -251,5 +271,5 @@
             </div>
         </div>
     </div>
-    <!-- End Blog Section -->	
+    <!-- End Blog Section -->	 --}}
     @stop

@@ -29,7 +29,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @if(empty($items))
+                    @if(!empty($items))
                     @foreach($items as $item)
                     <tr>
                       <td><img src="{{'book_images/'.$item->image}}" alt="image" /></td>
@@ -43,7 +43,7 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="#">View</a>
-                                <a class="dropdown-item" href="#">Edit</a>
+                                <a class="dropdown-item" href="{{ route('edititem',['id'=>$item->id])}}">Edit</a>
                                 <form action="{{route('deleteitem',['id'=>$item->id])}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                     @csrf
                                     @method('DELETE')

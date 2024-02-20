@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesSettingController;
-use App\Http\Controllers\SiteviewController;
+use App\Http\Controllers\SiteViewController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +14,6 @@ use App\Http\Controllers\SiteviewController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 
 
 Route::get('/dashboard', function () {
@@ -29,26 +28,34 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/indexitem', [PagesSettingController::class, 'indexitem'])->name('indexitem');
-Route::get('/createitem', [PagesSettingController::class, 'createitem'])->name('createitem');
-Route::delete('/deleteitem/{id}', [PagesSettingController::class, 'deleteitem'])->name('deleteitem');
-
-// admin index pages setting controller route
-Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
-// admin update pages setting controller route
-Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
-// admin category pages setting controller route
-Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
-// admin category pages setting controller route
-Route::put('/updatecategory', [PagesSettingController::class, 'updatecategory'])->name('updatecategory');
-// admin category pages setting controller route
-Route::delete('/deletecategory', [PagesSettingController::class, 'deletecategory'])->name('deletecategory');
-
-// index client pages route
+// clientside controller
 Route::get('/', [SiteViewController::class, 'index'])->name('index');
+Route::get('/about', [SiteViewController::class, 'about'])->name('about');
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
-Route::get('/about', [SiteViewController::class, 'about'])->name('about');
-Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
+Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
+Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
+Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 
+ // adminside controller
+Route::middleware('auth')->group(function () {   
+    //homepage setting  route
+    Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
+    Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
+    Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
+    //category routes
+    Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
+    Route::put('/updatecategory/{id}', [PagesSettingController::class, 'updatecategory'])->name('updatecategory');
+    Route::delete('/deletecategory', [PagesSettingController::class, 'deletecategory'])->name('deletecategory');
+    Route::put('/createcategory', [PagesSettingController::class, 'createcategory'])->name('createcategory');
+
+    //item routes
+    Route::get('/indexitem', [PagesSettingController::class, 'indexitem'])->name('indexitem');
+    Route::get('/createitem', [PagesSettingController::class, 'createitem'])->name('createitem');
+    Route::get('/edititem/{id}', [PagesSettingController::class, 'edititem'])->name('edititem');
+    Route::put('/updateitem/{id}', [PagesSettingController::class, 'updateitem'])->name('updateitem');
+    Route::post('/storeitem', [PagesSettingController::class, 'storeitem'])->name('storeitem');
+    Route::delete('/deleteitem/{id}', [PagesSettingController::class, 'deleteitem'])->name('deleteitem');
+
+});

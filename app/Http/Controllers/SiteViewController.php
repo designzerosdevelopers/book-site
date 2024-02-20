@@ -7,7 +7,8 @@ use App\Models\Homepage;
 use App\Models\Item;
 class SiteViewController extends Controller
 {
-    /**
+    
+ /**
      * Display a listing of the resource.
      */
     public function index()
@@ -27,43 +28,35 @@ class SiteViewController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function blog()
     {
-        //
+        return view('clientpages.blog');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function cart()
     {
-        //
+        return view('clientpages.cart');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function checkout()
     {
-        //
+        return view('clientpages.checkout');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function contact()
     {
-        //
+        return view('clientpages.contact');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+
+    public function thankyou()
     {
-        //
+        return view('clientpages.thankyou');
+    }
+
+    public function about()
+    {
+        return view('clientpages.about');
     }
 }

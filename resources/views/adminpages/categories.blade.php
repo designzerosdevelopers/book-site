@@ -30,52 +30,51 @@
                     <p class="card-description"> Modify categories </p>
                     {{-- create category code goes here  --}}
                     <h4 class="card-title">Create a new category</h4>
-                    <form class="forms-sample" action="" method="POST">
+                    <form class="forms-sample" action="{{ route('createcategory') }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Enter category name" name="category_name" aria-label="Enter category name" aria-describedby="basic-addon2">
                             <button class="btn btn-gradient-primary" type="submit">Create</button>
                         </div>
                     </form>
 
-                 
-                    <form class="forms-sample">
-                        @csrf
-                        @method('PUT')
+                
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Category Name</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($categories as $category)
-                                <tr>
-                                    <td>{{ $category['id'] }}</td>
-                                    <td>
-                                        <form action="{{ route('updatecategory') }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="input-group">
-                                                <input type="text" name="category_name" value="{{ $category['category_name'] }}" class="form-control">
-                                            </div>
-                                    </td>
-                                    <td>
-                                        <button type="submit" class="btn  btn-xs btn-gradient-primary ">Update</button>
-                                        </form>
-                                        <form action="{{ route('deletecategory') }}" method="POST" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-xs btn-gradient-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <form action="{{ route('updatecategory', ['id' => $category['id']]) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="input-group">
+                                                    <input type="text" name="category_name" value="{{ $category['category_name'] }}" class="form-control">
+                                                    @error('category_name')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-xs btn-gradient-primary">Update</button>
+                                            </form>
+                                            <form action="{{ route('deletecategory', ['id' => $category['id']]) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="category_id" value="{{ $category['id'] }}"> <!-- Hidden input for category ID -->
+                                                <button type="submit" class="btn btn-xs btn-gradient-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    </form>
                 </div>
             </div>
         </div>
