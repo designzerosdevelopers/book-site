@@ -244,7 +244,7 @@ class PagesSettingController extends Controller
                     'hero_image' => $unique_image, // Save the unique image name in the database
                 ]);
             } else {
-                // Create a new homepage record with only text fields
+                // Create a new homepage record with only text fields .
                 Homepage::create([
                     'hero_heading' => $request->hero_heading,
                     'hero_paragraph' => $request->hero_paragraph,
