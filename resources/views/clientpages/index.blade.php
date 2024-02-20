@@ -37,46 +37,19 @@
                 <!-- End Column 1 -->
 
                 <!-- Start Column 2 -->
+                @foreach($items as $item)
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <a class="product-item" href="{{ route('cart') }}">
-                        <img src="{{ asset('clientside/images/alchemist.jpg')}}" class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Al Chemistr</h3>
-                        <strong class="product-price">$50.00</strong>
-
+                        <img src="{{ asset($item->image)}}" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">{{$item->name}}</h3>
+                        <strong class="product-price">${{$item->price}}</strong>
                         <span class="icon-cross">
                             <img src="{{ asset('clientside/images/cross.svg')}}" class="img-fluid">
                         </span>
                     </a>
                 </div> 
+                @endforeach
                 <!-- End Column 2 -->
-
-                <!-- Start Column 3 -->
-                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <a class="product-item" href="{{ route('cart') }}">
-                        <img src={{ asset('clientside/images/artofwar.png')}} class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Art of war</h3>
-                        <strong class="product-price">$78.00</strong>
-
-                        <span class="icon-cross">
-                            <img src="{{ asset('clientside/images/cross.svg')}}"class="img-fluid">
-                        </span>
-                    </a>
-                </div>
-                <!-- End Column 3 -->
-
-                <!-- Start Column 4 -->
-                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <a class="product-item" href="{{ route('cart') }}">
-                        <img src={{ asset('clientside/images/mockingbird.png')}} class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Mocking bird</h3>
-                        <strong class="product-price">$43.00</strong>
-
-                        <span class="icon-cross">
-                            <img src="{{ asset('clientside/images/cross.svg')}}" class="img-fluid">
-                        </span>
-                    </a>
-                </div>
-                <!-- End Column 4 -->
 
             </div>
         </div>

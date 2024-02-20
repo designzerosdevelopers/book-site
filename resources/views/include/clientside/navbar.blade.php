@@ -8,19 +8,19 @@
 
         <div class="collapse navbar-collapse" id="navbarsFurni">
             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                <li class="nav-item {{ setActive('index') }}">
+                <li class="nav-item {{ request()->routeIs('index') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('index') }}">Home</a>
                 </li>
-                <li class="nav-item {{ setActive('shop') }}">
+                <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
                     <a class="nav-link" href="{{ route('shop') }}">Shop</a>
                 </li>
-                <li class="nav-item {{ setActive('about') }}">
+                <li class="nav-item {{ request()->routeIs('about') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('about') }}">About us</a>
                 </li>
-                <li class="nav-item {{ setActive('blog') }}">
+                <li class="nav-item {{ request()->routeIs('blog') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('blog') }}">Blog</a>
                 </li>
-                <li class="nav-item {{ setActive('contact') }}">
+                <li class="nav-item {{ request()->routeIs('conteact') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contact') }}">Contact us</a>
                 </li>
             </ul>
@@ -33,8 +33,3 @@
     </div>
 </nav>
 
-@php
-function setActive($routeName) {
-    return request()->routeIs($routeName) ? 'active' : '';
-}
-@endphp

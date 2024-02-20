@@ -46,44 +46,9 @@ Route::delete('/deletecategory', [PagesSettingController::class, 'deletecategory
 
 // index client pages route
 Route::get('/', [SiteViewController::class, 'index'])->name('index');
+Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
+Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
+Route::get('/about', [SiteViewController::class, 'about'])->name('about');
+Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
+Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
 
-// about pages route
-Route::get('/about', function () {
-    return view('clientpages.about');
-})->name('about');
-
-
-// shop pages route
-Route::get('/shop', function () {
-    return view('clientpages.shop');
-})->name('shop');
-
-// blog pages route
-Route::get('/blog', function () {
-    return view('clientpages.blog');
-})->name('blog');
-
-// cart pages route
-Route::get('/cart', function () {
-    return view('clientpages.cart');
-})->name('cart');
-
-// checkout pages route
-Route::get('/checkout', function () {
-    return view('clientpages.checkout');
-})->name('checkout');
-
-// contact pages route
-Route::get('/contact', function () {
-    return view('clientpages.contact');
-})->name('contact');
-
-// thankyou pages route
-Route::get('/thankyou', function () {
-    return view('clientpages.thankyou');
-})->name('thankyou');
-
-// thankyou pages route
-Route::get('/homeedit', function () {
-    return view('adminpages.editpages.homeedit');
-})->name('homeedit');

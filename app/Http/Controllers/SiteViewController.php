@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\homepage;
+use App\Models\Homepage;
+use App\Models\Item;
 class SiteViewController extends Controller
 {
     /**
@@ -11,16 +12,19 @@ class SiteViewController extends Controller
      */
     public function index()
     {
+        $latestItems = Item::latest()->take(3)->get();
         $heroData = Homepage::first();
-        return view('clientpages.index', compact('heroData'));
+        return view('clientpages.index', ['heroData'=>$heroData, 'items'=>$latestItems]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function shop()
     {
-        //
+        $Items = Item::get();
+        return view('clientpages.shop', ['allitems' => $Items]);
+
     }
 
     /**
