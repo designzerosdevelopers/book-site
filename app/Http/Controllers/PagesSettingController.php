@@ -27,9 +27,9 @@ class PagesSettingController extends Controller
     public function createitem()
     {
         $categories = Categories::get();
- 
+
         // Pass the data to the view
-        return view('adminpages.item.create', compact('categories')) ;
+        return view('adminpages.item.create', ['categories' => $categories]) ;
     }
 
 
