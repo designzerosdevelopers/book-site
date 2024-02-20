@@ -2,7 +2,7 @@
 
 @section('content')
 
-		<!-- Start Hero Section b -->
+		<!-- bStart Hero Section b -->
 			<div class="hero">
 				<div class="container">
 					<div class="row justify-content-between">
