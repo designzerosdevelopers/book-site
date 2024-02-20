@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<!-- End Hero Section -->
+<!-- End Hero Section --->
 
 
     <!-- Start Product Section -->
