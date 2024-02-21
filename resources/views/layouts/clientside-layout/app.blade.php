@@ -1,10 +1,3 @@
-<!-- /*
-* Bootstrap 5
-* Template Name: Furni
-* Template Author: Untree.co
-* Template URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/ -->
 <!doctype html>
 <html lang="en">
 @include('include.clientside.head')
@@ -21,9 +14,10 @@
 		<!-- End Footer Section -->	
 
 
-		<script src="js/bootstrap.bundle.min.js"></script>
-		<script src="js/tiny-slider.js"></script>
-		<script src="js/custom.js"></script>
+		<script src="{{asset('clientside/js/bootstrap.bundle.min.js')}}"></script>
+		<script src="{{asset('clientside/js/tiny-slider.js')}}"></script>
+		<script src="{{asset('clientside/js/custom.js')}}"></script>
+		<script src="{{asset('clientside/js/checkout.js')}}"></script>
 	</body>
 
 </html>

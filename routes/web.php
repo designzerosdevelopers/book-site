@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesSettingController;
 use App\Http\Controllers\SiteViewController;
+use App\Http\Controllers\StripeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,6 +16,8 @@ use App\Http\Controllers\SiteViewController;
 |
 */
 
+Route::post('/charge', [StripeController::class, 'charge'])->name('charge');
+Route::get('/checkout/cancel',  [StripeController::class, 'cancel'])->name('checkout.cancel');
 
 Route::get('/dashboard', function () {
     return view('adminpages.dashboard');
