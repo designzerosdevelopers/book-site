@@ -1,6 +1,8 @@
 (function() {
 	'use strict';
 
+	
+
 	var tinyslider = function() {
 		var el = document.querySelectorAll('.testimonial-slider');
 

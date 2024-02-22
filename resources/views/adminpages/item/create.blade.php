@@ -1,6 +1,6 @@
 @extends('layouts.admin-layout.app')
 @section('content')
-     <!-- partial 1-->
+     <!-- partial -->
         <div class="content-wrapper">
           <div class="page-header">
             <h3 class="page-title"> Home Page Settings </h3>
