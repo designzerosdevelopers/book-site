@@ -2,7 +2,12 @@
 
 @section('content')
 
-		<!-- Start Hero Section -->
+
+
+
+
+
+		 <!-- Start Hero Section -->
 			<div class="hero">
 				<div class="container">
 					<div class="row justify-content-between">
@@ -36,53 +41,32 @@
                         </tr>
                       </thead>
                       <tbody>
+                      
+                        @foreach($cartItems as $item)
                         <tr>
-                          <td class="product-thumbnail">
-                            <img src="images/product-1.png" alt="Image" class="img-fluid">
-                          </td>
-                          <td class="product-name">
-                            <h2 class="h5 text-black">Product 1</h2>
-                          </td>
-                          <td>$49.00</td>
-                          <td>
-                            <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
-                              <div class="input-group-prepend">
-                                <button class="btn btn-outline-black decrease" type="button">&minus;</button>
-                              </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-black increase" type="button">&plus;</button>
-                              </div>
-                            </div>
-        
-                          </td>
-                          <td>$49.00</td>
-                          <td><a href="#" class="btn btn-black btn-sm">X</a></td>
+                            <td class="product-thumbnail">
+                                <img src="{{ asset('book_images/' . $item['item_image']) }}" alt="Image" class="img-fluid" width="30%">
+                            </td>
+                            <td class="product-name">
+                                <h2 class="h5 text-black">{{ $item['item_name'] }}</h2>
+                            </td>
+                            <td id="price">${{ $item['item_price'] }}</td>
+                            <td>
+                                <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-black decrease" type="button" onclick="decreaseValue()">&minus;</button>
+                                    </div>
+                                    <input type="text" class="form-control text-center quantity-amount" value="{{ $item['item_quantity'] }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" id="quantity" onchange="updateTotal()">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-black increase" type="button" onclick="increaseValue()">&plus;</button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="totalprice">${{ $item['item_price'] * $item['item_quantity'] }}</td>
+                            <td><a href="#" class="btn btn-black btn-sm">X</a></td>
                         </tr>
-        
-                        <tr>
-                          <td class="product-thumbnail">
-                            <img src="images/product-2.png" alt="Image" class="img-fluid">
-                          </td>
-                          <td class="product-name">
-                            <h2 class="h5 text-black">Product 2</h2>
-                          </td>
-                          <td>$49.00</td>
-                          <td>
-                            <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
-                              <div class="input-group-prepend">
-                                <button class="btn btn-outline-black decrease" type="button">&minus;</button>
-                              </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-black increase" type="button">&plus;</button>
-                              </div>
-                            </div>
-        
-                          </td>
-                          <td>$49.00</td>
-                          <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                        </tr>
+                    @endforeach
+                    
                       </tbody>
                     </table>
                   </div>
@@ -125,7 +109,7 @@
                           <span class="text-black">Subtotal</span>
                         </div>
                         <div class="col-md-6 text-right">
-                          <strong class="text-black">$230.00</strong>
+                          <strong class="text-black" id="subtotal"></strong>
                         </div>
                       </div>
                       <div class="row mb-5">
@@ -133,7 +117,7 @@
                           <span class="text-black">Total</span>
                         </div>
                         <div class="col-md-6 text-right">
-                          <strong class="text-black">$230.00</strong>
+                          <strong class="text-black" id="total"></strong>
                         </div>
                       </div>
         
@@ -147,13 +131,9 @@
                 </div>
               </div>
             </div>
-          </div>
-@endsection
+          </div> 
+@stop
 
 
-		<script src="js/bootstrap.bundle.min.js"></script>
-		<script src="js/tiny-slider.js"></script>
-		<script src="js/custom.js"></script>
-	</body>
 
-</html>
+

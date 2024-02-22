@@ -54,7 +54,7 @@
                 <!-- Start Column 2 -->
                 @foreach($items as $item)
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <a class="product-item" href="{{ route('cart',['id']) }}">
+                    <a class="product-item" href="{{ route('cart', ['id' => $item->id]) }}">
                         <img src="{{ asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
                         <h3 class="product-title">{{$item->name}}</h3>
                         <strong class="product-price">${{$item->price}}</strong>

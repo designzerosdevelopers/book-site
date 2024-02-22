@@ -241,7 +241,7 @@
 			</div>
 		</div>
 		<!-- End Testimonial Slider --> --}}
-@endsection
+@stop
 
 
 		<script src="js/bootstrap.bundle.min.js"></script>

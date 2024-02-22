@@ -285,7 +285,7 @@
 		      <!-- </form> -->
 		    </div>
 		  </div>
-@endsection
+@stop
 
 
 		<script src="js/bootstrap.bundle.min.js"></script>

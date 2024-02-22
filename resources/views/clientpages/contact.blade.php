@@ -118,7 +118,7 @@
   </div>
 
   <!-- End Contact Form -->
-@endsection
+@stop
 		
 
 		
