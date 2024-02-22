@@ -3,10 +3,6 @@
 @section('content')
 
 
-
-
-
-
 		 <!-- Start Hero Section -->
 			<div class="hero">
 				<div class="container">
@@ -42,7 +38,7 @@
                       </thead>
                       <tbody>
                       
-                        @foreach($cartItems as $item)
+                        {{-- @foreach($cartItems as $item)
                         <tr>
                             <td class="product-thumbnail">
                                 <img src="{{ asset('book_images/' . $item['item_image']) }}" alt="Image" class="img-fluid" width="30%">
@@ -65,7 +61,7 @@
                             <td id="totalprice">${{ $item['item_price'] * $item['item_quantity'] }}</td>
                             <td><a href="#" class="btn btn-black btn-sm">X</a></td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                     
                       </tbody>
                     </table>
