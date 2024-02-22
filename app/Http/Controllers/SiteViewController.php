@@ -35,7 +35,6 @@ class SiteViewController extends Controller
         return view('clientpages.blog');
     }
 
-
     public function cart(Request $request)
     {
         // Retrieve existing cart items from the request
