@@ -50,15 +50,21 @@ class StripeController extends Controller
 
 
     public function paymentsuccess($cartItems)
-    {
-        $successMessage = "Your payment was successful";
-    
-        // Set flash message
-        session()->flash('success_message', $successMessage);
-    
-        // Redirect to the 'thankyou' route with parameters
-        return route('thankyou', ['cartItems' => $cartItems]);
-    }    
+{
+    $successMessage = "Your payment was successful";
+
+    // Set flash message
+    session()->flash('success_message', $successMessage);
+
+    // Remove cart cookie
+    if (isset($_COOKIE['cart'])) {
+        unset($_COOKIE['cart']);
+        setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
+    }
+
+    // Redirect to the 'thankyou' route with parameters
+    return route('thankyou', ['cartItems' => $cartItems]);
+}
 
     public function cancel(Request $request)
     {
