@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class StripeController extends Controller
 {
     public function charge(Request $request){
+        $cartItems  = $request->cartItems;
 
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
@@ -31,22 +32,33 @@ class StripeController extends Controller
                     'price_data' => [
                         'currency' => 'usd',
                         'product_data' => [
-                            'name' => $request->product_name,
+                            'name' => "book",
                         ],
-                        'unit_amount' => intval($request->amount . '00'),
+                        'unit_amount' =>str_replace('.', '', $request->amount),
                     ],
                     'quantity' => 1,
                 ],
             ],
             'customer_email' => $request->email_address,
             'mode' => 'payment',
-            'success_url' => route('thankyou'),
+            'success_url' => $this->paymentsuccess($cartItems),
             'cancel_url' => route('checkout.cancel'),
         ]);
 
         return redirect()->to($session->url);
     }
 
+
+    public function paymentsuccess($cartItems)
+    {
+        $successMessage = "Your payment was successful";
+    
+        // Set flash message
+        session()->flash('success_message', $successMessage);
+    
+        // Redirect to the 'thankyou' route with parameters
+        return route('thankyou', ['cartItems' => $cartItems]);
+    }    
 
     public function cancel(Request $request)
     {

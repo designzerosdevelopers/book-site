@@ -35,45 +35,75 @@ class SiteViewController extends Controller
     {
         return view('clientpages.blog');
     }
-
     public function cart(Request $request)
     {
-
-        // $response = new Response('Content');
-        // $response = $response->withoutCookie('cart'); // Remove 'cart' cookie
-        // // Add more withoutCookie calls for other cookies if needed
+       // Check if the 'id' parameter is present in the request
+        if (!$request->has('id')) {
+            // Retrieve existing cart data from the cookie
+            $cart = json_decode($request->cookie('cart'), true) ?? [];
+            
+            // Return the view with cart data
+            return view('clientpages.cart', [
+                'cartItems' => $cart,
+            ]);
+        }
     
-        // return $response;
         // Retrieve existing cart data from the cookie
         $cart = json_decode($request->cookie('cart'), true) ?? [];
     
         // Find the item
         $item = Item::find($request->id);
     
-        // Add the item to the cart
-        $cart[$item->id] = [
-            'id' => $item->id,
-            'name' => $item->name,
-            'price' => $item->price,
-            // Add other item properties you want to store in the cart
-        ];
-  //  dd($request->cookies->all());
+        // Check if the item is already in the cart
+        if (!isset($cart[$item->id])) {
+            // If the item is not in the cart, add it with a quantity of 1
+            $cart[$item->id] = [
+                'item_id' => $item->id,
+                'item_image' => $item->image,
+                'item_file' => $item->file,
+                'item_name' => $item->name,
+                'item_price' => $item->price,
+                'item_quantity' => 1, // Set quantity to 1 if not set
+                // Add other item properties you want to store in the cart
+            ];
+        }
+    
         // Update the cart data in the cookie
-        return response()
-            ->view('clientpages.cart')
-            ->cookie('cart', json_encode($cart), 60);
+        $response = response()->view('clientpages.cart', [
+            'cartItems' => $cart, // Pass the cart data with the name 'cartItems' to the view
+        ])->cookie('cart', json_encode($cart), 60);
+    
+        return $response;
     }
     
-    
-    
-    
-    
 
-
-    public function checkout()
+    public function removeFromCart($itemId)
     {
-        return view('clientpages.checkout');
+        // Retrieve the current cart items from the cookie
+        $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
+
+        // Remove the item with the given itemId from the cart
+        unset($cartItems[$itemId]);
+
+        // Encode the modified cart items and update the cookie
+        $cookie = cookie('cart', json_encode($cartItems), 60*24*30); // 1 month expiry (60 minutes * 24 hours * 30 days)
+
+        // Redirect back to the cart page
+        return redirect()->route('cart')->withCookie($cookie);
     }
+
+
+    public function checkout(request $request)
+    {
+        // Retrieve the subtotal from the form data
+        $subtotal = $request->input('subtotal');
+
+        // Retrieve the current cart items from the cookie
+        $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
+        
+        return view('clientpages.checkout', ['cartItems' => $cartItems], ['subtotal' => $subtotal]);
+    }
+    
 
     public function contact()
     {
@@ -82,9 +112,10 @@ class SiteViewController extends Controller
 
 
 
-    public function thankyou()
+    public function thankyou(request $request)
     {
-        return view('clientpages.thankyou');
+        $cartItems = $request->cartItems;
+        return view('clientpages.thankyou',['cartItems' => $cartItems]);
     }
 
     public function about()

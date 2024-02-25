@@ -37,7 +37,7 @@
 						</div>
 						</div>
 					</div> --}}
-					<form method="post" action="{{route('charge')}}">
+					<form method="post" action="{{route('charge',['cartItems' => $cartItems ])}}">
 						@csrf
 		      <div class="row">
 		        <div class="col-md-6 mb-5 mb-md-0">
@@ -206,25 +206,23 @@
 		                    <th>Total</th>
 		                  </thead>
 		                  <tbody>
-		                    <tr>
-		                      <td>Top Up T-Shirt <strong class="mx-2">x</strong> 1</td>
-		                      <td>$250.00</td>
-		                    </tr>
-		                    <tr>
-		                      <td>Polo Shirt <strong class="mx-2">x</strong>   1</td>
-		                      <td>$100.00</td>
-		                    </tr>
-		                    <tr>
-		                      <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-		                      <td class="text-black">$350.00</td>
-		                    </tr>
-		                    <tr>
-		                      <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-		                      <td class="text-black font-weight-bold"><strong>$350.00</strong></td>
-							  <input type="hidden" name="amount" value="350">
-							  <input type="hidden" name="product_name" value="Art of war book">
-		                    </tr>
-		                  </tbody>
+							@foreach($cartItems as $item)
+								<tr>
+									<td>{{ $item['item_name'] }} <strong class="mx-2"></strong> </td>
+									<td>${{ number_format($item['item_price'], 2) }}</td>
+								</tr>
+							@endforeach
+							<tr>
+								<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+								<td class="text-black">${{ $subtotal }}</td>
+							</tr>
+							<tr>
+								<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}</strong></td>
+								<input type="hidden" name="amount" value="{{ $subtotal }}">
+							</tr>
+						</tbody>
+						
 		                </table>
 
 		                {{-- <div class="border p-3 mb-3">
