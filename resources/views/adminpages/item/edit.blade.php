@@ -25,7 +25,15 @@
                             <img src="{{ asset( 'book_images/'.$item->image) }}" alt="Item image" style="max-width: 100px; max-height: 200px; margin-left: 15px;">
                         @endif
                     </div>
-              
+                    @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" id="updateSuccessAlert">
+                        {{ session('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                
                 <form class="form-sample" action="{{ route('updateitem',['id' => $item->id]) }}" method="POST" enctype="multipart/form-data">
                   @csrf
                   @method('PUT')
@@ -105,7 +113,7 @@
                           <div class="form-group row">
                               <label class="col-sm-3 col-form-label">Description</label>
                               <div class="col-sm-12">
-                                  <textarea class="form-control" name="description">{{ $item->description }}</textarea>
+                                  <textarea class="form-control" id="editor" name="description">{{ $item->description }}</textarea>
                                   @error('description')
                                       <span class="text-danger">{{ $message }}</span>
                                   @enderror
@@ -120,15 +128,4 @@
             </div>
           </div>
         </div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script>
-  $(document).ready(function(){
-       // Automatically hide the status message alert after 3 seconds
-       $("#updateSuccessAlert").fadeTo(3000, 500).slideUp(500, function(){
-          $("#updateSuccessAlert").slideUp(500);
-      });
-  });
-</script>
 @stop

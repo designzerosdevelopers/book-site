@@ -60,8 +60,8 @@
 
                     <!-- Add the paragraph textarea -->
                     <div class="form-group">
-                      <label for="Paragraph">Paragraph</label>
-                      <textarea class="form-control" id="Paragraph" rows="3" name="hero_paragraph">{{ $homepage->hero_paragraph ?? '' }}</textarea>
+                      <label for="editor">Paragraph</label>
+                      <textarea class="form-control" id="editor" rows="3" name="hero_paragraph">{{ $homepage->hero_paragraph ?? '' }}</textarea>
                     </div>
 
                     @error('hero_paragraph')
@@ -77,15 +77,4 @@
     </div>
 </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script>
-  $(document).ready(function(){
-       // Automatically hide the status message alert after 3 seconds
-       $("#updateSuccessAlert").fadeTo(3000, 500).slideUp(500, function(){
-          $("#updateSuccessAlert").slideUp(500);
-      });
-  });
-</script>
 @stop

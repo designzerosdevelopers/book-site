@@ -47,7 +47,7 @@ class PagesSettingController extends Controller
         ]);
 
         // Generate slug from the name
-        $slug = Str::slug($validatedData['name']); // Generate slug using Laravel's Str class
+        $slug = Str::slug($validatedData['name']); 
 
         // Ensure slug uniqueness
         $uniqueSlug = $slug;
@@ -162,7 +162,7 @@ class PagesSettingController extends Controller
         // Delete the item
         $item->delete();
     
-        return redirect()->route('indexitem')->with('success', 'Item deleted successfully.');
+        return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
 
     public function indexhome()
@@ -181,7 +181,7 @@ class PagesSettingController extends Controller
         $request->validate([
             'hero_heading' => 'required|string',
             'hero_paragraph' => 'required|string',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000', // Allow nullable image field
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
         ]);
 
         // Fetch the existing homepage record
@@ -203,13 +203,13 @@ class PagesSettingController extends Controller
                 $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
 
                 // Move the uploaded file to a temporary location
-                $request->hero_image->storeAs('temp', $unique_image); // Assuming you have a 'temp' folder
+                $request->hero_image->storeAs('temp', $unique_image);
 
                 // Update the homepage record in the database
                 $homepage->update([
                     'hero_heading' => $request->hero_heading,
                     'hero_paragraph' => $request->hero_paragraph,
-                    'hero_image' => $unique_image, // Save the unique image name in the database
+                    'hero_image' => $unique_image,
                 ]);
 
                 // Move the uploaded file to the public images folder with its original extension
@@ -269,7 +269,7 @@ class PagesSettingController extends Controller
     
         // Validate the incoming request
         $request->validate([
-            'category_name' => 'required|string|max:255', // Adjust validation rules as needed
+            'category_name' => 'required|string|max:255',
         ]);
     
         try {
@@ -320,46 +320,4 @@ class PagesSettingController extends Controller
     }
 
 
-    
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
