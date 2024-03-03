@@ -26,9 +26,15 @@
             </ul>
             
             <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                {{-- <li><a class="nav-link" href="#"><img src="{{ asset('clientside/images/user.svg')}}"></a></li> --}}
-                <li><a class="nav-link" href="{{ route('cart') }}"><img src="{{ asset('clientside/images/cart.svg')}}"></a></li>
-            </ul>
+                <li class="cart-item">
+                  <a class="nav-link" href="{{ route('cart') }}">
+                    <img src="{{ asset('clientside/images/cart.svg')}}" alt="Cart">
+                    <span class="cart-count-container" style="opacity:0;">
+                        <span class="cart-count" id="cartItemCount">0</span>
+                    </span>
+                  </a>
+                </li>
+              </ul>
         </div>
     </div>
 </nav>

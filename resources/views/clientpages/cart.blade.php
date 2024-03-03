@@ -1,3 +1,4 @@
+
 @extends('layouts.clientside-layout.app')
 
 @section('content')
@@ -59,8 +60,6 @@
                     </div>
                 </form>
             </div>
-
-            
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row mb-5">
@@ -126,21 +125,6 @@
     </div>
 @stop
 
-<script>
-    window.onload = function() {
-        var totalPrice = 0;
-        // Start a for loop
-        for (var i = 0; i < {{ count($cartItems) }}; i++) {
-            var priceText = document.getElementById("price" + i).innerText;
-            var price = parseFloat(priceText.replace('$', ''));
-            totalPrice += price;
-        }
 
-        // Set subtotal value for an input field with id "subtotal1"
-        document.getElementById("subtotal1").value = totalPrice.toFixed(2);
-        // Set subtotal value for an element with id "subtotal"
-        document.getElementById("subtotal").innerText = "$" + totalPrice.toFixed(2);
-        // Assuming there's an element with id "totalprice" for showing total price
-        document.getElementById("totalprice").innerText = "$" + totalPrice.toFixed(2);
-    }
-</script>
+
+

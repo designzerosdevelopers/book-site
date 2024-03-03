@@ -1,5 +1,6 @@
 @extends('layouts.admin-layout.app')
 @section('content')
+
      <!-- partial -->
         <div class="content-wrapper">
           <div class="page-header">
@@ -17,7 +18,17 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                   <h4 class="card-title">Item Table</h4>
                   <a href="{{route('createitem')}}" class="ml-auto"><button class="btn btn-gradient-primary me-2">Create</button></a>
-              </div>              
+              </div>      
+              @if(session('success'))
+                <div class="alert alert-success" role="alert" id="updateSuccessAlert">
+                    {{ session('success') }}
+                </div>
+              @endif        
+              @if(session('error'))
+              <div class="alert alert-danger" role="alert" id="updateSuccessAlert">
+                  {{ session('error') }}
+              </div>
+            @endif 
                 <table class="table table-striped">
                   <thead>
                     <tr>
@@ -38,19 +49,22 @@
                       <td>{{$item->price}} </td>
                       <td>
                         <div class="dropdown">
-                            <span class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <b>...</span>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">View</a>
-                                <a class="dropdown-item" href="{{ route('edititem',['id'=>$item->id])}}">Edit</a>
-                                <form action="{{route('deleteitem',['id'=>$item->id])}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="dropdown-item">Delete</button>
-                                </form>
-                            </div>
-                        </div>
+                          <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <!-- Dropdown Trigger Content -->
+                              <b>...</b>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <!-- Dropdown Items -->
+                              <a class="dropdown-item" href="#">View</a>
+                              <a class="dropdown-item" href="{{ route('edititem',['id'=>$item->id]) }}">Edit</a>
+                              <form action="{{ route('deleteitem',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="dropdown-item">Delete</button>
+                              </form>
+                          </div>
+                      </div>
+                      
                     </td>
                     </tr>
                     @endforeach
@@ -67,16 +81,5 @@
             </div>
           </div>       
         </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script>
-  $(document).ready(function(){
-       // Automatically hide the status message alert after 3 seconds
-       $("#updateSuccessAlert").fadeTo(3000, 500).slideUp(500, function(){
-          $("#updateSuccessAlert").slideUp(500);
-      });
-  });
-</script>
 @stop
+

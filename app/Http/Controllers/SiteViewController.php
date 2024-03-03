@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Homepage;
 use App\Models\Item;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Http\Response;
 
 class SiteViewController extends Controller
 {
@@ -19,6 +17,12 @@ class SiteViewController extends Controller
         $latestItems = Item::latest()->take(3)->get();
         $heroData = Homepage::first();
         return view('clientpages.index', ['heroData'=>$heroData, 'items'=>$latestItems]);
+    }
+
+    public function productdetails(Request $request)
+    {
+        $product = Item::find($request->id);
+        return view('clientpages/productdetail',['product' => $product]);
     }
 
     /**
@@ -35,6 +39,8 @@ class SiteViewController extends Controller
     {
         return view('clientpages.blog');
     }
+
+    
     public function cart(Request $request)
     {
        // Check if the 'id' parameter is present in the request
@@ -50,11 +56,10 @@ class SiteViewController extends Controller
     
         // Retrieve existing cart data from the cookie
         $cart = json_decode($request->cookie('cart'), true) ?? [];
-    
+         
         // Find the item
         $item = Item::find($request->id);
     
-        // Check if the item is already in the cart
         if (!isset($cart[$item->id])) {
             // If the item is not in the cart, add it with a quantity of 1
             $cart[$item->id] = [
@@ -63,8 +68,7 @@ class SiteViewController extends Controller
                 'item_file' => $item->file,
                 'item_name' => $item->name,
                 'item_price' => $item->price,
-                'item_quantity' => 1, // Set quantity to 1 if not set
-                // Add other item properties you want to store in the cart
+                'item_quantity' => 1,
             ];
         }
     
@@ -121,5 +125,12 @@ class SiteViewController extends Controller
     public function about()
     {
         return view('clientpages.about');
+    }
+
+    public function getCartItemCount(){
+        $dataCookie = request()->cookie('cart');
+        $records = json_decode($dataCookie, true);
+        $recordCount = count($records);
+        return $recordCount;
     }
 }
