@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Homepage;
 use App\Models\Item;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Http\Response;
 
 class SiteViewController extends Controller
 {
@@ -62,7 +60,6 @@ class SiteViewController extends Controller
         // Find the item
         $item = Item::find($request->id);
     
-        // Check if the item is already in the cart
         if (!isset($cart[$item->id])) {
             // If the item is not in the cart, add it with a quantity of 1
             $cart[$item->id] = [
@@ -71,8 +68,7 @@ class SiteViewController extends Controller
                 'item_file' => $item->file,
                 'item_name' => $item->name,
                 'item_price' => $item->price,
-                'item_quantity' => 1, // Set quantity to 1 if not set
-                // Add other item properties you want to store in the cart
+                'item_quantity' => 1,
             ];
         }
     

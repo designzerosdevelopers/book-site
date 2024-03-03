@@ -8,12 +8,7 @@
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('admin/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('admin/vendors/css/vendor.bundle.base.css')}}">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('admin/css/style.css')}}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('admin/images/favicon.ico')}}" />
@@ -39,6 +34,9 @@
       <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+    
+    <script src="{{ asset('admin/ckeditor5/ckeditor.js') }}"></script>
+    <script src="{{asset('admin/js/ck.js')}}"></script>
     <!-- plugins:js -->
     <script src="{{asset('admin/vendors/js/vendor.bundle.base.js')}}"></script>
     <!-- endinject -->
@@ -51,9 +49,14 @@
     <script src="{{asset('admin/js/hoverable-collapse.js')}}"></script>
     <script src="{{asset('admin/js/misc.js')}}"></script>
     <!-- endinject -->
+
     <!-- Custom js for this page -->
     <script src="{{asset('admin/js/dashboard.js')}}"></script>
     <script src="{{asset('admin/js/todolist.js')}}"></script>
     <!-- End custom js for this page -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
   </body>
 </html>
