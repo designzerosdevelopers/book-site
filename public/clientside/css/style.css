@@ -113,7 +113,7 @@ a {
   .hero h1 {
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 29px; 
+    margin-bottom: 29px; }
     @media (min-width: 1400px) {
       .hero h1 {
         font-size: 30px; } }
