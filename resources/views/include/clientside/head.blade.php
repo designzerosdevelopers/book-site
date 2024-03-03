@@ -12,4 +12,28 @@
     <link href="{{asset('clientside/css/tiny-slider.css')}}" rel="stylesheet">
     <link href="{{asset('clientside/css/style.css')}}" rel="stylesheet">
     <title>BookStore |Buy Your Favorite</title>
+    <style>
+.cart-item {
+  position: relative;
+}
+
+.cart-item .cart-count-container {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff6347;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-item .cart-count {
+  color: white;
+  font-size: 12px;
+}
+    </style>
+   
 </head>
