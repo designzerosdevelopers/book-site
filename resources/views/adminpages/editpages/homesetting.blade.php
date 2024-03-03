@@ -78,14 +78,3 @@
 </div>
 </div>
 @stop
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
-    $(document).ready(function(){
-         // Automatically hide the status message alert after 3 seconds
-         $("#updateSuccessAlert").fadeTo(3000, 500).slideUp(500, function(){
-            $("#updateSuccessAlert").slideUp(500);
-        });
-    });
-</script>
