@@ -1,5 +1,6 @@
 @extends('layouts.admin-layout.app')
 @section('content')
+
      <!-- partial -->
         <div class="content-wrapper">
           <div class="page-header">
@@ -48,19 +49,22 @@
                       <td>{{$item->price}} </td>
                       <td>
                         <div class="dropdown">
-                            <span class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <b>...</span>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">View</a>
-                                <a class="dropdown-item" href="{{ route('edititem',['id'=>$item->id])}}">Edit</a>
-                                <form action="{{route('deleteitem',['id'=>$item->id])}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="dropdown-item">Delete</button>
-                                </form>
-                            </div>
-                        </div>
+                          <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <!-- Dropdown Trigger Content -->
+                              <b>...</b>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <!-- Dropdown Items -->
+                              <a class="dropdown-item" href="#">View</a>
+                              <a class="dropdown-item" href="{{ route('edititem',['id'=>$item->id]) }}">Edit</a>
+                              <form action="{{ route('deleteitem',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="dropdown-item">Delete</button>
+                              </form>
+                          </div>
+                      </div>
+                      
                     </td>
                     </tr>
                     @endforeach
@@ -78,3 +82,4 @@
           </div>       
         </div>
 @stop
+
