@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
     Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
     Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
+    
     //category routes
     Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
     Route::put('/updatecategory/{id}', [PagesSettingController::class, 'updatecategory'])->name('updatecategory');

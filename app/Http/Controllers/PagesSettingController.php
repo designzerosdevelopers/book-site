@@ -231,27 +231,24 @@ class PagesSettingController extends Controller
                 $original_image = $request->hero_image->getClientOriginalName();
                 $extension = $request->hero_image->getClientOriginalExtension();
 
-                // Generate a unique file name
                 $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
 
-                // Move the uploaded file to the public images folder with its original extension
                 $request->hero_image->move(public_path('/clientside/images'), $unique_image);
 
-                // Create a new homepage record in the database
                 Homepage::create([
                     'hero_heading' => $request->hero_heading,
                     'hero_paragraph' => $request->hero_paragraph,
-                    'hero_image' => $unique_image, // Save the unique image name in the database
+                    'hero_image' => $unique_image,
                 ]);
             } else {
-                // Create a new homepage record with only text fields .
+               
                 Homepage::create([
                     'hero_heading' => $request->hero_heading,
                     'hero_paragraph' => $request->hero_paragraph,
                 ]);
             }
 
-            // Return a redirect response with a success message
+
             return redirect()->back()->with('status', 'Homepage Created Successfully.');
         }
     }

@@ -59,8 +59,6 @@
                     </div>
                 </form>
             </div>
-
-            
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row mb-5">
