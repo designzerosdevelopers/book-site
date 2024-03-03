@@ -21,6 +21,12 @@ class SiteViewController extends Controller
         return view('clientpages.index', ['heroData'=>$heroData, 'items'=>$latestItems]);
     }
 
+    public function productdetails(Request $request)
+    {
+        $product = Item::find($request->id);
+        return view('clientpages/productdetail',['product' => $product]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -35,6 +41,8 @@ class SiteViewController extends Controller
     {
         return view('clientpages.blog');
     }
+
+    
     public function cart(Request $request)
     {
        // Check if the 'id' parameter is present in the request

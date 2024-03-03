@@ -33,6 +33,7 @@ require __DIR__.'/auth.php';
 
 // clientside controller
 Route::get('/', [SiteViewController::class, 'index'])->name('index');
+Route::get('/product-details', [SiteViewController::class, 'productdetails'])->name('product.details');
 Route::get('/about', [SiteViewController::class, 'about'])->name('about');
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');

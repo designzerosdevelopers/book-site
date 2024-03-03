@@ -1,9 +1,20 @@
-<footer class="footer-section">
+<footer class="footer-section ">
     <div class="container relative">
 
-        <div class="sofa-img">
+        <style>
+            @media only screen and (max-width: 767px) {
+              .sofa-img img {
+                width: 20%;
+                max-width: none;
+                height: auto;
+                float: right;
+              }
+            }
+          </style>
+          
+          <div class="sofa-img mt-5 ">
             <img src="{{asset('clientside/images/download.png')}}" alt="Image" class="img-fluid">
-        </div>
+          </div>
 
         <div class="row">
             <div class="col-lg-8">
