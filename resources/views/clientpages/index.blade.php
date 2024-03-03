@@ -14,7 +14,7 @@
                     @endif
                    
                     @if (!empty($heroData->hero_paragraph ))
-                    <p class="mb-4">{{ $heroData->hero_paragraph }}</p>
+                    <p class="mb-4">{!! $heroData->hero_paragraph !!}</p>
                     @else
                         No  paragraph
                     @endif
