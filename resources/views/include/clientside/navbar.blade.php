@@ -29,9 +29,8 @@
                 <li class="cart-item">
                   <a class="nav-link" href="{{ route('cart') }}">
                     <img src="{{ asset('clientside/images/cart.svg')}}" alt="Cart">
-                    <span class="cart-count-container">
-                        <span class="cart-count" id="recordCount">0</span>
-                    </span>
+                    <span class="cart-count-container" style="opacity:0;">
+                        <span class="cart-count" id="cartItemCount">0</span>
                     </span>
                   </a>
                 </li>
@@ -39,3 +38,4 @@
         </div>
     </div>
 </nav>
+

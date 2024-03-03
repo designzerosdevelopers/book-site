@@ -19,8 +19,8 @@
 
 .cart-item .cart-count-container {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 0px;
+  right: 0px;
   background-color: #ff6347;
   border-radius: 50%;
   width: 20px;
@@ -32,7 +32,7 @@
 
 .cart-item .cart-count {
   color: white;
-  font-size: 12px;
+  font-size: 14px;
 }
     </style>
    

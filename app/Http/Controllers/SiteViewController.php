@@ -56,7 +56,7 @@ class SiteViewController extends Controller
     
         // Retrieve existing cart data from the cookie
         $cart = json_decode($request->cookie('cart'), true) ?? [];
-    
+         
         // Find the item
         $item = Item::find($request->id);
     
@@ -125,5 +125,12 @@ class SiteViewController extends Controller
     public function about()
     {
         return view('clientpages.about');
+    }
+
+    public function getCartItemCount(){
+        $dataCookie = request()->cookie('cart');
+        $records = json_decode($dataCookie, true);
+        $recordCount = count($records);
+        return $recordCount;
     }
 }

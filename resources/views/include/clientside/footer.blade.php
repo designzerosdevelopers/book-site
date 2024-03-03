@@ -109,3 +109,38 @@
 
     </div>
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var cartItemCountElement = document.getElementById('cartItemCount');
+        var cartCountContainer = document.querySelector('.cart-count-container');
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Configure the request
+        xhr.open('GET', '/cartItemCount', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        // Set up a callback function for when the request completes
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Parse the JSON response
+                var response = JSON.parse(xhr.responseText);
+                if (response > 0) {
+                    cartCountContainer.style.opacity = '1';
+
+                    cartItemCountElement.innerHTML = response;
+                }
+            } else {
+                console.error('Request failed with status:', xhr.status);
+            }
+        };
+
+        // Set up a callback function for if the request encounters an error
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+
+        // Send the request
+        xhr.send();
+    });
+</script>

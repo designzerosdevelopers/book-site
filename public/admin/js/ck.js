@@ -8,3 +8,6 @@
           console.error(error);
       });
 
+//cart count update
+
+

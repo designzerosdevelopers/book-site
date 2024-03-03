@@ -42,14 +42,14 @@ Route::get('/remove-from-cart/{itemId}', [SiteViewController::class, 'removeFrom
 Route::post('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
 Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
-
+Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
  // adminside controller
 Route::middleware('auth')->group(function () {   
     //homepage setting  route
     Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
     Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
     Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
-    
+
     //category routes
     Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
     Route::put('/updatecategory/{id}', [PagesSettingController::class, 'updatecategory'])->name('updatecategory');
