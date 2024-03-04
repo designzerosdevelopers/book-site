@@ -36,7 +36,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                  @php
+                                          $totalprice = 0;
+                                  @endphp
+                                
+                                
                                     @foreach($cartItems as $item)
+                                    @php
+                                        $totalprice += $item['item_price'];
+                                    @endphp
+                                   
                                         <tr>
                                             <td class="product-thumbnail">
                                                 <img src="{{ asset('book_images/' . $item['item_image']) }}" alt="Image" class="img-fluid" width="30%">
@@ -95,7 +104,7 @@
                                         <span class="text-black">Subtotal</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black" id="subtotal"></strong>
+                                        <strong class="text-black" id="subtotal">${{$totalprice}}</strong>
                                     </div>
                                 </div>
                                 <div class="row mb-5">
@@ -103,14 +112,14 @@
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black" id="totalprice"></strong>
+                                        <strong class="text-black" id="totalprice">${{$totalprice}}</strong>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <form id="checkoutForm" method="POST" action="{{ route('checkout') }}">
                                             @csrf <!-- CSRF protection -->
-                                            <input type="hidden" name="subtotal" id="subtotal1">
+                                            <input type="hidden" name="subtotal" id="subtotal1" value="{{$totalprice }}">
                                             <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</button>
                                         </form>
                                     </div>
