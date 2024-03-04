@@ -67,8 +67,7 @@ class SiteViewController extends Controller
                 'item_image' => $item->image,
                 'item_file' => $item->file,
                 'item_name' => $item->name,
-                'item_price' => $item->price,
-                'item_quantity' => 1,
+                'item_price' => $item->price
             ];
         }
     
