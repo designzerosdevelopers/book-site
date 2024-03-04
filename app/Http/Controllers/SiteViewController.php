@@ -61,7 +61,6 @@ class SiteViewController extends Controller
         $item = Item::find($request->id);
     
         if (!isset($cart[$item->id])) {
-            // If the item is not in the cart, add it with a quantity of 1
             $cart[$item->id] = [
                 'item_id' => $item->id,
                 'item_image' => $item->image,
@@ -73,7 +72,7 @@ class SiteViewController extends Controller
     
         // Update the cart data in the cookie
         $response = response()->view('clientpages.cart', [
-            'cartItems' => $cart, // Pass the cart data with the name 'cartItems' to the view
+            'cartItems' => $cart,
         ])->cookie('cart', json_encode($cart), 60);
     
         return $response;
@@ -89,7 +88,7 @@ class SiteViewController extends Controller
         unset($cartItems[$itemId]);
 
         // Encode the modified cart items and update the cookie
-        $cookie = cookie('cart', json_encode($cartItems), 60*24*30); // 1 month expiry (60 minutes * 24 hours * 30 days)
+        $cookie = cookie('cart', json_encode($cartItems), 60*24*30);
 
         // Redirect back to the cart page
         return redirect()->route('cart')->withCookie($cookie);

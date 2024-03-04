@@ -203,7 +203,7 @@
 		                <table class="table site-block-order-table mb-5">
 		                  <thead>
 		                    <th>Product</th>
-		                    <th>Total</th>
+		                    <th>Price</th>
 		                  </thead>
 		                  <tbody>
 							@foreach($cartItems as $item)
@@ -214,12 +214,12 @@
 							@endforeach
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-								<td class="text-black">${{ $subtotal }}</td>
+								<td class="text-black">${{ $subtotal}}.00</td>
 							</tr>
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}</strong></td>
-								<input type="hidden" name="amount" value="{{ $subtotal }}">
+								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}.00</strong></td>
+								<input type="hidden" name="amount" value="{{ $subtotal }}.00">
 							</tr>
 						</tbody>
 						
