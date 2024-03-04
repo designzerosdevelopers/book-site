@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('homepage', function (Blueprint $table) {
             $table->id();
             $table->string('hero_heading');
-            $table->string('hero_paragraph');
+            $table->text('hero_paragraph');
             $table->string('hero_image');
             $table->timestamps();
         });
