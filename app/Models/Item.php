@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
-    protected $fillabel = ['name', 'slug','image','file', 'price', 'category', 'description'];
+    protected $fillable = ['name', 'slug','image','file', 'price', 'category', 'description'];
 }

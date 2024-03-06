@@ -8,6 +8,10 @@ use App\Models\Categories;
 use App\Models\Item;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
+
+
 
 class PagesSettingController extends Controller
 {
@@ -316,5 +320,125 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homeedit');
     }
 
+    public function CsvImport()
+    {
+        return view('adminpages.csv');
+    }
+
+   
+    public function CsvSave(Request $request)
+    {
+        // Validate the CSV file
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Adjust the file size limit if necessary
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Retrieve the uploaded CSV file
+        $csvFile = $request->file('csv_file');
+       // Read the CSV file
+        $csvData = array_map('str_getcsv', file($csvFile));
+
+        // Read the CSV file
+        $csvData = array_map('str_getcsv', file($csvFile));
+
+        // Extract header row from CSV
+        $header = array_shift($csvData);
+
+        // Process the CSV data and insert into the database
+        foreach ($csvData as $row) {
+            $itemData = [];
+            foreach ($header as $index => $columnName) {
+                switch ($columnName) {
+                    case 'name':
+                        $itemData['name'] = $row[$index];
+                        break;
+                    case 'price':
+                        $itemData['price'] = $row[$index];
+                        break;
+                    case 'image':
+                        $itemData['image'] = $row[$index];
+                        break;
+                    case 'file':
+                        $itemData['file'] = $row[$index];
+                        break;
+                    case 'description':
+                        $itemData['description'] = $row[$index];
+                        break;
+                        case 'category':
+                            // Fetch category ID based on the given category name
+                            $categoryName = $row[$index];
+                            $categoryId = Categories::where('category_name','=',$categoryName)->firstOrFail()->id;
+                            $itemData['category']=$categoryId;
+                        break;  
+                    }
+            }
+            
+            // Generate slug from name
+            $itemData['slug'] = Str::slug($itemData['name']);
+
+            // Assuming Item is the model name for your database table
+            Item::create($itemData);
+        }
+
+        // Redirect back with a success message
+        return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
+    }
+   
+        public function ExportCsv()
+    {
+        // Fetch all items from the database
+        $items = Item::all();
+
+        // Set CSV file headers
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=items.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        // Define CSV file handle
+        $handle = fopen('php://output', 'w');
+
+        // Get the attribute names dynamically from the model
+        $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
+
+        // Add CSV headers dynamically
+        fputcsv($handle, $attributes);
+
+        // Add data rows
+        foreach ($items as $item) {
+            // Extract values for each attribute
+            $rowData = [];
+          
+            foreach ($attributes as $attribute) {
+                $category = Categories::find($item->category);
+                if ($category) {
+                    $categoryName = $category->category_name;
+                } 
+                if ($attribute == 'category') {
+                    // Assuming $category_name is the name of the category
+                    $rowData[] = $categoryName;
+                }else {
+                    $rowData[] = $item->{$attribute};
+                }            
+
+               
+            }
+            // Write the data row to the CSV file
+            fputcsv($handle, $rowData);
+        }
+
+        // Close file handle
+        fclose($handle);
+
+        // Return CSV file as response
+        return Response::make('', 200, $headers);
+    }
 
 }

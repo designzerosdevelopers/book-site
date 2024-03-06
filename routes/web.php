@@ -56,6 +56,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/deletecategory', [PagesSettingController::class, 'deletecategory'])->name('deletecategory');
     Route::put('/createcategory', [PagesSettingController::class, 'createcategory'])->name('createcategory');
 
+    // csv import export route
+    Route::get('/csv-import', [PagesSettingController::class, 'CsvImport'])->name('csv.import');
+    Route::post('/save-csv', [PagesSettingController::class, 'CsvSave'])->name('csv.save');
+    Route::get('/export-csv', [PagesSettingController::class, 'ExportCsv'])->name('export.csv');
+    
+
     //item routes
     Route::get('/indexitem', [PagesSettingController::class, 'indexitem'])->name('indexitem');
     Route::get('/createitem', [PagesSettingController::class, 'createitem'])->name('createitem');

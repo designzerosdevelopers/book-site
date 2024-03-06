@@ -24,7 +24,6 @@
         <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
           <span class="menu-title">Page Edits</span>
           <i class="menu-arrow"></i>
-          <i class="far fa-edit"></i>
         </a>
         <div class="collapse" id="ui-basic">
           <ul class="nav flex-column sub-menu">
@@ -43,7 +42,13 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ route('indexcategories') }}">
           <span class="menu-title">Categories</span>
-          <i class="fa-light fa-table-list"></i>
+          <i class="fa-light "></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('csv.import') }}">
+          <span class="menu-title">Import & Export CSV </span>
+          <i class="fa-light"></i>
         </a>
       </li>
     </ul>
