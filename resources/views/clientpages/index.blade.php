@@ -7,16 +7,11 @@
         <div class="row justify-content-between">
             <div class="col-lg-7">
                 <div class="intro-excerpt">
-                    @if (!empty($heroData->hero_heading))
-                    <h1>{{ $heroData->hero_heading }}</h1>
+                    @if (!empty(App\Helpers\SiteviewHelper::homepage()))
+                    <h1>{{ App\Helpers\SiteviewHelper::homepage()->hero_heading }}</h1>
+                    <p class="mb-4">{!! App\Helpers\SiteviewHelper::homepage()->hero_paragraph !!}</p>
                     @else
-                        No  heading
-                    @endif
-                   
-                    @if (!empty($heroData->hero_paragraph ))
-                    <p class="mb-4">{!! $heroData->hero_paragraph !!}</p>
-                    @else
-                        No  paragraph
+                        No  Data
                     @endif
                     
                     <p><a href="" class="btn btn-secondary me-2">Shop now</a><a href="" class="btn btn-white-outline">Explore</a></p>
@@ -24,12 +19,12 @@
             </div>
             <div class="col-lg-5">
                 <div class="hero-img-wrap">
-                    @if (!empty($heroData->hero_image ))
-                    <img src="{{ asset('clientside/images/'.$heroData->hero_image) }}" class="img-fluid" width="90%">
+                    @if (!empty(App\Helpers\SiteviewHelper::homepage() ))
+                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="90%">
                     @else
                         No  Image
                     @endif
-         
+        
                 </div>
             </div>
         </div>
