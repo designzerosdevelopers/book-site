@@ -46,7 +46,7 @@
                     </div>
                   </div>
                   <div class="mt-3">
-                    <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">SIGN UP</button>
+                    <button class="btn btn-block btn-gradient-success btn-lg font-weight-medium auth-form-btn">SIGN UP</button>
                   </div>
                   <div class="text-center mt-4 font-weight-light"> Already have an account? <a href="{{route('login')}}" class="text-primary">Login</a>
                   </div>
