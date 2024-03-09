@@ -67,7 +67,7 @@
                         {{ $message }}
                         @enderror
 
-                        <button type="submit" class="btn btn-gradient-primary me-2">Save</button>
+                        <button type="submit" class="btn btn-gradient-success me-2">Save</button>
                     </form>
                 </div>
             </div>

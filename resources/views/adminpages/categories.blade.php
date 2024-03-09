@@ -34,7 +34,7 @@
                         @method('PUT')
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Enter category name" name="category_name" aria-label="Enter category name" aria-describedby="basic-addon2">
-                            <button class="btn btn-gradient-primary" type="submit">Create</button>
+                            <button class="btn btn-gradient-success" type="submit">Create</button>
                         </div>
                     </form>
 

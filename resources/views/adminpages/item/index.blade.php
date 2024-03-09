@@ -17,7 +17,7 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                   <h4 class="card-title">Item Table</h4>
-                  <a href="{{route('createitem')}}" class="ml-auto"><button class="btn btn-gradient-primary me-2">Create</button></a>
+                  <a href="{{route('createitem')}}" class="ml-auto"><button class="btn btn-gradient-success me-2">Create</button></a>
               </div>      
               @if(session('success'))
                 <div class="alert alert-success" role="alert" id="updateSuccessAlert">
