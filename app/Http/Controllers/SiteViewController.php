@@ -15,8 +15,7 @@ class SiteViewController extends Controller
     public function index()
     {
         $latestItems = Item::latest()->take(3)->get();
-        $heroData = Homepage::first();
-        return view('clientpages.index', ['heroData'=>$heroData, 'items'=>$latestItems]);
+        return view('clientpages.index', ['items'=>$latestItems]);
     }
 
     public function productdetails(Request $request)
