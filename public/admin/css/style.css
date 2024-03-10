@@ -8532,7 +8532,7 @@ textarea.form-control-lg {
 
 .text-white, .navbar.navbar-primary .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-secondary .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-success .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-info .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-warning .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-danger .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-light .navbar-menu-wrapper .nav-profile-text p, .navbar.navbar-dark .navbar-menu-wrapper .nav-profile-text p {
   --bs-text-opacity: 1;
-  color: rgba(var(#494949), var(--bs-text-opacity)) !important; }
+  color: rgba(var(--bs-white-rgb), var(--bs-text-opacity)) !important; }
 
 .text-body {
   --bs-text-opacity: 1;
