@@ -390,54 +390,82 @@ class PagesSettingController extends Controller
    
     public function ExportCsv()
     {
-        // Fetch all items from the database
-        $items = Item::all();
+        // // Fetch all items from the database
+        // $items = Item::all();
 
-        // Set CSV file headers
-        $headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=items.csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        );
+        // // Set CSV file headers
+        // $headers = array(
+        //     "Content-type" => "text/csv",
+        //     "Content-Disposition" => "attachment; filename=items.csv",
+        //     "Pragma" => "no-cache",
+        //     "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+        //     "Expires" => "0"
+        // );
 
-        // Define CSV file handle
-        $handle = fopen('php://output', 'w');
+        // // Define CSV file handle
+        // $handle = fopen('php://output', 'w');
 
-        // Get the attribute names dynamically from the model
-        $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
+        // // Get the attribute names dynamically from the model
+        // $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
 
-        // Add CSV headers dynamically
-        fputcsv($handle, $attributes);
+        // // Add CSV headers dynamically
+        // fputcsv($handle, $attributes);
 
-        // Add data rows
-        foreach ($items as $item) {
-            // Extract values for each attribute
-            $rowData = [];
+        // // Add data rows
+        // foreach ($items as $item) {
+        //     // Extract values for each attribute
+        //     $rowData = [];
           
-            foreach ($attributes as $attribute) {
-                $category = Categories::find($item->category);
-                if ($category) {
-                    $categoryName = $category->category_name;
-                } 
-                if ($attribute == 'category') {
-                    // Assuming $category_name is the name of the category
-                    $rowData[] = $categoryName;
-                }else {
-                    $rowData[] = $item->{$attribute};
-                }            
+        //     foreach ($attributes as $attribute) {
+        //         $category = Categories::find($item->category);
+        //         if ($category) {
+        //             $categoryName = $category->category_name;
+        //         } 
+        //         if ($attribute == 'category') {
+        //             // Assuming $category_name is the name of the category
+        //             $rowData[] = $categoryName;
+        //         }else {
+        //             $rowData[] = $item->{$attribute};
+        //         }            
 
                
-            }
-            // Write the data row to the CSV file
-            fputcsv($handle, $rowData);
+        //     }
+        //     // Write the data row to the CSV file
+        //     fputcsv($handle, $rowData);
+        // }
+
+        // // Close file handle
+        // fclose($handle);
+
+        // // Return CSV file as response
+        // return Response::make('', 200, $headers);
+        // Sample multidimensional array data (similar to fetched data from a database)
+        $multiArray = [
+            ['Name', 'Age', 'Country'],
+            ['John', 25, 'USA'],
+            ['Alice', 30, 'Canada'],
+            ['Bob', 28, 'UK']
+        ];
+
+        // Set headers for CSV file download
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="data.csv"',
+        ];
+
+        // Create output stream
+        $output = fopen('php://output', 'w');
+
+        // Write data rows
+        foreach ($multiArray as $row) {
+            fputcsv($output, $row);
         }
 
-        // Close file handle
-        fclose($handle);
+        // Close the output stream
+        fclose($output);
 
-        // Return CSV file as response
+        // Return CSV file as response with appropriate headers
         return Response::make('', 200, $headers);
+
     }
 }
