@@ -433,6 +433,8 @@ class PagesSettingController extends Controller
     
         // Close file handle
         fclose($handle);
+
+        dd($headers);
     
         // Return CSV file as response
         return Response::make('', 200, $headers);
