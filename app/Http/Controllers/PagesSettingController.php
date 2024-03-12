@@ -390,47 +390,53 @@ class PagesSettingController extends Controller
   
     public function exportCsv()
     {
-        // Fetch all items from the database
-        $items = Item::all();
+    // Fetch all items from the database
+$items = Item::all();
         
-        // Set CSV file headers
-        $headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=items.csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        );
-        
-        // Create a file handle for writing
-        $handle = fopen('php://output', 'w');
-        
-        // Get the attribute names dynamically from the model
-        $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
-        
-        // Fetch category names in bulk
-        $categoryIds = $items->pluck('category')->unique()->toArray();
-        $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
-        
-        
-       // Add data rows
-        foreach ($items as $item) {
-            // Initialize an array to hold the data for this row
-            $rowData = [];
+// Set CSV file headers
+$headers = array(
+    "Content-type" => "text/csv",
+    "Content-Disposition" => "attachment; filename=items.csv",
+    "Pragma" => "no-cache",
+    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+    "Expires" => "0"
+);
 
-            // Extract values for each attribute
-            foreach ($attributes as $attribute) {
-                if ($attribute == 'category') {
-                    $categoryName = $categories[$item->category] ?? '';
-                    $rowData[] = $categoryName;
-                } else {
-                    $rowData[] = $item->{$attribute};
-                }
-            }
+// Create a file handle for writing
+$output = fopen('php://output', 'w');
 
-            // Add the row data to the CSV file
-            fputcsv($handle, $rowData);
+// Get the attribute names dynamically from the model
+$attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
+    
+// Fetch category names in bulk
+$categoryIds = $items->pluck('category')->unique()->toArray();
+$categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
+
+// Write data to the CSV file (you can modify this according to your data source)
+// Add data rows
+foreach ($items as $item) {
+    // Initialize an array to hold the data for this row
+    $rowData = [];
+
+    // Extract values for each attribute
+    foreach ($attributes as $attribute) {
+        if ($attribute == 'category') {
+            $categoryName = $categories[$item->category] ?? '';
+            $rowData[] = $categoryName;
+        } else {
+            $rowData[] = $item->{$attribute};
         }
-
     }
+
+    // Add the row data to the CSV file
+    fputcsv($output, $rowData);
+}
+
+// Close the file handle
+fclose($output);
+
+    
+    
+}
+
 }
