@@ -431,10 +431,11 @@ class PagesSettingController extends Controller
             fputcsv($handle, $rowData);
         }
     
+        dd($headers);
         // Close file handle
         fclose($handle);
 
-        dd($headers);
+       
     
         // Return CSV file as response
         return Response::make('', 200, $headers);
