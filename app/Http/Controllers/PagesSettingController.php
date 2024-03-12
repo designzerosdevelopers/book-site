@@ -415,10 +415,12 @@ class PagesSettingController extends Controller
         // Add CSV headers dynamically
         fputcsv($handle, $attributes);
         
-        // Add data rows
+       // Add data rows
         foreach ($items as $item) {
-            // Extract values for each attribute
+            // Initialize an array to hold the data for this row
             $rowData = [];
+
+            // Extract values for each attribute
             foreach ($attributes as $attribute) {
                 if ($attribute == 'category') {
                     $categoryName = $categories[$item->category] ?? '';
@@ -427,16 +429,10 @@ class PagesSettingController extends Controller
                     $rowData[] = $item->{$attribute};
                 }
             }
-            // Write the data row to the CSV file
+
+            // Add the row data to the CSV file
             fputcsv($handle, $rowData);
         }
-        
-        // Close file handle
-        fclose($handle);
-    
-        // Return CSV file as response
-        return response()->make('', 200, $headers);
+
     }
-    
-    
 }
