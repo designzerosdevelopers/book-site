@@ -390,53 +390,30 @@ class PagesSettingController extends Controller
   
     public function exportCsv()
     {
-    // Fetch all items from the database
-$items = Item::all();
+     
+        // Set headers to force download the file
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="exported_data.csv"');
         
-// Set CSV file headers
-$headers = array(
-    "Content-type" => "text/csv",
-    "Content-Disposition" => "attachment; filename=items.csv",
-    "Pragma" => "no-cache",
-    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-    "Expires" => "0"
-);
-
-// Create a file handle for writing
-$output = fopen('php://output', 'w');
-
-// Get the attribute names dynamically from the model
-$attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
-    
-// Fetch category names in bulk
-$categoryIds = $items->pluck('category')->unique()->toArray();
-$categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
-
-// Write data to the CSV file (you can modify this according to your data source)
-// Add data rows
-foreach ($items as $item) {
-    // Initialize an array to hold the data for this row
-    $rowData = [];
-
-    // Extract values for each attribute
-    foreach ($attributes as $attribute) {
-        if ($attribute == 'category') {
-            $categoryName = $categories[$item->category] ?? '';
-            $rowData[] = $categoryName;
-        } else {
-            $rowData[] = $item->{$attribute};
+        // Create a file handle for writing
+        $output = fopen('php://output', 'w');
+        
+        // Write data to the CSV file (you can modify this according to your data source)
+        $data = array(
+            array('Name', 'Email', 'Phone'),
+            array('John Doe', 'john@example.com', '1234567890'),
+            array('Jane Smith', 'jane@example.com', '0987654321')
+        );
+        
+        // Write each row to the CSV file
+        foreach ($data as $row) {
+            fputcsv($output, $row);
         }
+        
+        // Close the file handle
+        fclose($output);
+    
     }
-
-    // Add the row data to the CSV file
-    fputcsv($output, $rowData);
-}
-
-// Close the file handle
-fclose($output);
-
     
     
-}
-
 }
