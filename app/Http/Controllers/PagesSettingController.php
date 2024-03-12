@@ -407,10 +407,10 @@ class PagesSettingController extends Controller
     
         // Get the attribute names dynamically from the model
         $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
-    
+        dd($headers);
         // Add CSV headers dynamically
         fputcsv($handle, $attributes);
-        dd($headers);
+       
         // Fetch category names in bulk
         $categoryIds = $items->pluck('category')->unique()->toArray();
         $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
