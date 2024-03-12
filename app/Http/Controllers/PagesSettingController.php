@@ -407,7 +407,7 @@ class PagesSettingController extends Controller
     
         // Get the attribute names dynamically from the model
         $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
-        dd($headers);
+        
         // Add CSV headers dynamically
         fputcsv($handle, $attributes);
        
