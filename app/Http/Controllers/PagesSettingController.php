@@ -429,7 +429,7 @@ class PagesSettingController extends Controller
                 }
             }
             // Write the data row to the CSV file
-            // fputcsv($handle, $rowData);
+            fputcsv($handle, $rowData);
         }
     
     
