@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 
 
@@ -393,35 +392,39 @@ class PagesSettingController extends Controller
     public function ExportCsv()
     {
        
-        $items = Item::all();
-
-        $csvFileName = 'items.csv';
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$csvFileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
-
-        $handle = fopen('php://output', 'w');
-
-        // Get column names dynamically
-        $columnNames = Schema::getColumnListing('items');
-        fputcsv($handle, $columnNames); // Add column headers
-
-        foreach ($items as $item) {
-            // Extract data dynamically based on column names
-            $rowData = [];
-            foreach ($columnNames as $columnName) {
-                $rowData[] = $item->{$columnName};
+       
+        
+        // Fetch all items from the database
+        $items = DB::table('items')->select('*')->get();
+        
+        // Remove 'updated_at' and 'deleted_at' columns
+        $filteredItems = $items->map(function ($item) {
+            return (array) $item;
+        })->map(function ($item) {
+            return array_diff_key($item, ['updated_at' => '', 'deleted_at' => '']);
+        });
+        
+        // Create CSV file content
+        $csvData = '';
+        
+        // Add header row
+        if (!empty($filteredItems)) {
+            $csvData .= implode(',', array_keys((array) $filteredItems[0])) . "\n";
+        
+            // Add data rows
+            foreach ($filteredItems as $item) {
+                $csvData .= implode(',', $item) . "\n";
             }
-            fputcsv($handle, $rowData);
         }
-
-        fclose($handle);
-
-        return Response::make('', 200, $headers);
+        
+        // Set headers for CSV file download
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="items.csv"',
+        ];
+        
+        // Return CSV file as response with appropriate headers
+        return Response::make($csvData, 200, $headers);
         
     }
 }
