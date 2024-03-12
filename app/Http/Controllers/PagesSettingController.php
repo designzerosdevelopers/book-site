@@ -415,6 +415,7 @@ class PagesSettingController extends Controller
         $categoryIds = $items->pluck('category')->unique()->toArray();
         $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
     
+        dd($headers);
         // Add data rows
         foreach ($items as $item) {
             // Extract values for each attribute
@@ -431,7 +432,7 @@ class PagesSettingController extends Controller
             fputcsv($handle, $rowData);
         }
     
-        dd($headers);
+    
         // Close file handle
         fclose($handle);
 
