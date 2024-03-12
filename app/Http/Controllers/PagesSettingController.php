@@ -388,7 +388,7 @@ class PagesSettingController extends Controller
         return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
     }
    
-        public function ExportCsv()
+    public function ExportCsv()
     {
         // Fetch all items from the database
         $items = Item::all();
@@ -440,5 +440,4 @@ class PagesSettingController extends Controller
         // Return CSV file as response
         return Response::make('', 200, $headers);
     }
-
 }
