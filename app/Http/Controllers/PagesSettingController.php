@@ -328,6 +328,7 @@ class PagesSettingController extends Controller
    
     public function CsvSave(Request $request)
     {
+        dd("hello");
         // Validate the CSV file
         $validator = Validator::make($request->all(), [
             'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Adjust the file size limit if necessary
@@ -407,7 +408,7 @@ class PagesSettingController extends Controller
     
         // Get the attribute names dynamically from the model
         $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
-        
+
         // Add CSV headers dynamically
         fputcsv($handle, $attributes);
        
