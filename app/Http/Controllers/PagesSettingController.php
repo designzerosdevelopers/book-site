@@ -408,8 +408,8 @@ class PagesSettingController extends Controller
         // Get the attribute names dynamically from the model
         $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
         
-        // Add CSV headers dynamically
-        fputcsv($handle, $attributes);
+        // // Add CSV headers dynamically
+        // fputcsv($handle, $attributes);
        
         // Fetch category names in bulk
         $categoryIds = $items->pluck('category')->unique()->toArray();
@@ -428,8 +428,8 @@ class PagesSettingController extends Controller
                     $rowData[] = $item->{$attribute};
                 }
             }
-            // Write the data row to the CSV file
-            fputcsv($handle, $rowData);
+            // // Write the data row to the CSV file
+            // fputcsv($handle, $rowData);
         }
     
     
