@@ -393,31 +393,34 @@ class PagesSettingController extends Controller
     {
         // Fetch specific columns from the database
         $items = DB::table('items')->select('id', 'name', 'price', 'image', 'file', 'description', 'category')->get();
-        
+    
+        // Fetch category data from the category table
+        $categories = DB::table('categories')->pluck('category_name', 'id');
+    
         // Create CSV file content
         $csvData = '';
-        
+    
         // Add header row
         if (!empty($items)) {
             $csvData .= "id,name,price,image,file,description,category\n";
-        
+    
             // Add data rows
             foreach ($items as $item) {
                 // Escape commas in description and category
                 $description = str_replace(',', ' ', $item->description);
-                $category = str_replace(',', ' ', $item->category);
+                $categoryName = isset($categories[$item->category]) ? $categories[$item->category] : '';
     
                 // Combine all fields into CSV format
-                $csvData .= "{$item->id},{$item->name},{$item->price},{$item->image},{$item->file},\"{$description}\",\"{$category}\"\n";
+                $csvData .= "{$item->id},{$item->name},{$item->price},{$item->image},{$item->file},\"{$description}\",\"{$categoryName}\"\n";
             }
         }
-        
+    
         // Set headers for CSV file download
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="items.csv"',
         ];
-        
+    
         // Return CSV file as response with appropriate headers
         return response()->make($csvData, 200, $headers);
     }
