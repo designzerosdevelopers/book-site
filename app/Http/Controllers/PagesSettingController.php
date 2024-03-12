@@ -412,8 +412,6 @@ class PagesSettingController extends Controller
         $categoryIds = $items->pluck('category')->unique()->toArray();
         $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
         
-        // Add CSV headers dynamically
-        fputcsv($handle, $attributes);
         
        // Add data rows
         foreach ($items as $item) {
