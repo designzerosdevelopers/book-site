@@ -1,5 +1,5 @@
 @extends('layouts.admin-layout.app')
-
+{{-- 
 @section('content')
 <!-- partial -->
 <div class="content-wrapper">
@@ -75,4 +75,4 @@
         </div>
     </div> 
 </div>
-@stop
+@stop --}}
