@@ -387,12 +387,12 @@ class PagesSettingController extends Controller
         // Redirect back with a success message
         return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
     }
-   
-    public function ExportCsv()
+  
+    public function exportCsv()
     {
         // Fetch all items from the database
         $items = Item::all();
-    
+        
         // Set CSV file headers
         $headers = array(
             "Content-type" => "text/csv",
@@ -401,21 +401,20 @@ class PagesSettingController extends Controller
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"
         );
-    
-        // Define CSV file handle
+        
+        // Create a file handle for writing
         $handle = fopen('php://output', 'w');
-    
+        
         // Get the attribute names dynamically from the model
         $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
         
-        // // Add CSV headers dynamically
-        // fputcsv($handle, $attributes);
-       
         // Fetch category names in bulk
         $categoryIds = $items->pluck('category')->unique()->toArray();
         $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
-    
-       
+        
+        // Add CSV headers dynamically
+        fputcsv($handle, $attributes);
+        
         // Add data rows
         foreach ($items as $item) {
             // Extract values for each attribute
@@ -431,13 +430,13 @@ class PagesSettingController extends Controller
             // Write the data row to the CSV file
             fputcsv($handle, $rowData);
         }
-    
-    
+        
         // Close file handle
         fclose($handle);
-
+    
         // Return CSV file as response
-        return Response::make('', 200, $headers);
+        return response()->make('', 200, $headers);
     }
+    
     
 }
