@@ -391,27 +391,19 @@ class PagesSettingController extends Controller
    
     public function ExportCsv()
     {
-        // Fetch all items from the database
-        $items = DB::table('items')->select('*')->get();
-        
-        // Remove 'created_at' and 'updated_at' columns
-        $filteredItems = $items->map(function ($item) {
-            $itemArray = (array) $item;
-            unset($itemArray['created_at']);
-            unset($itemArray['updated_at']);
-            return $itemArray;
-        });
+        // Fetch specific columns from the database
+        $items = DB::table('items')->select('id', 'name', 'price', 'image', 'file', 'description', 'category')->get();
         
         // Create CSV file content
         $csvData = '';
         
         // Add header row
-        if (!empty($filteredItems)) {
-            $csvData .= implode(',', array_keys((array) $filteredItems[0])) . "\n";
+        if (!empty($items)) {
+            $csvData .= implode(',', array_keys((array) $items[0])) . "\n";
         
             // Add data rows
-            foreach ($filteredItems as $item) {
-                $csvData .= implode(',', $item) . "\n";
+            foreach ($items as $item) {
+                $csvData .= implode(',', (array) $item) . "\n";
             }
         }
         
@@ -424,6 +416,7 @@ class PagesSettingController extends Controller
         // Return CSV file as response with appropriate headers
         return response()->make($csvData, 200, $headers);
     }
+    
     
         
     
