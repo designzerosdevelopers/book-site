@@ -410,12 +410,12 @@ class PagesSettingController extends Controller
     
         // Add CSV headers dynamically
         fputcsv($handle, $attributes);
-    
+        dd($headers);
         // Fetch category names in bulk
         $categoryIds = $items->pluck('category')->unique()->toArray();
         $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
     
-        dd($headers);
+       
         // Add data rows
         foreach ($items as $item) {
             // Extract values for each attribute
