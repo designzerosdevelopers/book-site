@@ -27,32 +27,15 @@
 
                         <hr>
 
-                        <form id="exportForm" method="GET" action="{{ route('export.csv') }}">
-                            <button type="button" onclick="downloadFile('{{asset('book_files/'.$product['item_file'])}}')" class="btn btn-primary">Download</button>
+                        <form method="GET" action="{{ route('export.csv') }}">
                             <button type="submit" class="btn btn-success">Export CSV</button>
                         </form>
-                        
-                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @stop
-
-
-<script>
-    function downloadFile(fileUrl) {
-        // Create a temporary anchor element
-        var downloadAnchor = document.createElement('a');
-        downloadAnchor.href = fileUrl;
-        downloadAnchor.target = '_blank'; // Open in a new tab
-        downloadAnchor.download = fileUrl.substring(fileUrl.lastIndexOf('/') + 1); // Extract filename
-        document.body.appendChild(downloadAnchor); // Append anchor to body
-        downloadAnchor.click(); // Simulate click to trigger download
-        document.body.removeChild(downloadAnchor); // Clean up anchor
-    }
-</script>
 
 @section('scripts')
     
