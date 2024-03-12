@@ -399,11 +399,16 @@ class PagesSettingController extends Controller
         
         // Add header row
         if (!empty($items)) {
-            $csvData .= implode(',', array_keys((array) $items[0])) . "\n";
+            $csvData .= "id,name,price,image,file,description,category\n";
         
             // Add data rows
             foreach ($items as $item) {
-                $csvData .= implode(',', (array) $item) . "\n";
+                // Escape commas in description and category
+                $description = str_replace(',', ' ', $item->description);
+                $category = str_replace(',', ' ', $item->category);
+    
+                // Combine all fields into CSV format
+                $csvData .= "{$item->id},{$item->name},{$item->price},{$item->image},{$item->file},\"{$description}\",\"{$category}\"\n";
             }
         }
         
@@ -416,6 +421,7 @@ class PagesSettingController extends Controller
         // Return CSV file as response with appropriate headers
         return response()->make($csvData, 200, $headers);
     }
+    
     
     
         
