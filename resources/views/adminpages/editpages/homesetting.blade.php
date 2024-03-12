@@ -1,4 +1,5 @@
 @extends('layouts.admin-layout.app')
+
 @section('content')
 <!-- partial -->
 <div class="content-wrapper">
@@ -73,8 +74,5 @@
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
 </div>
 @stop
