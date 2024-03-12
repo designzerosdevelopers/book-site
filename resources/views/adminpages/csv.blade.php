@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="content-wrapper">
-    <div class="container my-5 py-5">
+    {{-- <div class="container my-5 py-5">
         <div class="row justify-content-center">
-            {{-- <div class="col-md-8">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Import and Export CSV</div>
 
@@ -32,10 +32,10 @@
                             <button type="submit" class="btn btn-success">Export CSV</button>
                         </form>
                     </div>
-                </div> --}}
+                </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @stop 
 
