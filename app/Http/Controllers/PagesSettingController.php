@@ -401,21 +401,20 @@ class PagesSettingController extends Controller
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"
         );
-    
+
         // Define CSV file handle
         $handle = fopen('php://output', 'w');
-    
+        
         // Get the attribute names dynamically from the model
         $attributes = array_diff(array_keys($items->first()->getAttributes()), ['created_at', 'updated_at']);
         
         // Add CSV headers dynamically
         fputcsv($handle, $attributes);
-       
+        
         // Fetch category names in bulk
         $categoryIds = $items->pluck('category')->unique()->toArray();
         $categories = Categories::whereIn('id', $categoryIds)->pluck('category_name', 'id');
-    
-       
+        
         // Add data rows
         foreach ($items as $item) {
             // Extract values for each attribute
@@ -431,15 +430,22 @@ class PagesSettingController extends Controller
             // Write the data row to the CSV file
             fputcsv($handle, $rowData);
         }
-    
-    
+        
         // Close file handle
         fclose($handle);
-
-       
-    
-        // Return CSV file as response
-        return Response::make('', 200, $headers);
+        
+        // Get the CSV data from the output buffer
+        $csvData = ob_get_clean();
+        
+        // Set headers for CSV file download
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="data.csv"',
+        ];
+        
+        // Return CSV file as response with CSV data
+        return Response::make($csvData, 200, $headers);
+        
     }
     
 }
