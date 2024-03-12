@@ -425,8 +425,6 @@ class PagesSettingController extends Controller
         return response()->make($csvData, 200, $headers);
     }
     
-    
-    
         
     
 }
