@@ -50,5 +50,11 @@
           <i class="fa-light"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="">
+          <span class="menu-title">Uploads</span>
+          <i class="fa-light"></i>
+        </a>
+      </li>
     </ul>
   </nav>
