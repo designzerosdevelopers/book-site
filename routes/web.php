@@ -70,4 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/storeitem', [PagesSettingController::class, 'storeitem'])->name('storeitem');
     Route::delete('/deleteitem/{id}', [PagesSettingController::class, 'deleteitem'])->name('deleteitem');
 
+    // uploads routes
+    Route::get('/uploadsindex', [PagesSettingController::class, 'uploadsindex'])->name('uploads.index');
+    Route::post('/saveuploads', [PagesSettingController::class, 'saveuploads'])->name('save.uploads');
 });
