@@ -51,7 +51,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ route('uploads.index') }}">
           <span class="menu-title">Uploads</span>
           <i class="fa-light"></i>
         </a>

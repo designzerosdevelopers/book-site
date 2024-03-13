@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Homepage;
+use App\Models\Upload;
 use App\Models\Categories;
 use App\Models\Item;
 use Illuminate\Support\Str;
@@ -423,6 +424,47 @@ class PagesSettingController extends Controller
     
         // Return CSV file as response with appropriate headers
         return response()->make($csvData, 200, $headers);
+    }
+
+    function uploadsindex()
+    {
+        $files = Upload::get();
+        return view('adminpages.uploads', ['uploadedFiles' => $files]);
+    }
+
+    function saveuploads(Request $request)
+    {
+        
+        if ($request->hasFile('uploadfiles')) {
+            $files = $request->file('uploadfiles');
+           
+            foreach ($files as $file) {
+                // Validate file extension
+                $validator = Validator::make(['file' => $file], [
+                    'file' => 'mimes:pdf,jpeg,png,gif|required|max:2048', // Adjust max file size if needed
+                ]);
+        
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator);
+                }
+        
+                // Generate a unique filename
+                $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension(); 
+        
+                // Move each uploaded file to a new location
+                $file->move(public_path('uploads'), $filename);  
+        
+                // Save file information to the database
+                Upload::create([
+                    'file' => $filename,
+                ]);
+            }
+            return redirect()->back()->with('message', 'File(s) uploaded successfully!');
+        } else {
+            return 'No file uploaded.';
+        }
+        
+        
     }
     
         
