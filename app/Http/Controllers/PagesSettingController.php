@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+
 
 
 
@@ -459,13 +461,42 @@ class PagesSettingController extends Controller
                     'file' => $filename,
                 ]);
             }
-            return redirect()->back()->with('message', 'File(s) uploaded successfully!');
+            return redirect()->back()->with('success', 'Uploaded successfully!');
         } else {
             return 'No file uploaded.';
         }
         
         
     }
+
+   
+    public function deleteUploads(Request $request)
+    {
+        $id = $request->deleteid;
+        $upload = Upload::find($id); // Find the Upload model instance by its id
+        
+        if ($upload) {
+            $file = public_path('uploads/') . $upload->file; // Construct the absolute file path
+            
+            // Ensure that $file contains a safe path
+            if (file_exists($file)) {
+                if (unlink($file)) {
+                    $upload->delete(); // Delete the Upload
+                    // Redirect back to the previous page
+                    return Redirect::back()->with('error', 'File deleted successfully');
+                } else {
+                    return Redirect::back()->with('error', 'Failed to delete file');
+                }
+            } else {
+                return Redirect::back()->with('error', 'File not found or not writable');
+            }
+        } else {
+            return Redirect::back()->with('error', 'Upload not found');
+        }
+    }
+    
+    
+    
     
         
     

@@ -73,4 +73,5 @@ Route::middleware('auth')->group(function () {
     // uploads routes
     Route::get('/uploadsindex', [PagesSettingController::class, 'uploadsindex'])->name('uploads.index');
     Route::post('/saveuploads', [PagesSettingController::class, 'saveuploads'])->name('save.uploads');
+    Route::get('/deleteuploads', [PagesSettingController::class, 'deleteuploads'])->name('delete.uploads');
 });
