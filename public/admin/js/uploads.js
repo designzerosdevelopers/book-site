@@ -37,6 +37,7 @@ console.log('clicked');
     });
 });
 function copyImageUrl(url, iconElement) {
+    console.log('trying to copy');
     var tempInput = document.createElement('input');
     tempInput.style = "position: absolute; left: -1000px; top: -1000px";
     tempInput.value = url;
