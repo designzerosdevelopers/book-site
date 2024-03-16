@@ -2,35 +2,32 @@
 @section('content')
 <div class="content-wrapper">
 
-    
+    {{-- upload successful session --}}
     @if (session('success'))
         <div id="success-alert" class="alert alert-success" role="alert">
             {{ session('success') }}
         </div>
     @endif
 
+    {{-- delete successful session --}}
+    @if (session('error'))
+        <div id="success-alert" class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
+
+    {{-- error during upload file --}}
     @if (session('upload_errors'))
-    <div class="alert alert-danger" id="success-alert">
-        <ul>
+        <div class="alert alert-danger" id="success-alert">
             @foreach (session('upload_errors') as $error)
                 <li>{{ $error }}</li>
             @endforeach
-        </ul>
-    </div>
-@endif
-
-
-
-   {{-- input field errors --}}
-    @if ($errors->any())
-    <div id="error-alert" class="alert alert-danger" role="alert">
-      
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-       
-    </div>
+        </div>
     @endif
+
+
 
     <form method="POST" action="{{ route('save.uploads') }}" enctype="multipart/form-data">
         @csrf
