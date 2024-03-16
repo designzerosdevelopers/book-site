@@ -67,7 +67,7 @@
     <!-- Custom js for this page -->
     <script src="{{asset('admin/js/dashboard.js')}}"></script>
     <script src="{{asset('admin/js/todolist.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+   
     <script src="{{asset('admin/js/alertcloser.js')}}"></script>
     <script src="{{asset('admin/js/uploads.js')}}"></script>
     <!-- End custom js for this page -->

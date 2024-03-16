@@ -1,3 +1,4 @@
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 $(document).ready(function() {
     // Add click event handler to all image thumbnails
     $('.file-thumbnail').click(function() {
