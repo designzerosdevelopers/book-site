@@ -66,7 +66,7 @@
                         @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
                             <div class="col-auto mb-2">
                                 <div class="img-container" style="width: 120px; height: 80px; background: rgb(255, 255, 255); display: flex; justify-content: center; align-items: center; position: relative;"> 
-                                    <img src="{{ asset('uploads/'.$file->file) }}" id="file-thumbnail img-fluid" data-pdf="{{ asset('uploads/'.$file->file) }}" data-name="{{ $file->file }}" data-id="{{ $file->id }}" style="max-width: 100%; max-height: 100%; vertical-align: middle;">
+                                    <img src="{{ asset('uploads/'.$file->file) }}" class="file-thumbnail img-fluid" data-pdf="{{ asset('uploads/'.$file->file) }}" data-name="{{ $file->file }}" data-id="{{ $file->id }}" style="max-width: 100%; max-height: 100%; vertical-align: middle;">
                                     <span class="copy-icon" onclick="copyImageUrl('{{ asset('uploads/'.$file->file) }}', this)">
                                         <i class="fas fa-copy"></i>
                                     </span>
@@ -76,7 +76,7 @@
                         @if (in_array($extension, ['pdf']))
                             <div class="col-auto mb-2">
                                 <div class="img-container" style="width: 120px; height: 80px; background: rgb(255, 255, 255); display: flex; justify-content: center; align-items: center; position: relative;"> 
-                                    <img src="{{ asset('uploads/pdf-logo.png') }}" id="file-thumbnail img-fluid" data-pdf="{{ asset('uploads/'.$file->file) }}" data-name="{{ $file->file }}" data-id="{{ $file->id }}" style="max-width: 100%; max-height: 100%; vertical-align: middle;">
+                                    <img src="{{ asset('uploads/pdf-logo.png') }}" class="file-thumbnail img-fluid" data-pdf="{{ asset('uploads/'.$file->file) }}" data-name="{{ $file->file }}" data-id="{{ $file->id }}" style="max-width: 100%; max-height: 100%; vertical-align: middle;">
                                     <span class="copy-icon" onclick="copyImageUrl('{{ asset('uploads/'.$file->file) }}', this)">
                                         <i class="fas fa-copy"></i>
                                     </span>
