@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
     // Add click event handler to all image thumbnails
-    $('#file-thumbnail').click(function() {
+    $('.file-thumbnail').click(function() {
         const pdfUrl = $(this).data('pdf');
         const pdfName = $(this).data('name');
         var deleteid = $(this).data('id');
