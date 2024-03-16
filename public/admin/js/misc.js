@@ -1,144 +1,108 @@
-var ChartColor = ["#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "rgb(93.0, 98.0, 180.0)", "#21B7EC", "#04BCCC"];
-var primaryColor = getComputedStyle(document.body).getPropertyValue('--primary');
-var secondaryColor = getComputedStyle(document.body).getPropertyValue('--secondary');
-var successColor = getComputedStyle(document.body).getPropertyValue('--success');
-var warningColor = getComputedStyle(document.body).getPropertyValue('--warning');
-var dangerColor = getComputedStyle(document.body).getPropertyValue('--danger');
-var infoColor = getComputedStyle(document.body).getPropertyValue('--info');
-var darkColor = getComputedStyle(document.body).getPropertyValue('--dark');
-var lightColor = getComputedStyle(document.body).getPropertyValue('--light');
-
-(function($) {
+$(document).ready(function() {
   'use strict';
-  $(function() {
-    var body = $('body');
-    var contentWrapper = $('.content-wrapper');
-    var scroller = $('.container-scroller');
-    var footer = $('.footer');
-    var sidebar = $('.sidebar');
 
-    //Add active class to nav-link based on url dynamically
-    //Active class can be hard coded directly in html file also as required
+  // Your color variables
+  var ChartColor = ["#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "rgb(93.0, 98.0, 180.0)", "#21B7EC", "#04BCCC"];
+  var primaryColor = getComputedStyle(document.body).getPropertyValue('--primary');
+  var secondaryColor = getComputedStyle(document.body).getPropertyValue('--secondary');
+  var successColor = getComputedStyle(document.body).getPropertyValue('--success');
+  var warningColor = getComputedStyle(document.body).getPropertyValue('--warning');
+  var dangerColor = getComputedStyle(document.body).getPropertyValue('--danger');
+  var infoColor = getComputedStyle(document.body).getPropertyValue('--info');
+  var darkColor = getComputedStyle(document.body).getPropertyValue('--dark');
+  var lightColor = getComputedStyle(document.body).getPropertyValue('--light');
 
-    function addActiveClass(element) {
-      if (current === "") {
-        //for root url
-        if (element.attr('href').indexOf("index.html") !== -1) {
-          element.parents('.nav-item').last().addClass('active');
-          if (element.parents('.sub-menu').length) {
-            element.closest('.collapse').addClass('show');
-            element.addClass('active');
-          }
-        }
-      } else {
-        //for other url
-        if (element.attr('href').indexOf(current) !== -1) {
-          element.parents('.nav-item').last().addClass('active');
-          if (element.parents('.sub-menu').length) {
-            element.closest('.collapse').addClass('show');
-            element.addClass('active');
-          }
-          if (element.parents('.submenu-item').length) {
-            element.addClass('active');
-          }
-        }
-      }
-    }
-
+  // Function to add active class to nav-link based on URL
+  function addActiveClass(element) {
     var current = location.pathname.split("/").slice(-1)[0].replace(/^\/|\/$/g, '');
-    $('.nav li a', sidebar).each(function() {
-      var $this = $(this);
-      addActiveClass($this);
-    })
 
-    $('.horizontal-menu .nav li a').each(function() {
-      var $this = $(this);
-      addActiveClass($this);
-    })
-
-    //Close other submenu in sidebar on opening any
-
-    sidebar.on('show.bs.collapse', '.collapse', function() {
-      sidebar.find('.collapse.show').collapse('hide');
-    });
-
-
-    //Change sidebar and content-wrapper height
-    applyStyles();
-
-    function applyStyles() {
-      //Applying perfect scrollbar
-      if (!body.hasClass("rtl")) {
-        if (body.hasClass("sidebar-fixed")) {
-          var fixedSidebarScroll = new PerfectScrollbar('#sidebar .nav');
+    if (current === "") {
+      // For root URL
+      if (element.attr('href').indexOf("index.html") !== -1) {
+        element.parents('.nav-item').last().addClass('active');
+        if (element.parents('.sub-menu').length) {
+          element.closest('.collapse').addClass('show');
+          element.addClass('active');
+        }
+      }
+    } else {
+      // For other URLs
+      if (element.attr('href').indexOf(current) !== -1) {
+        element.parents('.nav-item').last().addClass('active');
+        if (element.parents('.sub-menu').length) {
+          element.closest('.collapse').addClass('show');
+          element.addClass('active');
+        }
+        if (element.parents('.submenu-item').length) {
+          element.addClass('active');
         }
       }
     }
+  }
 
-    $('[data-toggle="minimize"]').on("click", function() {
-      if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
-        body.toggleClass('sidebar-hidden');
-      } else {
-        body.toggleClass('sidebar-icon-only');
-      }
-    });
-
-    //checkbox and radios
-    $(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
-
-    //fullscreen
-    $("#fullscreen-button").on("click", function toggleFullScreen() {
-      if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
-        if (document.documentElement.requestFullScreen) {
-          document.documentElement.requestFullScreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-          document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullScreen) {
-          document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (document.documentElement.msRequestFullscreen) {
-          document.documentElement.msRequestFullscreen();
-        }
-      } else {
-        if (document.cancelFullScreen) {
-          document.cancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      }
-    })
-    if ($.cookie('purple-free-banner')!="true") {
-      document.querySelector('#proBanner').classList.add('d-flex');
-      document.querySelector('.navbar').classList.remove('fixed-top');
-    }
-    else {
-      document.querySelector('#proBanner').classList.add('d-none');
-      document.querySelector('.navbar').classList.add('fixed-top');
-    }
-    
-    if ($( ".navbar" ).hasClass( "fixed-top" )) {
-      document.querySelector('.page-body-wrapper').classList.remove('pt-0');
-      document.querySelector('.navbar').classList.remove('pt-5');
-    }
-    else {
-      document.querySelector('.page-body-wrapper').classList.add('pt-0');
-      document.querySelector('.navbar').classList.add('pt-5');
-      document.querySelector('.navbar').classList.add('mt-3');
-      
-    }
-    document.querySelector('#bannerClose').addEventListener('click',function() {
-      document.querySelector('#proBanner').classList.add('d-none');
-      document.querySelector('#proBanner').classList.remove('d-flex');
-      document.querySelector('.navbar').classList.remove('pt-5');
-      document.querySelector('.navbar').classList.add('fixed-top');
-      document.querySelector('.page-body-wrapper').classList.add('proBanner-padding-top');
-      document.querySelector('.navbar').classList.remove('mt-3');
-      var date = new Date();
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000); 
-      $.cookie('purple-free-banner', "true", { expires: date });
-    });
+  // Add active class to nav links
+  $('.nav li a, .horizontal-menu .nav li a').each(function() {
+    var $this = $(this);
+    addActiveClass($this);
   });
-})(jQuery);
+
+  // Close other submenu in sidebar on opening any
+  $('.sidebar').on('show.bs.collapse', '.collapse', function() {
+    $('.sidebar').find('.collapse.show').collapse('hide');
+  });
+
+  // Toggle sidebar
+  $('[data-toggle="minimize"]').on("click", function() {
+    var body = $('body');
+    if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
+      body.toggleClass('sidebar-hidden');
+    } else {
+      body.toggleClass('sidebar-icon-only');
+    }
+  });
+
+  // Checkbox and radios styling
+  $(".form-check label, .form-radio label").append('<i class="input-helper"></i>');
+
+  // Fullscreen functionality
+  $("#fullscreen-button").on("click", function toggleFullScreen() {
+    var doc = document.documentElement;
+    var requestFullScreen = doc.requestFullScreen || doc.mozRequestFullScreen || doc.webkitRequestFullScreen || doc.msRequestFullscreen;
+    var cancelFullScreen = doc.cancelFullScreen || doc.mozCancelFullScreen || doc.webkitCancelFullScreen || doc.msExitFullscreen;
+
+    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+      requestFullScreen.call(doc);
+    } else {
+      cancelFullScreen.call(doc);
+    }
+  });
+
+  // Banner display logic
+  if ($.cookie('purple-free-banner') !== "true") {
+    $('#proBanner').addClass('d-flex');
+    $('.navbar').removeClass('fixed-top');
+  } else {
+    $('#proBanner').addClass('d-none');
+    $('.navbar').addClass('fixed-top');
+  }
+
+  // Adjust page-body-wrapper and navbar classes based on fixed-top class presence
+  if ($(".navbar").hasClass("fixed-top")) {
+    $('.page-body-wrapper').removeClass('pt-0');
+    $('.navbar').removeClass('pt-5');
+  } else {
+    $('.page-body-wrapper').addClass('pt-0');
+    $('.navbar').addClass('pt-5');
+    $('.navbar').addClass('mt-3');
+  }
+
+  // Event listener for banner close
+  $('#bannerClose').on('click', function() {
+    $('#proBanner').addClass('d-none').removeClass('d-flex');
+    $('.navbar').removeClass('pt-5').addClass('fixed-top');
+    $('.page-body-wrapper').addClass('proBanner-padding-top').removeClass('mt-3');
+    var date = new Date();
+    date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
+    $.cookie('purple-free-banner', "true", { expires: date });
+  });
+});
