@@ -19,7 +19,7 @@
 
   
 /* Media query for mobile devices */
-@media (max-width: 768px) {
+@media (max-width: 400x) {
    /* Apply styles for mobile devices */
    #imagerow {
       width: 50%; /* Two columns on mobile screens */
