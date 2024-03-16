@@ -97,8 +97,9 @@
 @endif
 </div>
 @stop
+
 <script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 $(document).ready(function() {
     // Add click event handler to all image thumbnails
     $('.file-thumbnail').click(function() {
