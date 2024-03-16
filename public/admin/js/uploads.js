@@ -4,7 +4,7 @@ $(document).ready(function() {
         const pdfUrl = $(this).data('pdf');
         const pdfName = $(this).data('name');
         var deleteid = $(this).data('id');
-        console.log('clicked');
+    
 
         if (pdfUrl && pdfName && deleteid) {
             // Load PDF into the col-4 section
