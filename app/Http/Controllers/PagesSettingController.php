@@ -447,7 +447,9 @@ class PagesSettingController extends Controller
                 ]);
         
                 if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator);
+                    // Flash validation errors to the session
+                    $request->session()->flash('upload_errors', $validator->errors()->all());
+                    return redirect()->back();
                 }
         
                 // Generate a unique filename
@@ -461,10 +463,17 @@ class PagesSettingController extends Controller
                     'file' => $filename,
                 ]);
             }
-            return redirect()->back()->with('success', 'Uploaded successfully!');
+        
+            // Set success message in session flash data
+            if (!$request->session()->has('success')) {
+                $request->session()->flash('success', 'Uploaded successfully!');
+            }
+        
+            return redirect()->back();
         } else {
             return 'No file uploaded.';
         }
+        
         
         
     }
@@ -477,22 +486,26 @@ class PagesSettingController extends Controller
         
         if ($upload) {
             $file = public_path('uploads/') . $upload->file; // Construct the absolute file path
-            
+        
             // Ensure that $file contains a safe path
             if (file_exists($file)) {
                 if (unlink($file)) {
                     $upload->delete(); // Delete the Upload
-                    // Redirect back to the previous page
-                    return Redirect::back()->with('error', 'File deleted successfully');
+                    // Redirect back to the previous page with success message
+                    return redirect()->back()->with('success', 'File deleted successfully');
                 } else {
-                    return Redirect::back()->with('error', 'Failed to delete file');
+                    // Redirect back to the previous page with error message
+                    return redirect()->back()->with('error', 'Failed to delete file');
                 }
             } else {
-                return Redirect::back()->with('error', 'File not found or not writable');
+                // Redirect back to the previous page with error message
+                return redirect()->back()->with('error', 'File not found or not writable');
             }
         } else {
-            return Redirect::back()->with('error', 'Upload not found');
+            // Redirect back to the previous page with error message
+            return redirect()->back()->with('error', 'Upload not found');
         }
+        
     }
     
     

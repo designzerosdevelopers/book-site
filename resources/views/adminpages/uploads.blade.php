@@ -9,11 +9,16 @@
         </div>
     @endif
 
-    @if (session('error'))
-        <div id="success-alert" class="alert alert-danger" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
+    @if (session('upload_errors'))
+    <div class="alert alert-danger" id="success-alert">
+        <ul>
+            @foreach (session('upload_errors') as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 
 
    {{-- input field errors --}}
@@ -82,8 +87,8 @@
                     </div>
                 </div>
                 
-                <div class="col-4" id="pdf-viewer">
-                    <!-- Your PDF viewer content goes here -->
+                <div class="col-4" id="upload-viewer">
+                    <!-- Your upload viewer content goes here -->
                 </div>
             </div>
             
