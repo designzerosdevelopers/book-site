@@ -65,11 +65,12 @@
     <!-- endinject -->
 
     <!-- Custom js for this page -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{asset('admin/js/dashboard.js')}}"></script>
     <script src="{{asset('admin/js/todolist.js')}}"></script>
     <script src="{{asset('admin/js/alertcloser.js')}}"></script>
     <script src="{{asset('admin/js/uploads.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   
     <!-- End custom js for this page -->
 
   </body>
