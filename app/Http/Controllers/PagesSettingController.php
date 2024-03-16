@@ -492,7 +492,7 @@ class PagesSettingController extends Controller
                 if (unlink($file)) {
                     $upload->delete(); // Delete the Upload
                     // Redirect back to the previous page with success message
-                    return redirect()->back()->with('success', 'File deleted successfully');
+                    return redirect()->back()->with('error', 'File deleted successfully');
                 } else {
                     // Redirect back to the previous page with error message
                     return redirect()->back()->with('error', 'Failed to delete file');
