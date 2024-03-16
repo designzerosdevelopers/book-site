@@ -8,7 +8,7 @@ $(document).ready(function() {
         if (pdfUrl && pdfName && deleteid) {
             // Load PDF into the col-4 section
             $('#upload-viewer').html(`
-                <embed src="${pdfUrl}" height="150px" />
+                <embed src="${pdfUrl}" width="150px" />
                 <p>Name: ${pdfName}</p>
                 <a style="text-decoration: none;" href="/deleteuploads?deleteid=${deleteid}" id="delete-pdf">Delete Permanently</a>
                 <div class="input-group my-3">
