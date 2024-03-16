@@ -37,7 +37,7 @@
     <!-- container-scroller -->
 
     <!-- link for slide up alert status -->
-   
+   {{-- jquery cdn start --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- js links for dropdown -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
