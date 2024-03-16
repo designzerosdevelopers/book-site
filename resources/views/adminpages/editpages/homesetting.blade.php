@@ -3,7 +3,7 @@
 <!-- partial -->
 <div class="content-wrapper">
     <div class="page-header">
-        <h3 class="page-title"> Home Page Settings </h3>
+        <h3 class="page-title"> Edit Home </h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Forms</a></li>
