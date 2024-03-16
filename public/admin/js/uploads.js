@@ -11,7 +11,7 @@ console.log('clicked');
             $('#upload-viewer').html(`
                 <embed src="${pdfUrl}" height="150px" />
                 <p>Name: ${pdfName}</p>
-                <a style="text-decoration: none;" href="/deleteuploads?deleteid=${deleteid}" id="delete-pdf">Delete Permanently</a>
+                
                 <div class="input-group my-3">
                     <input type="text" class="form-control" value="${pdfUrl}" readonly>
                     <div class="input-group-append">
