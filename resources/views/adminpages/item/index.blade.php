@@ -29,7 +29,8 @@
                   {{ session('error') }}
               </div>
             @endif 
-                <table class="table table-striped">
+            <div class="table-responsive">
+                <table class="table table-striped  ">
                   <thead>
                     <tr>
                       <th> Image </th>
@@ -77,6 +78,7 @@
                     @endif
                   </tbody>
                 </table>
+              </div>
               </div>
             </div>
           </div>       
