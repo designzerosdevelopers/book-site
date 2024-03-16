@@ -1,14 +1,17 @@
 $(document).ready(function() {
     // Add click event handler to all image thumbnails
     $('.file-thumbnail').click(function() {
+
         const pdfUrl = $(this).data('pdf');
         const pdfName = $(this).data('name');
         var deleteid = $(this).data('id');
 
+        
+
         if (pdfUrl && pdfName && deleteid) {
             // Load PDF into the col-4 section
             $('#upload-viewer').html(`
-                <embed src="${pdfUrl}" width="250px" />
+                <embed src="${pdfUrl}" width="250px" id="singleimg"/>
                 <p>Name: ${pdfName}</p>
                 <a style="text-decoration: none;" href="/deleteuploads?deleteid=${deleteid}" id="delete-pdf">Delete Permanently</a>
                 <div class="input-group my-3">

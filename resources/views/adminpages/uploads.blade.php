@@ -2,49 +2,55 @@
 @section('content')
 <div class="content-wrapper">
 
-    {{-- upload successful session --}}
+    
     @if (session('success'))
         <div id="success-alert" class="alert alert-success" role="alert">
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- delete successful session --}}
-    @if (session('error'))
-        <div id="success-alert" class="alert alert-danger" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
-
-
-
-    {{-- error during upload file --}}
     @if (session('upload_errors'))
-        <div class="alert alert-danger" id="success-alert">
+    <div class="alert alert-danger" id="success-alert">
+        <ul>
             @foreach (session('upload_errors') as $error)
                 <li>{{ $error }}</li>
             @endforeach
-        </div>
+        </ul>
+    </div>
+@endif
+
+
+
+   {{-- input field errors --}}
+    @if ($errors->any())
+    <div id="error-alert" class="alert alert-danger" role="alert">
+      
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+       
+    </div>
     @endif
 
-
-
+            
     <form method="POST" action="{{ route('save.uploads') }}" enctype="multipart/form-data">
-        @csrf
+    @csrf
 
-       
-
-        <div class="input-group my-3">
-            <input type="file" id="uploadfiles" class="form-control" name="uploadfiles[]" required multiple>
-            <div class="input-group-append">
-                <button class="btn btn-outline-success btn-copy" type="submit">Upload</button>
-            </div>
-        </div>
-
+    <div class="input-group my-3">
+        <input type="file" id="uploadfiles" class="form-control" name="uploadfiles[]" required accept="image/*" multiple>
         
+        <div class="input-group-append">
+            <button class="btn btn-outline-success btn-copy" type="submit">Upload</button>
+        </div>
+    </div>
+
+    <small class="text-muted">
+        Please ensure that the images you upload have an aspect ratio of 2:3.
+    </small>
+
+</form>
 
     
-    </form>
 
 
    
@@ -54,7 +60,7 @@
         <h2>Uploaded Files</h2>
         <ul>
             <div class="row">
-                <div class="col-8">
+                <div class="col-8" id="imagerow">
                     <div class="row">
                         @foreach($uploadedFiles as $file)
                         @php
