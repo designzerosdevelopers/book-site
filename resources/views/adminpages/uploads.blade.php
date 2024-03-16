@@ -9,6 +9,13 @@
         </div>
     @endif
 
+        
+    @if (session('error'))
+        <div id="success-alert" class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if (session('upload_errors'))
     <div class="alert alert-danger" id="success-alert">
         <ul>
