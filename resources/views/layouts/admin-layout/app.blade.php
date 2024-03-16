@@ -65,7 +65,7 @@
     <!-- endinject -->
 
     <!-- Custom js for this page -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
     <script src="{{asset('admin/js/dashboard.js')}}"></script>
     <script src="{{asset('admin/js/todolist.js')}}"></script>
     <script src="{{asset('admin/js/alertcloser.js')}}"></script>
