@@ -69,7 +69,7 @@
     <script src="{{asset('admin/js/dashboard.js')}}"></script>
     <script src="{{asset('admin/js/todolist.js')}}"></script>
     <script src="{{asset('admin/js/alertcloser.js')}}"></script>
-    {{-- <script src="{{asset('admin/js/uploads.js')}}"></script> --}}
+    <script src="{{asset('admin/js/uploads.js')}}"></script>
     <!-- End custom js for this page -->
 
   </body>
