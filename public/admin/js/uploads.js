@@ -4,7 +4,6 @@ $(document).ready(function() {
         const pdfUrl = $(this).data('pdf');
         const pdfName = $(this).data('name');
         var deleteid = $(this).data('id');
-console.log('clicked');
         if (pdfUrl && pdfName && deleteid) {
             // Load PDF into the col-4 section
             $('#upload-viewer').html(`
@@ -36,7 +35,6 @@ console.log('clicked');
     });
 });
 function copyImageUrl(url, iconElement) {
-    console.log('hit success');
     var tempInput = document.createElement('input');
     tempInput.style = "position: absolute; left: -1000px; top: -1000px";
     tempInput.value = url;
