@@ -7,17 +7,20 @@ $(document).ready(function() {
 
         if (pdfUrl && pdfName && deleteid) {
             // Load PDF into the col-4 section
-            $('#pdf-viewer').html(`<embed src="${pdfUrl}" height="150px" />
-            <p>Name: ${pdfName}</p>
-            <a style="text-decoration: none;" href="{{ route('delete.uploads') }}?deleteid=${deleteid}" id="delete-pdf">Delete Parmanentaly</a>
-            <div class="input-group my-3">
-                <input type="text" class="form-control" value="${pdfUrl}" readonly>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary btn-copy" type="button">Copy</button>
+            $('#upload-viewer').html(`
+                <embed src="${pdfUrl}" height="150px" />
+                <p>Name: ${pdfName}</p>
+                <a style="text-decoration: none;" href="/deleteuploads?deleteid=${deleteid}" id="delete-pdf">Delete Permanently</a>
+                <div class="input-group my-3">
+                    <input type="text" class="form-control" value="${pdfUrl}" readonly>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-copy" type="button">Copy</button>
+                    </div>
                 </div>
-            </div>
-            <span class="copy-success" style="display: none;">URL Copied!</span>`);
+                <span class="copy-success" style="display: none;">URL Copied!</span>`
+            );
         }
+        
 
 
         // Add click event handler to the copy button
