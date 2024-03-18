@@ -1,6 +1,10 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
+
+
+
+
 			<!-- Start Hero Section -->
 			<div class="hero">
 				<div class="container">
@@ -30,32 +34,73 @@
 				</div>
 			</div>
 			<!-- End Hero Section -->
-
-			   <!-- Start Product Details Section -->
-			   <section class="product-details">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-5 d-flex justify-content-end">
-							<img src="{{ asset('book_images/'.$product->image ) }}" alt="Product Image" class="product-image" height= "600px">
+			<style>
+				.product-details {
+					padding: 50px 0;
+					margin-top: 100px;
+					margin-bottom: 200px;
+				}
+				
+				.product-image {
+					max-width: 100%;
+					height: auto;
+				}
+				
+				.product-title {
+					font-size: 24px;
+					font-weight: bold;
+					margin-bottom: 20px;
+				}
+				
+				.product-description {
+					margin-bottom: 30px;
+				}
+				
+				.product-price {
+					font-size: 18px;
+					font-weight: bold;
+					color: #ff6347; /* Adjust color as needed */
+					margin-bottom: 20px;
+				}
+				
+				.add-to-cart-btn {
+					background-color: #14A44D;
+					color: #fff;
+					padding: 10px 20px;
+					font-size: 16px;
+					border: none;
+					cursor: pointer;
+				}
+				.product-detail-main-img img{
+					height: 600px;
+				}
+				.img-wrap img:hover {
+				transform: scale(1.1);
+				transition: transform 0.3s ease-in-out;
+				}
+				
+				</style>
+					   <!-- Start Product Details Section -->
+					   <section class="product-details">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-6 product-detail-main-img img-wrap">
+									<img src="{{ asset('book_images/'.$product->image ) }}" alt="Product Image" class="product-image">
+								</div>
+								<div class="col-md-6">
+									<h1 class="product-title">{{ $product->name }}</h1>
+									<p class="product-description"> {!! $product->description !!}
+									</p>
+									
+									<p class="product-price">${{ $product->price }}</p>
+									<a href="{{ route('cart', ['id' => $product->id]) }}">
+										<button class="add-to-cart-btn">
+											Add to Cart
+										</button>
+									</a>
+								</div>
+							</div>
 						</div>
-						<div class="col-md-7">
-							<h1 class="product-title">{{ $product->name }}</h1>
-							<p class="product-description">
-			
-                            {{ $product->description }}
-							</p>
+					</section>
 
-							<p class="product-price text-success">Price: ${{ $product->price }}</p>
-							 <div class="d-flex justify-content-center align-items-center">
-                                <a href="{{ route('cart', ['id' => $product->id]) }}">
-                                <button class="btn btn-primary btn-sm ml-2">
-                                    ADD TO CART
-                                </button>
-                                </a>
-                            </div>
-							
-						</div>
-					</div>
-				</div>
-			</section>
 @stop

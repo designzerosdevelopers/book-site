@@ -7,6 +7,7 @@ use App\Models\Homepage;
 use App\Models\Upload;
 use App\Models\Categories;
 use App\Models\Item;
+use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -506,6 +507,31 @@ class PagesSettingController extends Controller
             return redirect()->back()->with('error', 'Upload not found');
         }
         
+    }
+
+    public function purchases()
+    {
+        // get user id from auth
+        $userid = Auth()->id();
+
+        
+        // fetch from item table 
+        $itemIds = [];
+        $purchases = Purchase::where('user_id', $userid)->get();
+        
+        foreach ($purchases as $purchase) {
+            $itemIds[] = $purchase->item_id;
+        }
+        
+        // Retrieve items based on the collected item IDs
+        $items = Item::whereIn('id', $itemIds)->get();
+        
+    
+        
+         // Return the view with cart data
+         return view('adminpages.purchases', [
+            'cartItems' => $items,
+        ]);
     }
     
     

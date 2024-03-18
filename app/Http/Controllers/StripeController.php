@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class StripeController extends Controller
 {
     public function charge(Request $request){
-        $cartItems  = $request->cartItems;
+       
 
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
@@ -41,7 +43,7 @@ class StripeController extends Controller
             ],
             'customer_email' => $request->email_address,
             'mode' => 'payment',
-            'success_url' => $this->paymentsuccess($cartItems),
+            'success_url' => $this->paymentsuccess($request),
             'cancel_url' => route('checkout.cancel'),
         ]);
 
@@ -49,22 +51,34 @@ class StripeController extends Controller
     }
 
 
-    public function paymentsuccess($cartItems)
-{
-    $successMessage = "Your payment was successful";
+    public function paymentsuccess(Request $request)
+    {
+       
+        $successMessage = "Your payment was successful";
+    
+        // Set flash message
+        session()->flash('success_message', $successMessage);
+    
+        // Remove cart cookie
+        if (isset($_COOKIE['cart'])) {
+            unset($_COOKIE['cart']);
+            setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
+        }
 
-    // Set flash message
-    session()->flash('success_message', $successMessage);
+        // Access the array
+        $requestData = $request->all();
 
-    // Remove cart cookie
-    if (isset($_COOKIE['cart'])) {
-        unset($_COOKIE['cart']);
-        setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
-    }
+        // Store data in session
+        session(['requestData' => $requestData]);
 
-    // Redirect to the 'thankyou' route with parameters
-    return route('thankyou', ['cartItems' => $cartItems]);
-}
+        // Redirect to the 'user' route
+        return route('user');
+        }
+
+
+
+   
+    
 
     public function cancel(Request $request)
     {
