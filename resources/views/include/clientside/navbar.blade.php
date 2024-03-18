@@ -1,6 +1,6 @@
 <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('index') }}">BookStore<span>.</span></a>
+        <a class="navbar-brand" href="{{ route('index') }}">Digital store<span>.</span></a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,6 +26,8 @@
             </ul>
             
             <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                <li><a class="nav-link" href="{{ route('login') }}"><img src="clientside/images/user.svg"></a></li>
+                
                 <li class="cart-item">
                   <a class="nav-link" href="{{ route('cart') }}">
                     <img src="{{ asset('clientside/images/cart.svg')}}" alt="Cart">
@@ -33,7 +35,13 @@
                         <span class="cart-count" id="cartItemCount">0</span>
                     </span>
                   </a>
+                  
+                  {{-- <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="#"><img src="clientside/images/user.svg"></a></li>
+						<li><a class="nav-link" href="cart.html"><img src="clientside/images/cart.svg"></a></li>
+					</ul> --}}
                 </li>
+                
               </ul>
         </div>
     </div>

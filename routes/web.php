@@ -35,6 +35,7 @@ require __DIR__.'/auth.php';
 Route::get('/', [SiteViewController::class, 'index'])->name('index');
 Route::get('/product-details', [SiteViewController::class, 'productdetails'])->name('product.details');
 Route::get('/about', [SiteViewController::class, 'about'])->name('about');
+
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
 Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
@@ -43,6 +44,12 @@ Route::post('/checkout', [SiteViewController::class, 'checkout'])->name('checkou
 Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
+
+// user details and profile settings 
+Route::get('/user', [SiteViewController::class, 'user'])->name('user');
+
+
+
  // adminside controller
 Route::middleware('auth')->group(function () {   
     //homepage setting  route
@@ -74,4 +81,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/uploadsindex', [PagesSettingController::class, 'uploadsindex'])->name('uploads.index');
     Route::post('/saveuploads', [PagesSettingController::class, 'saveuploads'])->name('save.uploads');
     Route::get('/deleteuploads', [PagesSettingController::class, 'deleteuploads'])->name('delete.uploads');
+
+    // purchases routes
+    Route:: get('/purchases', [PagesSettingController::class, 'purchases']) -> name ('purchases.index') ;
+    
+  
 });

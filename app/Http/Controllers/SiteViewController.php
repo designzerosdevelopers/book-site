@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Homepage;
 use App\Models\Item;
+use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\Purchase;
 
 class SiteViewController extends Controller
 {
@@ -130,4 +133,77 @@ class SiteViewController extends Controller
         $recordCount = count($records);
         return $recordCount;
     }
+
+   
+
+    public function user(Request $request)
+    {
+    
+        
+           
+        if (!empty(session('requestData'))) {
+
+            // Retrieve data from session
+            $data = session('requestData');
+
+            // if the account is previously added fetch that through email
+            $email = $data['email_address'];
+            $user = User::where('email', $email)->first();
+
+            if ($user) {
+                 // if user exists get its id
+                $userid = $user->id;
+            } else {
+                // if user not exist, create the user 
+                // Generate random password
+                $randomPassword = Str::random(8);
+                // Create user
+                User::create([
+                    'name' => $data['f_name'],
+                    'last_name' => $data['l_name'],
+                    'address' => $data['address1'],
+                    'state/country' => $data['state_country'],
+                    'postal/zip' => $data['postal_zip'],
+                    'email' => $data['email_address'],
+                    'phone' => $data['phone'],
+                    'password' => $randomPassword
+                ]);
+                // fetching user if after creating its record first
+                $email = $data['email_address'];
+                $user = User::where('email', $email)->first();
+                $userid = $user->id;
+            }
+            $itemIds = [];
+            foreach ($data['cartItems'] as $cartItem) {
+                $itemIds[] = $cartItem['item_id'];
+            }
+            
+            // Create separate purchases for each item ID
+            foreach ($itemIds as $itemId) {
+                Purchase::create([
+                    'user_id' => $userid,
+                    'item_id' => $itemId
+                ]);
+            }
+            
+            
+          
+            
+        }
+    
+        // fetch items id from purchases table through user id
+        $item_ids = Purchase::where('user_id',$userid)->get('item_id');
+
+        // fetch items from item table through item ids
+        $purchases = Item::find($item_ids);
+
+       
+        // Return the view with cart data
+        return view('clientpages.user', [
+            'cartItems' => $purchases,
+        ]);
+    }
+
+   
+
 }
