@@ -74,6 +74,9 @@
 				.product-detail-main-img img{
 					height: 600px;
 				}
+				.product-detail-main-img{
+					text-align: center;
+				}
 				.img-wrap img:hover {
 				transform: scale(1.1);
 				transition: transform 0.3s ease-in-out;
