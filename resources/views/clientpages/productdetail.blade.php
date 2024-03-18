@@ -49,6 +49,7 @@
 				.product-title {
 					font-size: 24px;
 					font-weight: bold;
+					color:#0d4916;
 					margin-bottom: 20px;
 				}
 				
@@ -59,7 +60,7 @@
 				.product-price {
 					font-size: 18px;
 					font-weight: bold;
-					color: #ff6347; /* Adjust color as needed */
+					color: #0d4916; /* Adjust color as needed */
 					margin-bottom: 20px;
 				}
 				
@@ -76,6 +77,7 @@
 				}
 				.product-detail-main-img{
 					text-align: center;
+					margin-bottom: 50px;
 				}
 				.img-wrap img:hover {
 				transform: scale(1.1);
@@ -95,7 +97,7 @@
 									<p class="product-description"> {!! $product->description !!}
 									</p>
 									
-									<p class="product-price">${{ $product->price }}</p>
+									<p class="product-price">Price: ${{ $product->price }}</p>
 									<a href="{{ route('cart', ['id' => $product->id]) }}">
 										<button class="add-to-cart-btn">
 											Add to Cart
