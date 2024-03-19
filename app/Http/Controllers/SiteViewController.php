@@ -8,6 +8,10 @@ use App\Models\Item;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Purchase;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Password;
 
 class SiteViewController extends Controller
 {
@@ -133,14 +137,13 @@ class SiteViewController extends Controller
         $recordCount = count($records);
         return $recordCount;
     }
+    
 
    
 
     public function user(Request $request)
     {
     
-        
-           
         if (!empty(session('requestData'))) {
 
             // Retrieve data from session
@@ -149,16 +152,29 @@ class SiteViewController extends Controller
             // if the account is previously added fetch that through email
             $email = $data['email_address'];
             $user = User::where('email', $email)->first();
-
+            
             if ($user) {
                  // if user exists get its id
                 $userid = $user->id;
+
+                $itemIds = [];
+                foreach ($data['cartItems'] as $cartItem) {
+                    $itemIds[] = $cartItem['item_id'];
+                }
+                
+                // Create separate purchases for each item ID
+                foreach ($itemIds as $itemId) {
+                    Purchase::create([
+                        'user_id' => $user->id,
+                        'item_id' => $itemId
+                    ]);
+                }
+
             } else {
-                // if user not exist, create the user 
                 // Generate random password
                 $randomPassword = Str::random(8);
                 // Create user
-                User::create([
+                $user = User::create([
                     'name' => $data['f_name'],
                     'last_name' => $data['l_name'],
                     'address' => $data['address1'],
@@ -168,42 +184,38 @@ class SiteViewController extends Controller
                     'phone' => $data['phone'],
                     'password' => $randomPassword
                 ]);
-                // fetching user if after creating its record first
-                $email = $data['email_address'];
-                $user = User::where('email', $email)->first();
-                $userid = $user->id;
-            }
-            $itemIds = [];
-            foreach ($data['cartItems'] as $cartItem) {
-                $itemIds[] = $cartItem['item_id'];
-            }
-            
-            // Create separate purchases for each item ID
-            foreach ($itemIds as $itemId) {
-                Purchase::create([
-                    'user_id' => $userid,
-                    'item_id' => $itemId
+
+                $itemIds = [];
+                foreach ($data['cartItems'] as $cartItem) {
+                    $itemIds[] = $cartItem['item_id'];
+                }
+                
+                // Create separate purchases for each item ID
+                foreach ($itemIds as $itemId) {
+                    Purchase::create([
+                        'user_id' => $user->id,
+                        'item_id' => $itemId
+                    ]);
+                }
+
+                $status = Password::sendResetLink([
+                    'email' => $data['email_address']
                 ]);
+
+                if ($status == Password::RESET_LINK_SENT) {
+                    // Email sent, create a session variable
+                    session()->flash('email_sent', true);
+                }
+                
+                
+
             }
-            
-            
-          
-            
-        }
+
+            event(new Registered($user));
+
+            Auth::login($user);
     
-        // fetch items id from purchases table through user id
-        $item_ids = Purchase::where('user_id',$userid)->get('item_id');
-
-        // fetch items from item table through item ids
-        $purchases = Item::find($item_ids);
-
-       
-        // Return the view with cart data
-        return view('clientpages.user', [
-            'cartItems' => $purchases,
-        ]);
+            return redirect()->route('purchases.index');
+        }
     }
-
-   
-
 }

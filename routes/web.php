@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesSettingController;
 use App\Http\Controllers\SiteViewController;
 use App\Http\Controllers\StripeController;
+use App\Mail\ExampleMail;
+use Illuminate\Support\Facades\Mail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,7 +50,6 @@ Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->n
 
 // user details and profile settings 
 Route::get('/user', [SiteViewController::class, 'user'])->name('user');
-
 
 
  // adminside controller

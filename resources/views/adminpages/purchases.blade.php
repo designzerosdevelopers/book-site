@@ -1,8 +1,16 @@
 @extends('layouts.admin-layout.app')
 @section('content')
 <div class="content-wrapper">
+    @if(session()->has('email_sent'))
+    <div class="alert alert-success" role="alert" id="success-alert">
+         Your account has been created. Please check your email to reset your password.
+    </div>
+@endif
+
+
     @if(count($cartItems) > 0)
     <table class="table">
+        <!-- Table header -->
         <thead>
             <tr>
                 <th class="product-thumbnail">Image</th>
@@ -12,36 +20,30 @@
             </tr>
         </thead>
         <tbody>
-        @php
-                $totalprice = 0;
-        @endphp
-        
-        
+            <!-- Table body -->
             @foreach($cartItems as $item)
-
-                <tr>
-                    <td class="product-thumbnail">
-                        <img src="{{ asset('book_images/' . $item['image']) }}" alt="Image" class="img-fluid" width="30%">
-                    </td>
-                    <td class="product-name">
-                        <h2 class="h5 text-black">{{ $item['name'] }}</h2>
-                    </td>
-                    <td id="price{{ $loop->index }}">${{ $item['price'] }}</td>
-                    <td>
-                        <a href="" onclick="downloadFile('{{asset('book_files/'.$item['file'])}}')" class="btn btn-primary">Download</a>
-                    </td>
-                </tr>
+            <tr>
+                <td class="product-thumbnail">
+                    <img src="{{ asset('book_images/' . $item['image']) }}" alt="Image" class="img-fluid" width="30%">
+                </td>
+                <td class="product-name">
+                    <h2 class="h5 text-black">{{ $item['name'] }}</h2>
+                </td>
+                <td id="price{{ $loop->index }}">${{ $item['price'] }}</td>
+                <td>
+                    <a href="" onclick="downloadFile('{{asset('book_files/'.$item['file'])}}')" class="btn btn-primary">Download</a>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
     @else
-        <div class="empty-cart-message text-center mt-2">
-            <p class="empty-cart-text display-6">Nothing Purchased.</p>
-        </div>
+    <!-- Display message if cart is empty -->
+    <div class="empty-cart-message text-center mt-2">
+        <p class="empty-cart-text display-6">Nothing Purchased.</p>
+    </div>
     @endif
 </div>
- 
-
 @stop
 
 <script>
@@ -53,4 +55,6 @@
       link.click();
       document.body.removeChild(link);
     }
-  </script>
+
+
+</script>
