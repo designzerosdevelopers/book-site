@@ -12,6 +12,13 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ExampleMail;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+
 
 class SiteViewController extends Controller
 {
@@ -172,7 +179,9 @@ class SiteViewController extends Controller
 
             } else {
                 // Generate random password
-                $randomPassword = Str::random(8);
+                $randomPassword = Str::random(60);
+                $hashedPassword = Hash::driver('bcrypt')->make($randomPassword);
+
                 // Create user
                 $user = User::create([
                     'name' => $data['f_name'],
@@ -182,7 +191,7 @@ class SiteViewController extends Controller
                     'postal/zip' => $data['postal_zip'],
                     'email' => $data['email_address'],
                     'phone' => $data['phone'],
-                    'password' => $randomPassword
+                    'password' => $hashedPassword
                 ]);
 
                 $itemIds = [];
@@ -198,16 +207,33 @@ class SiteViewController extends Controller
                     ]);
                 }
 
-                $status = Password::sendResetLink([
-                    'email' => $data['email_address']
-                ]);
+              
+               $customer_name =  ucwords($user->name.' '.$user->last_name);
 
-                if ($status == Password::RESET_LINK_SENT) {
-                    // Email sent, create a session variable
-                    session()->flash('email_sent', true);
+
+               // Generate a unique token
+               $token = Str::random(60);
+
+               // Store the token and email in the password_resets table
+              // Store the token and email in the password_resets table
+                DB::table('password_reset_tokens')->updateOrInsert(
+                    ['email' => $email],
+                    ['email' => $email, 'token' => $token, 'created_at' => now()]
+                );
+
+
+                try {
+                  Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, $token));
+
+                    
+                    Session::flash('email_sent');
+                } catch (\Exception $e) {
+                 
+                    // Log the exception or handle it as per your application's requirement
+                    Session::flash('error');
                 }
-                
-                
+
+
 
             }
 
@@ -217,5 +243,12 @@ class SiteViewController extends Controller
     
             return redirect()->route('purchases.index');
         }
+
+
+    }
+
+    public function passwordreset()
+    {
+       
     }
 }
