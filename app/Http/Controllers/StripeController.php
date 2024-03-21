@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Helpers\SiteviewHelper;
 
 class StripeController extends Controller
 {
@@ -25,7 +26,7 @@ class StripeController extends Controller
             'amount' => 'required|numeric|min:0', 
         ]);
 
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
 
         $session = Session::create([
             'payment_method_types' => ['card'],

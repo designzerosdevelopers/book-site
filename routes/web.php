@@ -8,6 +8,7 @@ use App\Http\Controllers\StripeController;
 use App\Mail\ExampleMail;
 use Illuminate\Support\Facades\Mail;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,6 +52,8 @@ Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->n
 // user details and profile settings 
 Route::get('/user', [SiteViewController::class, 'user'])->name('user');
 
+Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
+
 
  // adminside controller
 Route::middleware('auth')->group(function () {   
@@ -87,5 +90,7 @@ Route::middleware('auth')->group(function () {
     // purchases routes
     Route:: get('/purchases', [PagesSettingController::class, 'purchases']) -> name ('purchases.index') ;
     
-  
+    // setting routes
+    Route::get('/settings', [PagesSettingController::class,'settingsindex'])->name('settings.index');
+    Route::post('/updatesettings', [PagesSettingController::class,'updatesettings'])->name('update.settings');
 });
