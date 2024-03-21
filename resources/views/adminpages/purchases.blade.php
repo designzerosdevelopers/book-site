@@ -2,10 +2,14 @@
 @section('content')
 <div class="content-wrapper">
     @if(session()->has('email_sent'))
-    <div class="alert alert-success" role="alert" id="success-alert">
-         Your account has been created. Please check your email to reset your password.
-    </div>
-@endif
+        <div class="alert alert-success" role="alert" id="success-alert">
+            Your account has been created. Please check your email to reset your password.
+        </div>
+    @elseif(session()->has('error'))
+        <div class="alert alert-warning" role="alert" id="success-alert">
+            <strong>Account Creation Successful:</strong> Your account has been created, but unfortunately, we were unable to send your password via email. Please contact support for assistance.
+        </div>
+   @endif
 
 
     @if(count($cartItems) > 0)

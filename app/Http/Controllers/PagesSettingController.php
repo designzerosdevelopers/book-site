@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Homepage;
 use App\Models\Upload;
+use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Purchase;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+
+
 
 
 
@@ -533,6 +536,53 @@ class PagesSettingController extends Controller
             'cartItems' => $items,
         ]);
     }
+
+    public function settingsindex()
+    {
+        $settings = Settings::get(["key", "value", "display_name"]);
+
+        $stripeSettings = [];
+        $paypalSettings = [];
+        
+        foreach ($settings as $setting) {
+            if ($setting->key === 'STRIPE_KEY' || $setting->key === 'STRIPE_SECRET') {
+                $stripeSettings[] = $setting;
+            } elseif ($setting->key === 'PAYPAL_KEY' || $setting->key === 'PAYPAL_SECRET') {
+                $paypalSettings[] = $setting;
+            }
+        }
+       
+        return view("adminpages.setting", ['stripeSettings' => $stripeSettings, 'paypalSettings' => $paypalSettings]);
+    }
+
+    
+    public function updatesettings(Request $request)
+    {
+        // Update settings where key is 'STRIPE_KEY'
+        if (!is_null($request->STRIPE_KEY)) {
+            Settings::where('key', 'STRIPE_KEY')->update(['value' => $request->STRIPE_KEY]);
+        }
+    
+        // Update settings where key is 'STRIPE_SECRET'
+        if (!is_null($request->STRIPE_SECRET)) {
+            Settings::where('key', 'STRIPE_SECRET')->update(['value' => $request->STRIPE_SECRET]);
+        }
+    
+        // Update settings where key is 'PAYPAL_KEY'
+        if (!is_null($request->PAYPAL_KEY)) {
+            Settings::where('key', 'PAYPAL_KEY')->update(['value' => $request->PAYPAL_KEY]);
+        }
+    
+        // Update settings where key is 'PAYPAL_SECRET'
+        if (!is_null($request->PAYPAL_SECRET)) {
+            Settings::where('key', 'PAYPAL_SECRET')->update(['value' => $request->PAYPAL_SECRET]);
+        }
+    
+        // Flash a success message to the session
+        return redirect()->back()->with('success', 'Settings updated successfully');
+    }
+    
+
     
     
     
