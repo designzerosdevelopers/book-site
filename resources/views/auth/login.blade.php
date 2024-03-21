@@ -15,7 +15,7 @@
                 <form method="POST" action="{{ route('login') }}" class="pt-3">
                   @csrf
                   <div class="form-group">
-                    <input type="email" class="form-control form-control-lg" id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username">
+                    <input type="email" class="form-control form-control-lg" id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Email">
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                   </div>
                   <div class="form-group">

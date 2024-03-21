@@ -151,11 +151,11 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 60px 50px;font-family:'Raleway',sans-serif;" align="left">
         
   <div class="v-text-align" style="font-size: 14px; line-height: 140%; text-align: justify; word-wrap: break-word;">
-    <p style="line-height: 140%;">Dear {{$customerName,}}</p>
+    <p style="line-height: 140%;">Dear {{$customerName}},</p>
 <p style="line-height: 140%;"> </p>
 <p style="line-height: 140%;">This is to informed you that your account has been successfully created. Your account is now secured with the new password that we have set. </p>
 <p style="line-height: 140%;"> </p>
-<p style="line-height: 140%;">Your temporary password is :{{$randomPassword}}</p>
+<p style="line-height: 140%;">Your login password is : {{ $randomPassword }}</p>
 <p style="line-height: 140%;"> </p>
 <p style="line-height: 140%;">If you want to change the password, please click on "Change Your Password"  button</p>
 <p style="line-height: 140%;"> </p>
@@ -164,7 +164,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 <p style="line-height: 140%;">Thank you for purchasing from Digital Store.</p>
 <p style="line-height: 140%;"> </p>
 <p style="line-height: 140%;">Best regards,</p>
-<p style="line-height: 140%;"> Digital Store.support team.</p>
+<p style="line-height: 140%;"> Digital Store support team.</p>
   </div>
 
       </td>
@@ -180,13 +180,14 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
 <div class="v-text-align" align="center">
   <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://unlayer.com/templates" style="height:37px; v-text-anchor:middle; width:189px;" arcsize="11%"  stroke="f" fillcolor="#316b94"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-    <form action="{{ route('password.reset', ['token' => $token]) }}" method="GET" target="_blank">
-        @csrf
-        <input type="hidden" name="email" value="{{ $email }}"> <!-- Replace example@example.com with the default email address -->
-        <button type="submit" class="v-button v-size-width" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #316b94; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px; padding: 10px 20px; line-height: 120%;">
-            <span style="line-height: 16.8px;">Change Your Password</span>
-        </button>
-    </form>
+    <form action="{{ route('profile.edit') }}" method="GET" target="_blank">
+      @csrf
+      <input type="hidden" name="email" value="{{ $email }}">
+      <button type="submit" class="v-button v-size-width" style="cursor: pointer; text-decoration: none; box-sizing: border-box; display: inline-block; -webkit-text-size-adjust: none; text-align: center; color: #FFFFFF; background-color: #316b94; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap: break-word; mso-border-alt: none; font-size: 14px; padding: 10px 20px; line-height: 120%;">
+          <span style="line-height: 16.8px;">Change Your Password</span>
+      </button>
+  </form>
+  
 
     {{-- <form action="{{ route('reset-password') }}" method="GET">
         <input type="hidden" name="token" value="9d46cb3a61327090e76ddcc6db81ac5fa5dd8d139ad03536d1eac58472a79d4f">
