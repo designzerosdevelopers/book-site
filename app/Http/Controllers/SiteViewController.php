@@ -179,7 +179,7 @@ class SiteViewController extends Controller
 
             } else {
                 // Generate random password
-                $randomPassword = Str::random(60);
+                $randomPassword = Str::random(8);
                 $hashedPassword = Hash::driver('bcrypt')->make($randomPassword);
 
                 // Create user
@@ -211,19 +211,19 @@ class SiteViewController extends Controller
                $customer_name =  ucwords($user->name.' '.$user->last_name);
 
 
-               // Generate a unique token
-               $token = Str::random(60);
+            //    // Generate a unique token
+            //    $token = Str::random(60);
 
-               // Store the token and email in the password_resets table
-              // Store the token and email in the password_resets table
-                DB::table('password_reset_tokens')->updateOrInsert(
-                    ['email' => $email],
-                    ['email' => $email, 'token' => $token, 'created_at' => now()]
-                );
+            //    // Store the token and email in the password_resets table
+            //   // Store the token and email in the password_resets table
+            //     DB::table('password_reset_tokens')->updateOrInsert(
+            //         ['email' => $email],
+            //         ['email' => $email, 'token' => $token, 'created_at' => now()]
+            //     );
 
 
                 try {
-                  Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, $token));
+                  Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email,));
 
                     
                     Session::flash('email_sent');
