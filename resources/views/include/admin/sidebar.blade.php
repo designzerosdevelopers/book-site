@@ -44,6 +44,12 @@
           <i class="fa-light"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('settings.index') }}">
+          <span class="menu-title">Settings</span>
+          <i class="fa-light"></i>
+        </a>
+      </li>
     @else
     <li class="nav-item">
       <a class="nav-link" href="{{ route('purchases.index') }}">
@@ -52,5 +58,6 @@
       </a>
     </li>
     @endif
+
     </ul>
   </nav>
