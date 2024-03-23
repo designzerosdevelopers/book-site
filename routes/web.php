@@ -56,7 +56,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
 
  // adminside controller
-Route::middleware('auth')->group(function () {   
+Route::middleware('auth', 'checkUserRole')->group(function () {   
     //homepage setting  route
     Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
     Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
@@ -87,10 +87,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/saveuploads', [PagesSettingController::class, 'saveuploads'])->name('save.uploads');
     Route::get('/deleteuploads', [PagesSettingController::class, 'deleteuploads'])->name('delete.uploads');
 
-    // purchases routes
-    Route:: get('/purchases', [PagesSettingController::class, 'purchases']) -> name ('purchases.index') ;
-    
     // setting routes
     Route::get('/settings', [PagesSettingController::class,'settingsindex'])->name('settings.index');
     Route::post('/updatesettings', [PagesSettingController::class,'updatesettings'])->name('update.settings');
+});
+Route::middleware('auth')->group(function () {  
+    // purchases routes
+    Route:: get('/purchases', [PagesSettingController::class, 'purchases']) -> name ('purchases.index');
 });
