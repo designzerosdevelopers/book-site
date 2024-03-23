@@ -1,6 +1,8 @@
 @extends('layouts.admin-layout.app')
 @section('content')
+
 <div class="content-wrapper">
+    <div class="card">
     @if(session()->has('email_sent'))
         <div class="alert alert-success" role="alert" id="success-alert">
             Your account has been created. Please check your email to reset your password.
@@ -47,6 +49,7 @@
         <p class="empty-cart-text display-6">Nothing Purchased.</p>
     </div>
     @endif
+</div>
 </div>
 @stop
 

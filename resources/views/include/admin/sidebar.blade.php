@@ -23,38 +23,38 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ route('indexitem') }}">
           <span class="menu-title">Items</span>
-          <i class="mdi mdi-format-list-numbered menu-icon"></i>
+          <i class="mdi mdi-package-variant menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ route('indexcategories') }}">
           <span class="menu-title">Categories</span>
-          <i class="fa-light "></i>
+          <i class="mdi mdi-view-module  menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ route('csv.import') }}">
           <span class="menu-title">Import & Export CSV </span>
-          <i class="fa-light"></i>
+          <i class="mdi mdi-package  menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ route('uploads.index') }}">
           <span class="menu-title">Uploads</span>
-          <i class="fa-light"></i>
+          <i class="mdi mdi-upload  menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ route('settings.index') }}">
           <span class="menu-title">Settings</span>
-          <i class="fa-light"></i>
+          <i class="mdi mdi-settings menu-icon"></i>
         </a>
       </li>
     @else
     <li class="nav-item">
       <a class="nav-link" href="{{ route('purchases.index') }}">
         <span class="menu-title">Purchase</span>
-        <i class="fa-light"></i>
+        <i class="mdi mdi-download menu-icon"></i>
       </a>
     </li>
     @endif
