@@ -18,7 +18,7 @@
                             <label for="">{{ $stripeSetting['display_name'] }}</label>
                             <input type="text" class="form-control" name="{{ $stripeSetting['key'] }}" value="{{ $stripeSetting['value'] }}">
                         </div>
-                @endforeach  
+                @endforeach
                 <button type="submit" class="btn btn-success">Save</button>
                 </form>   
             </div>

@@ -433,7 +433,8 @@ class PagesSettingController extends Controller
     }
 
     function uploadsindex()
-    {
+    { 
+        
         $files = Upload::get();
         return view('adminpages.uploads', ['uploadedFiles' => $files]);
     }
