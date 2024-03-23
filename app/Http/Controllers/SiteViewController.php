@@ -234,7 +234,6 @@ class SiteViewController extends Controller
                 }
 
 
-
             }
 
             event(new Registered($user));
