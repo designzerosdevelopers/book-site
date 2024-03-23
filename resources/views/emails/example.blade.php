@@ -189,11 +189,6 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </form>
   
 
-    {{-- <form action="{{ route('reset-password') }}" method="GET">
-        <input type="hidden" name="token" value="9d46cb3a61327090e76ddcc6db81ac5fa5dd8d139ad03536d1eac58472a79d4f">
-        <input type="hidden" name="email" value="maqsoodmn03@gmail.com">
-        <button type="submit">Reset Password</button>
-    </form> --}}
     
     
     
