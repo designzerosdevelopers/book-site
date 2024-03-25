@@ -100,8 +100,7 @@ class StripeController extends Controller
             $provider->getAccessToken();
             $response = $provider->capturePaymentOrder($request['token']);
             if (isset($response['status']) && $response['status'] == 'COMPLETED') {
-                return $this->paymentsuccess();
-
+                return redirect()->route('payment.success');
             } else {
                 return redirect()
                     ->route('createTransaction')
