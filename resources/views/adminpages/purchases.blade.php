@@ -1,6 +1,7 @@
 @extends('layouts.admin-layout.app')
 @section('content')
 
+
 <div class="content-wrapper">
     <div class="card">
     @if(session()->has('email_sent'))
@@ -8,11 +9,16 @@
             Your account has been created. Please check your email to reset your password.
         </div>
     @elseif(session()->has('error'))
-        <div class="alert alert-warning" role="alert" id="success-alert">
-            <strong>Account Creation Successful:</strong> Your account has been created, but unfortunately, we were unable to send your password via email. Please contact support for assistance.
+        <div class="alert alert-success" role="alert" id="success-alert">
+            <strong>Account Creation Successful:</strong> Your account has been created, but unfortunately, we were unable to send your password via email.
         </div>
-   @endif
+    @elseif(session()->has('repurchases'))
+        <div class="alert alert-success" role="alert" id="success-alert">
+            {{ session('repurchases') }}
+        </div>
+    @endif
 
+    
 
     @if(count($cartItems) > 0)
     <table class="table">

@@ -19,9 +19,18 @@ use Illuminate\Support\Facades\Mail;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('createTransaction', [StripeController::class, 'createTransaction'])->name('createTransaction');
+Route::get('process-transaction', [StripeController::class, 'processTransaction'])->name('processTransaction');
+Route::get('success-transaction', [StripeController::class, 'successTransaction'])->name('successTransaction');
+Route::get('cancel-transaction', [StripeController::class, 'cancelTransaction'])->name('cancelTransaction');
+Route::post('/paypalcharge', [StripeController::class, 'paypalcharge'])->name('paypalcharge');
 
-Route::post('/charge', [StripeController::class, 'charge'])->name('charge');
+Route::post('/stripecharge', [StripeController::class, 'stripecharge'])->name('stripecharge');
 Route::get('/checkout/cancel',  [StripeController::class, 'cancel'])->name('checkout.cancel');
+
+// payment success route
+Route::get('/paymentsuccess',  [StripeController::class, 'paymentsuccess'])->name('payment.success');
+
 
 Route::get('/dashboard', function () {
     return view('adminpages.dashboard');
@@ -51,7 +60,6 @@ Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->n
 
 // user details and profile settings 
 Route::get('/user', [SiteViewController::class, 'user'])->name('user');
-
 Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
 
