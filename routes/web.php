@@ -28,8 +28,6 @@ Route::post('/paypalcharge', [StripeController::class, 'paypalcharge'])->name('p
 Route::post('/stripecharge', [StripeController::class, 'stripecharge'])->name('stripecharge');
 Route::get('/checkout/cancel',  [StripeController::class, 'cancel'])->name('checkout.cancel');
 
-// payment success route
-Route::get('/paymentsuccess',  [StripeController::class, 'paymentsuccess'])->name('payment.success');
 
 
 Route::get('/dashboard', function () {
