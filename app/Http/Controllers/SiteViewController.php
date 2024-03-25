@@ -14,9 +14,11 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ExampleMail;
+use App\Mail\PostPurchaseMail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 
 
 
@@ -146,21 +148,21 @@ class SiteViewController extends Controller
     }
     
 
-   
-
     public function user(Request $request)
     {
     
         if (!empty(session('requestData'))) {
 
             // Retrieve data from session
-            $data = session('requestData');
-
+            $data =  Session::all();
+       
             // if the account is previously added fetch that through email
             $email = $data['email_address'];
             $user = User::where('email', $email)->first();
+           
             
             if ($user) {
+                $customer_name =  ucwords($user->name.' '.$user->last_name);
                  // if user exists get its id
                 $userid = $user->id;
 
@@ -176,6 +178,24 @@ class SiteViewController extends Controller
                         'item_id' => $itemId
                     ]);
                 }
+
+                // Remove cart cookie
+                if (isset($_COOKIE['cart'])) {
+                    unset($_COOKIE['cart']);
+                    setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
+                }
+
+                // Remove all data from the session
+                Session::flush();
+
+                try {
+                    Mail::to($email)->send(new PostPurchaseMail($customer_name, $email));
+  
+                    Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
+                } catch (\Exception $e) {
+                    dd($e);
+                }
+
 
             } else {
                 // Generate random password
@@ -208,31 +228,27 @@ class SiteViewController extends Controller
                 }
 
               
-               $customer_name =  ucwords($user->name.' '.$user->last_name);
+                // Remove cart cookie
+                if (isset($_COOKIE['cart'])) {
+                    unset($_COOKIE['cart']);
+                    setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
+                }
+                
+                $user = User::where('email', $email)->first();
+                $customer_name =  ucwords($user->name.' '.$user->last_name);
 
-
-            //    // Generate a unique token
-            //    $token = Str::random(60);
-
-            //    // Store the token and email in the password_resets table
-            //   // Store the token and email in the password_resets table
-            //     DB::table('password_reset_tokens')->updateOrInsert(
-            //         ['email' => $email],
-            //         ['email' => $email, 'token' => $token, 'created_at' => now()]
-            //     );
-
+                // Remove all data from the session
+                Session::flush();
 
                 try {
                   Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email,));
 
-                    
                     Session::flash('email_sent');
                 } catch (\Exception $e) {
                  
                     // Log the exception or handle it as per your application's requirement
                     Session::flash('error');
                 }
-
 
             }
 
@@ -246,8 +262,4 @@ class SiteViewController extends Controller
 
     }
 
-    public function passwordreset()
-    {
-       
-    }
 }

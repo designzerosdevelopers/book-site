@@ -159,20 +159,31 @@ class PagesSettingController extends Controller
     {
 
         $item = Item::find($id);
+        // Delete the item
+        $item->delete();
+
+        // Find the purchase record by its ID
+        $purchase = Purchase::where('item_id',$id);
+        // Delete the purchase record
+        $purchase->delete();
 
         $imagePath = public_path('book_images/' . $item->image);
         if (file_exists($imagePath)) {
             unlink($imagePath); // Deletes the image file
         }
+
+         
     
         // Delete file
         $filePath = public_path('book_files/' . $item->file);
         if (file_exists($filePath)) {
             unlink($filePath); // Deletes the file
         }
+
+       
+
     
-        // Delete the item
-        $item->delete();
+      
     
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }

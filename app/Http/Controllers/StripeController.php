@@ -8,12 +8,135 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Helpers\SiteviewHelper;
+use PayPalHttp\HttpException;
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\SandboxEnvironment;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
+
+
 
 class StripeController extends Controller
 {
-    public function charge(Request $request){
-       
 
+  
+  /**
+     * create transaction.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createTransaction()
+    {
+        return view('transaction');
+    }
+    /**
+     * process transaction.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    //  process transaction
+        public function paypalcharge(Request $request)
+        {
+            
+          
+           // Access the array
+            $requestData = $request->all();
+
+            // Loop through the request data and add to session
+            foreach ($requestData as $key => $value) {
+                session([$key => $value]);
+            }
+
+            // Optionally, you can store the entire request data as well
+            session(['requestData' => $requestData]);
+
+
+            $provider = new PayPalClient;
+            $provider->setApiCredentials(config('paypal'));
+            $paypalToken = $provider->getAccessToken();
+            $response = $provider->createOrder([
+                "intent" => "CAPTURE",
+                "application_context" => [
+                    "return_url" => route('successTransaction'),
+                    "cancel_url" => route('checkout.cancel'),
+                ],
+                "purchase_units" => [
+                    0 => [
+                        "amount" => [
+                            "currency_code" => 'usd',
+                            "value" => $request->amount
+                        ]
+                    ]
+                ]
+            ]);
+            if (isset($response['id']) && $response['id'] != null) {
+                // redirect to approve href
+                foreach ($response['links'] as $links) {
+                    if ($links['rel'] == 'approve') {
+                        return redirect()->away($links['href']);
+                    }
+                }
+                return redirect()
+                    ->route('createTransaction')
+                    ->with('error', 'Something went wrong.');
+            } else {
+                return redirect()
+                    ->route('createTransaction')
+                    ->with('error', $response['message'] ?? 'Something went wrong.');
+            }
+        }
+        /**
+         * success transaction.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        // executes the function if transaction is sucessful
+        public function successTransaction(Request $request)
+        {
+
+            $provider = new PayPalClient;
+            $provider->setApiCredentials(config('paypal'));
+            $provider->getAccessToken();
+            $response = $provider->capturePaymentOrder($request['token']);
+            if (isset($response['status']) && $response['status'] == 'COMPLETED') {
+                return $this->paymentsuccess();
+
+            } else {
+                return redirect()
+                    ->route('createTransaction')
+                    ->with('error', $response['message'] ?? 'Something went wrong.');
+            }
+        }
+        /**
+         * cancel transaction.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function cancelTransaction(Request $request)
+        {
+            return redirect()
+                ->route('createTransaction')
+                ->with('error', $response['message'] ?? 'You have canceled the transaction.');
+        }
+    
+
+
+
+
+    public function stripecharge(Request $request)
+    {
+        // Access the array
+        $requestData = $request->all();
+
+        // Loop through the request data and add to session
+        foreach ($requestData as $key => $value) {
+            session([$key => $value]);
+        }
+
+        // Optionally, you can store the entire request data as well
+        session(['requestData' => $requestData]);
+       
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
@@ -44,42 +167,13 @@ class StripeController extends Controller
             ],
             'customer_email' => $request->email_address,
             'mode' => 'payment',
-            'success_url' => $this->paymentsuccess($request),
+            'success_url' => route('user'),
             'cancel_url' => route('checkout.cancel'),
         ]);
 
         return redirect()->to($session->url);
     }
 
-
-    public function paymentsuccess(Request $request)
-    {
-       
-        $successMessage = "Your payment was successful";
-    
-        // Set flash message
-        session()->flash('success_message', $successMessage);
-    
-        // Remove cart cookie
-        if (isset($_COOKIE['cart'])) {
-            unset($_COOKIE['cart']);
-            setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
-        }
-
-        // Access the array
-        $requestData = $request->all();
-
-        // Store data in session
-        session(['requestData' => $requestData]);
-
-        // Redirect to the 'user' route
-        return route('user');
-        }
-
-
-
-   
-    
 
     public function cancel(Request $request)
     {
