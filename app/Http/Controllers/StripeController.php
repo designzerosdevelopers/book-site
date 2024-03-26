@@ -38,8 +38,24 @@ class StripeController extends Controller
     //  process transaction
         public function paypalcharge(Request $request)
         {
+         
+            $validator = Validator::make($request->all(), [
+                'f_name' => 'required|string|max:255',
+                'l_name' => 'required|string|max:255',
+                'product_name' => 'required|string|max:255',
+                'address1' => 'required|string|max:255',
+                'state_country' => 'required|string|max:255',
+                'postal_zip' => 'required|string|max:255',
+                'email_address' => 'required|email|max:255',
+                'amount' => 'required|numeric|min:0', 
+            ]);
+        
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator); 
+            }
             
-          
+            
+            
            // Access the array
             $requestData = $request->all();
 
@@ -144,9 +160,14 @@ class StripeController extends Controller
             'state_country' => 'required|string|max:255',
             'postal_zip' => 'required|string|max:255',
             'email_address' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
             'amount' => 'required|numeric|min:0', 
         ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator); 
+        }
+        
+        
 
         Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
 
