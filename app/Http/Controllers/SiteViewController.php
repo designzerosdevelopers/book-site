@@ -112,12 +112,16 @@ class SiteViewController extends Controller
 
     public function checkout(request $request)
     {
-        // Retrieve the subtotal from the form data
-        $subtotal = $request->input('subtotal');
+        // // Retrieve the subtotal from the form data
+        // $subtotal = $request->input('subtotal');
 
         // Retrieve the current cart items from the cookie
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
-        
+        $subtotal = 0;
+        foreach ($cartItems as $value) {
+           $value['item_price'];
+           $subtotal += $value['item_price'];  
+        }
         return view('clientpages.checkout', ['cartItems' => $cartItems], ['subtotal' => $subtotal]);
     }
     
