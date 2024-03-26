@@ -6,6 +6,7 @@ use Stripe\Checkout\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 use App\Helpers\SiteviewHelper;
 use PayPalHttp\HttpException;
@@ -42,17 +43,18 @@ class StripeController extends Controller
             $validator = Validator::make($request->all(), [
                 'f_name' => 'required|string|max:255',
                 'l_name' => 'required|string|max:255',
-                'product_name' => 'required|string|max:255',
                 'address1' => 'required|string|max:255',
                 'state_country' => 'required|string|max:255',
                 'postal_zip' => 'required|string|max:255',
                 'email_address' => 'required|email|max:255',
-                'amount' => 'required|numeric|min:0', 
+                'amount' => 'required|numeric|min:0',
             ]);
         
             if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator); 
+                return $this->redirectBackToCheckoutWithError($validator);
             }
+
+            
             
             
             
@@ -102,6 +104,13 @@ class StripeController extends Controller
                     ->with('error', $response['message'] ?? 'Something went wrong.');
             }
         }
+        
+        protected function redirectBackToCheckoutWithError($validator): RedirectResponse
+        {
+            return redirect()->route('checkout')->withInput()->withErrors($validator);
+        }
+
+
         /**
          * success transaction.
          *
@@ -155,7 +164,6 @@ class StripeController extends Controller
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
-            'product_name' => 'required|string|max:255',
             'address1' => 'required|string|max:255',
             'state_country' => 'required|string|max:255',
             'postal_zip' => 'required|string|max:255',
