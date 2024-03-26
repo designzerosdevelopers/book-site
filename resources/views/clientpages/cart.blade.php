@@ -118,8 +118,6 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <form id="checkoutForm" method="get" action="{{ route('checkout') }}">
-                                            @csrf <!-- CSRF protection -->
-                                            <input type="hidden" name="subtotal" id="subtotal1" value="{{$totalprice }}">
                                             <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</button>
                                         </form>
                                     </div>
@@ -133,7 +131,3 @@
         </div>
     </div>
 @stop
-
-
-
-
