@@ -18,15 +18,7 @@
 				</div>
 			</div>
 		<!-- End Hero Section -->
-		@if ($errors->any())
-		<div class="alert alert-danger">
-			<ul>
-				@foreach ($errors->all() as $error)
-					<li>{{ $error }}</li>
-				@endforeach
-			</ul>
-		</div>
-	@endif
+	
 	
 		<div class="untree_co-section">
 		    <div class="container">
@@ -37,47 +29,86 @@
 		          <h2 class="h3 mb-3 text-black">Billing Details</h2>
 		          <div class="p-3 p-lg-5 border bg-white">
 		            <div class="form-group row">
-		              <div class="col-md-6">
-		                <label for="fname" class="text-black">First Name <span class="text-danger">*</span></label>
-		                <input type="text" class="form-control" id="fname" name="f_name" required>
-		              </div>
-		              <div class="col-md-6">
-		                <label for="lname" class="text-black">Last Name <span class="text-danger">*</span></label>
-		                <input type="text" class="form-control" id="lname" name="l_name" required>
-		              </div>
-		            </div>
-
-		            <div class="form-group row">
-		              <div class="col-md-12">
-		                <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
-		                <input type="text" class="form-control" id="address" name="address1" placeholder="Street address" required>
-		              </div>
-		            </div>
-
-		            <div class="form-group mt-3">
-		              <input type="text" class="form-control" name="address2" placeholder="Apartment, suite, unit etc. (optional)">
-		            </div>
-
-		            <div class="form-group row">
-		              <div class="col-md-6">
-		                <label for="state_country" class="text-black">State / Country <span class="text-danger">*</span></label>
-		                <input type="text" class="form-control" id="state_country" name="state_country" required>
-		              </div>
-		              <div class="col-md-6">
-		                <label for="postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
-		                <input type="text" class="form-control" id="postal_zip" name="postal_zip" required>
-		              </div>
-		            </div>
-
-		            <div class="form-group row mb-5">
-		              <div class="col-md-6">
-		                <label for="email_address" class="text-black">Email Address <span class="text-danger">*</span></label>
-		                <input type="text" class="form-control" id="email_address" name="email_address" required>
-		              </div>
+						<div class="col-md-6">
+							<label for="fname" class="text-black">First Name <span class="text-danger">*</span></label>
+							<input type="text" class="form-control @error('f_name') is-invalid @enderror" id="fname" name="f_name" required>
+							@error('f_name')
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+						
+						<div class="col-md-6">
+							<label for="lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+							<input type="text" class="form-control @error('l_name') is-invalid @enderror" id="lname" name="l_name" required>
+							@error('l_name')
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+						
+						<!-- Repeat this pattern for other fields -->
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label for="address" class="text-black">Address <span class="text-danger">*</span></label>
+								<input type="text" class="form-control @error('address1') is-invalid @enderror" id="address" name="address1" placeholder="Street address" required>
+								@error('address1')
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+						</div>
+						
+						<!-- Address 2 -->
+						<div class="form-group mt-3">
+							<input type="text" class="form-control" name="address2" placeholder="Apartment, suite, unit etc. (optional)">
+						</div>
+						
+						<!-- State / Country -->
+						<div class="form-group row">
+							<div class="col-md-6">
+								<label for="state_country" class="text-black">State / Country <span class="text-danger">*</span></label>
+								<input type="text" class="form-control @error('state_country') is-invalid @enderror" id="state_country" name="state_country" required>
+								@error('state_country')
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+						
+							<!-- Postal / Zip -->
+							<div class="col-md-6">
+								<label for="postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
+								<input type="text" class="form-control @error('postal_zip') is-invalid @enderror" id="postal_zip" name="postal_zip" required>
+								@error('postal_zip')
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+						</div>
+						
+						<!-- Email Address -->
+						<div class="form-group row mb-5">
+							<div class="col-md-6">
+								<label for="email_address" class="text-black">Email Address <span class="text-danger">*</span></label>
+								<input type="text" class="form-control @error('email_address') is-invalid @enderror" id="email_address" name="email_address" required>
+								@error('email_address')
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+						
+						
 		              <div class="col-md-6">
 		                <label for="phone" class="text-black">Phone</label>
-		                <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
+		                <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number (optional)">
 		              </div>
+						</div>
 		            </div>
 		          </div>
 		        </div>

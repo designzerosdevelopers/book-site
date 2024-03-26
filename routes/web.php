@@ -51,7 +51,7 @@ Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
 Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
 Route::get('/remove-from-cart/{itemId}', [SiteViewController::class, 'removeFromCart'])->name('remove_from_cart');
-Route::post('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
+Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
 Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
