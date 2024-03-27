@@ -182,13 +182,23 @@
 <script>
   $(document).ready(function() {
     $('#stripeButton').click(function() {
-      $('#paymentForm').attr('action', '{{ route("stripecharge", ["cartItems" => $cartItems ]) }}');
-      $('#paymentForm').submit();
+      if ($('#paymentForm')[0].checkValidity()) { // Check form validity before submission
+        $('#paymentForm').attr('action', '{{ route("stripecharge", ["cartItems" => $cartItems ]) }}');
+        $('#paymentForm').submit();
+      } else {
+        // Let HTML5 form validation handle the error message
+        $('#paymentForm')[0].reportValidity();
+      }
     });
 
     $('#paypalButton').click(function() {
-      $('#paymentForm').attr('action', '{{ route("paypalcharge", ["cartItems" => $cartItems ]) }}');
-      $('#paymentForm').submit();
+      if ($('#paymentForm')[0].checkValidity()) { // Check form validity before submission
+        $('#paymentForm').attr('action', '{{ route("paypalcharge", ["cartItems" => $cartItems ]) }}');
+        $('#paymentForm').submit();
+      } else {
+        // Let HTML5 form validation handle the error message
+        $('#paymentForm')[0].reportValidity();
+      }
     });
   });
 </script>
