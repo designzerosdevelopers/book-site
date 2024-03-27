@@ -44,26 +44,30 @@
                   </div>
                   <div class="row">
                       <div class="col-md-6">
-                          <div class="form-group row">
-                              <label class="col-sm-3 col-form-label">Image</label>
-                              <div class="col-sm-9">
-                                  <input type="file" class="form-control" name="image" />
-                                  @error('image')
-                                      <span class="text-danger">{{ $message }}</span>
-                                  @enderror
-                              </div>
-                          </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Image</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="" name="image" placeholder="Paste Image Url" >
+                                    </div>
+                                    @error('image')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                       </div>
                       <div class="col-md-6">
-                          <div class="form-group row">
-                              <label class="col-sm-3 col-form-label">File</label>
-                              <div class="col-sm-9">
-                                  <input type="file" class="form-control" name="bookfile" />
-                                  @error('bookfile')
-                                      <span class="text-danger">{{ $message }}</span>
-                                  @enderror
-                              </div>
-                          </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">File</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="" name="bookfile" placeholder="Paste File Url" id="file"> 
+                                    </div>
+                                    @error('bookfile')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                       </div>
                   </div>
                   <div class="row">
@@ -72,7 +76,7 @@
                             <label class="col-sm-3 col-form-label">Category</label>
                             <div class="col-sm-9">
                                 <select class="form-control" name="category">
-                                    <option value="" disabled selected>Select a category</option>
+                                    <option value="" disabled selected >Select a category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{$category->id}}">{{ $category->category_name }}</option>
                                     @endforeach
@@ -97,10 +101,13 @@
                           </div>
                       </div>
                   </div>
-                  <button type="submit" class="btn btn-gradient-primary me-2">Save</button>
+                  <button type="submit" class="btn btn-gradient-success me-2">Save</button>
               </form>
               </div>
             </div>
           </div>
         </div>
 @stop
+
+
+
