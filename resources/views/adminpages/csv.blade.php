@@ -14,6 +14,19 @@
                                 {{ session('status') }}
                             </div>
                         @endif
+                    
+                        @if ($errors->has('csv_file'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ $errors->first('csv_file') }}
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div id="success-alert" class="alert alert-danger" role="alert">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                    
 
                         <form method="POST" action="{{ route('csv.save') }}" enctype="multipart/form-data">
                             @csrf

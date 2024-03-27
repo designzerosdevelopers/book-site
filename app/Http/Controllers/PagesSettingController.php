@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
+
 
 
 
@@ -52,8 +54,8 @@ class PagesSettingController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bookfile' => 'required|mimes:pdf|max:2048',
+            'image' => 'required|url',
+            'bookfile' => 'required|url',
             'category' => 'required|string',
             'description' => 'required|string',
         ]);
@@ -69,25 +71,25 @@ class PagesSettingController extends Controller
             $counter++;
         }
 
-        // Store image file
-        $imageExtension = $request->file('image')->extension();
-        $fileExtension = $request->file('bookfile')->extension();
+        // // Store image file
+        // $imageExtension = $request->file('image')->extension();
+        // $fileExtension = $request->file('bookfile')->extension();
         
-        $unique_image =  uniqid() . '.' . $imageExtension;
-        $uniquesfile =  $request->name . '.' . $fileExtension;
+        // $unique_image =  uniqid() . '.' . $imageExtension;
+        // $uniquesfile =  $request->name . '.' . $fileExtension;
 
-        $request->file('image')->move(public_path('book_images'), $unique_image);
-        $request->file('bookfile')->move(public_path('book_files'), $uniquesfile);
+        // $request->file('image')->move(public_path('book_images'), $unique_image);
+        // $request->file('bookfile')->move(public_path('book_files'), $uniquesfile);
 
         // Process the validated data and store it in the database
         $item = new Item();
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
-        $item->image = $unique_image;
-        $item->file = $uniquesfile;
+        $item->image = $validatedData['image'];
+        $item->file = $validatedData['bookfile'];
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
-        $item->slug = $uniqueSlug; // Assign the unique slug to the item
+        $item->slug = $uniqueSlug;
         $item->save();
 
         // Redirect the user or return a response indicating success
@@ -112,41 +114,43 @@ class PagesSettingController extends Controller
             'price' => 'required|numeric',
             'category' => 'required|string',
             'description' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Example validation for image file
-            'bookfile' => 'max:2048', // Example validation for file
+            'image' => 'url', // Example validation for image file
+            'bookfile' => 'url', // Example validation for file
         ]);
     
         // Update item attributes with the new data
         $item->name = $request->name;
         $item->price = $request->price;
+        $item->image = $request->image;
+        $item->file = $request->bookfile;
         $item->category = $request->category;
         $item->description = $request->description;
     
-        // Handle image update if provided
-        if ($request->hasFile('image')) {
-            // Delete previous image if it exists
-            if ($item->image && file_exists(public_path('book_images/'.$item->image))) {
-                unlink(public_path('book_images/'.$item->image));
-            }
+        // // Handle image update if provided
+        // if ($request->hasFile('image')) {
+        //     // Delete previous image if it exists
+        //     if ($item->image && file_exists(public_path('book_images/'.$item->image))) {
+        //         unlink(public_path('book_images/'.$item->image));
+        //     }
     
-            $imageExtension = $request->file('image')->extension();
-            $uniqueImage = uniqid() . '.' . $imageExtension;
-            $request->file('image')->move(public_path('book_images'), $uniqueImage);
-            $item->image = $uniqueImage;
-        }
+        //     $imageExtension = $request->file('image')->extension();
+        //     $uniqueImage = uniqid() . '.' . $imageExtension;
+        //     $request->file('image')->move(public_path('book_images'), $uniqueImage);
+        //     $item->image = $uniqueImage;
+        // }
     
         // Handle file update if provided
-        if ($request->hasFile('bookfile')) {
-            // Delete previous file if it exists
-            if ($item->file && file_exists(public_path('book_files/'.$item->file))) {
-                unlink(public_path('book_files/'.$item->file));
-            }
+        // if ($request->hasFile('bookfile')) {
+        //     // Delete previous file if it exists
+        //     if ($item->file && file_exists(public_path('book_files/'.$item->file))) {
+        //         unlink(public_path('book_files/'.$item->file));
+        //     }
     
-            $fileExtension = $request->file('bookfile')->extension();
-            $uniqueFile = $request->name . '.' . $fileExtension;
-            $request->file('bookfile')->move(public_path('book_files'), $uniqueFile);
-            $item->file = $uniqueFile;
-        }
+        //     $fileExtension = $request->file('bookfile')->extension();
+        //     $uniqueFile = $request->name . '.' . $fileExtension;
+        //     $request->file('bookfile')->move(public_path('book_files'), $uniqueFile);
+        //     $item->file = $uniqueFile;
+        // }
     
         // Save the changes to the database
         $item->save();
@@ -349,63 +353,110 @@ class PagesSettingController extends Controller
     {
         // Validate the CSV file
         $validator = Validator::make($request->all(), [
-            'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Adjust the file size limit if necessary
+            'csv_file' => 'required|file|mimes:txt,csv',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+    
         // Retrieve the uploaded CSV file
         $csvFile = $request->file('csv_file');
-       // Read the CSV file
-        $csvData = array_map('str_getcsv', file($csvFile));
-
+        
         // Read the CSV file
         $csvData = array_map('str_getcsv', file($csvFile));
-
+        
         // Extract header row from CSV
         $header = array_shift($csvData);
-
-        // Process the CSV data and insert into the database
+        
+        // Define the required columns
+        $requiredColumns = ['id','name', 'price', 'description', 'category'];
+        
+        // Check if all required columns exist in the header
+        $missingColumns = array_diff($requiredColumns, $header);
+        
+        if (!empty($missingColumns)) {
+            // Construct the error message
+            $errorMessage = 'The CSV file is missing the following column(s): ' . implode(', ', $missingColumns);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+        
+        // Check for empty cells
         foreach ($csvData as $row) {
-            $itemData = [];
-            foreach ($header as $index => $columnName) {
-                switch ($columnName) {
-                    case 'name':
-                        $itemData['name'] = $row[$index];
-                        break;
-                    case 'price':
-                        $itemData['price'] = $row[$index];
-                        break;
-                    case 'image':
-                        $itemData['image'] = $row[$index];
-                        break;
-                    case 'file':
-                        $itemData['file'] = $row[$index];
-                        break;
-                    case 'description':
-                        $itemData['description'] = $row[$index];
-                        break;
+            foreach ($row as $idx => $value) {
+                if ($value === "") {
+                    return redirect()->back()->with('error', 'Empty cell found at (ID '.($idx + 1).'). Please fill in the missing data.');
+                }
+            }
+        }
+        
+        // Process the CSV data and insert into the database
+        try {
+            DB::beginTransaction();
+
+            
+        
+            foreach ($csvData as $indx => $row) {
+
+                
+                $itemData = [];
+                foreach ($header as $index => $columnName) {
+                    switch ($columnName) {
+                        case 'name':
+                        case 'price':
+                        case 'image':
+                        case 'file':
+                        case 'description':
+                            $itemData[$columnName] = $row[$index];
+                            break;
                         case 'category':
                             // Fetch category ID based on the given category name
                             $categoryName = $row[$index];
-                            $categoryId = Categories::where('category_name','=',$categoryName)->firstOrFail()->id;
-                            $itemData['category']=$categoryId;
-                        break;  
+
+                            // Check if the category exists in the database
+                            $categoryId = Categories::where('category_name', $categoryName)->value('id');
+                            
+                            if ($categoryId) {
+                                // If the category exists, assign its ID to the item data
+                                $itemData['category'] = $categoryId;
+                            } else {
+                                // If the category doesn't exist, create it
+                                $newCategory = Categories::create(['category_name' => $categoryName]);
+                            
+                                // Check if the category was created successfully
+                                if ($newCategory) {
+                                    // Assign the newly created category's ID to the item data
+                                    $itemData['category'] = $newCategory->id;
+                                } else {
+                                    // Log error and skip insertion
+                                    Log::error("Failed to create category '$categoryName' for item '{$row['name']}'");
+                                    continue 2; // Skip to the next row
+                                }
+                            }
+                            
+                        break;                            
                     }
+                }
+        
+                // Generate slug from name
+                $itemData['slug'] = Str::slug($itemData['name']);
+        
+                // Insert into the database
+                Item::create($itemData);
             }
-            
-            // Generate slug from name
-            $itemData['slug'] = Str::slug($itemData['name']);
-
-            // Assuming Item is the model name for your database table
-            Item::create($itemData);
+        
+            DB::commit();
+        
+            // Redirect back with a success message
+            return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
+        
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error("Error processing CSV file: " . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
         }
-
-        // Redirect back with a success message
-        return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
     }
+    
    
     public function ExportCsv()
     {
@@ -446,7 +497,7 @@ class PagesSettingController extends Controller
     function uploadsindex()
     { 
         
-        $files = Upload::get();
+        $files = Upload::orderBy('created_at', 'desc')->get();
         return view('adminpages.uploads', ['uploadedFiles' => $files]);
     }
 

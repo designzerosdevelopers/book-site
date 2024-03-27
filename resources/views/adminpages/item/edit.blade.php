@@ -22,7 +22,7 @@
                         </div>
                         @if(!empty($item->image))
                       
-                            <img src="{{ asset( 'book_images/'.$item->image) }}" alt="Item image" style="max-width: 100px; max-height: 200px; margin-left: 15px;">
+                            <img src="{{ asset($item->image) }}" alt="Item image" style="max-width: 100px; max-height: 200px; margin-left: 15px;">
                         @endif
                     </div>
                     @if(session('success'))
@@ -52,7 +52,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Image</label>
                             <div class="col-sm-9">
-                                <input type="file" class="form-control" name="image" />
+                                <input type="text" class="form-control" name="image" />
                                 @error('image')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -76,7 +76,7 @@
                           <div class="form-group row">
                               <label class="col-sm-3 col-form-label">File</label>
                               <div class="col-sm-9">
-                                  <input type="file" class="form-control" name="bookfile" />
+                                  <input type="text" class="form-control" name="bookfile" />
                                   @error('bookfile')
                                       <span class="text-danger">{{ $message }}</span>
                                   @enderror
