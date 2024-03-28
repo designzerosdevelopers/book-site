@@ -48,7 +48,7 @@
                                    
                                         <tr>
                                             <td class="product-thumbnail">
-                                                <img src="{{ asset('book_images/' . $item['item_image']) }}" alt="Image" class="img-fluid" width="30%">
+                                                <img src="{{ asset( $item['item_image']) }}" alt="Image" class="img-fluid" width="30%">
                                             </td>
                                             <td class="product-name">
                                                 <h2 class="h5 text-black">{{ $item['item_name'] }}</h2>

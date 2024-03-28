@@ -88,7 +88,7 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-md-6 product-detail-main-img img-wrap">
-									<img src="{{ asset('book_images/'.$product->image ) }}" alt="Product Image" class="product-image">
+									<img src="{{ asset($product->image ) }}" alt="Product Image" class="product-image">
 								</div>
 								<div class="col-md-6">
 									<h1 class="product-title">{{ $product->name }}</h1>
