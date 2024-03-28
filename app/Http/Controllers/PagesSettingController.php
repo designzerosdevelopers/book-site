@@ -25,10 +25,19 @@ use Illuminate\Support\Facades\Log;
 
 class PagesSettingController extends Controller
 {
+ 
+    public function dashboard() {
+       
 
-    /**
-     * Display a listing of the resource.
-     */
+        $totalSaleAmount = Purchase::join('items', 'purchases.item_id', '=', 'items.id')
+                                   ->sum('items.price');
+
+                                   return view('adminpages.dashboard', ['totalsale' => $totalSaleAmount]);
+
+    }
+
+   
+
     public function indexitem()
     {
         // Fetch the homepage data
@@ -126,31 +135,7 @@ class PagesSettingController extends Controller
         $item->category = $request->category;
         $item->description = $request->description;
     
-        // // Handle image update if provided
-        // if ($request->hasFile('image')) {
-        //     // Delete previous image if it exists
-        //     if ($item->image && file_exists(public_path('book_images/'.$item->image))) {
-        //         unlink(public_path('book_images/'.$item->image));
-        //     }
-    
-        //     $imageExtension = $request->file('image')->extension();
-        //     $uniqueImage = uniqid() . '.' . $imageExtension;
-        //     $request->file('image')->move(public_path('book_images'), $uniqueImage);
-        //     $item->image = $uniqueImage;
-        // }
-    
-        // Handle file update if provided
-        // if ($request->hasFile('bookfile')) {
-        //     // Delete previous file if it exists
-        //     if ($item->file && file_exists(public_path('book_files/'.$item->file))) {
-        //         unlink(public_path('book_files/'.$item->file));
-        //     }
-    
-        //     $fileExtension = $request->file('bookfile')->extension();
-        //     $uniqueFile = $request->name . '.' . $fileExtension;
-        //     $request->file('bookfile')->move(public_path('book_files'), $uniqueFile);
-        //     $item->file = $uniqueFile;
-        // }
+       
     
         // Save the changes to the database
         $item->save();
@@ -370,7 +355,7 @@ class PagesSettingController extends Controller
         $header = array_shift($csvData);
         
         // Define the required columns
-        $requiredColumns = ['id','name', 'price', 'description', 'category'];
+        $requiredColumns = ['name', 'price', 'description', 'category'];
         
         // Check if all required columns exist in the header
         $missingColumns = array_diff($requiredColumns, $header);
@@ -382,10 +367,10 @@ class PagesSettingController extends Controller
         }
         
         // Check for empty cells
-        foreach ($csvData as $row) {
-            foreach ($row as $idx => $value) {
+        foreach ($csvData as $idx => $row) {
+            foreach ($row as  $value) {
                 if ($value === "") {
-                    return redirect()->back()->with('error', 'Empty cell found at (ID '.($idx + 1).'). Please fill in the missing data.');
+                    return redirect()->back()->with('error', 'Empty cell found at (Row '.($idx + 2).'). Please fill in the missing data.');
                 }
             }
         }

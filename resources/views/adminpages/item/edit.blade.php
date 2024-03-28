@@ -41,7 +41,7 @@
                           <div class="form-group row">
                               <label class="col-sm-3 col-form-label">Name</label>
                               <div class="col-sm-9">
-                                  <input type="text" class="form-control" name="name" value="{{ $item->name}}" />
+                                  <input type="text" class="form-control" name="name" value="{{ $item->name }}" />
                                   @error('name')
                                       <span class="text-danger">{{ $message }}</span>
                                   @enderror
@@ -52,7 +52,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Image</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="image" />
+                                <input type="text" class="form-control" name="image" value="{{ $item->image }}" />
                                 @error('image')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -76,7 +76,7 @@
                           <div class="form-group row">
                               <label class="col-sm-3 col-form-label">File</label>
                               <div class="col-sm-9">
-                                  <input type="text" class="form-control" name="bookfile" />
+                                  <input type="text" class="form-control" name="bookfile" value="{{  $item->file }}"/>
                                   @error('bookfile')
                                       <span class="text-danger">{{ $message }}</span>
                                   @enderror

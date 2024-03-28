@@ -29,10 +29,8 @@ Route::post('/stripecharge', [StripeController::class, 'stripecharge'])->name('s
 Route::get('/checkout/cancel',  [StripeController::class, 'cancel'])->name('checkout.cancel');
 
 
+Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', function () {
-    return view('adminpages.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
