@@ -29,7 +29,7 @@ Route::post('/stripecharge', [StripeController::class, 'stripecharge'])->name('s
 Route::get('/checkout/cancel',  [StripeController::class, 'cancel'])->name('checkout.cancel');
 
 
-Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 
 Route::middleware('auth')->group(function () {
@@ -60,7 +60,10 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
 
  // adminside controller
-Route::middleware('auth', 'checkUserRole')->group(function () {   
+Route::middleware('auth', 'checkUserRole')->group(function () {
+    // dashboard
+    Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
     //homepage setting  route
     Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
     Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
@@ -95,7 +98,7 @@ Route::middleware('auth', 'checkUserRole')->group(function () {
     Route::get('/settings', [PagesSettingController::class,'settingsindex'])->name('settings.index');
     Route::post('/updatesettings', [PagesSettingController::class,'updatesettings'])->name('update.settings');
 });
-Route::middleware('auth')->group(function () {  
+Route::middleware('auth')->group(function () {
     // purchases routes
     Route:: get('/purchases', [PagesSettingController::class, 'purchases']) -> name ('purchases.index');
 });

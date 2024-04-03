@@ -20,12 +20,12 @@
                   <a href="{{route('createitem')}}" class="ml-auto"><button class="btn btn-gradient-success me-2">Create</button></a>
               </div>      
               @if(session('success'))
-                <div class="alert alert-success" role="alert" id="updateSuccessAlert">
+                <div class="alert alert-success" role="alert" id="success-alert">
                     {{ session('success') }}
                 </div>
               @endif        
               @if(session('error'))
-              <div class="alert alert-danger" role="alert" id="updateSuccessAlert">
+              <div class="alert alert-danger" role="alert" id="error-alert">
                   {{ session('error') }}
               </div>
             @endif 
