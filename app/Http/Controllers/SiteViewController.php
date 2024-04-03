@@ -62,16 +62,16 @@ class SiteViewController extends Controller
         if (!$request->has('id')) {
             // Retrieve existing cart data from the cookie
             $cart = json_decode($request->cookie('cart'), true) ?? [];
-            
+          
             // Return the view with cart data
             return view('clientpages.cart', [
                 'cartItems' => $cart,
             ]);
         }
-    
+       
         // Retrieve existing cart data from the cookie
         $cart = json_decode($request->cookie('cart'), true) ?? [];
-         
+       
         // Find the item
         $item = Item::find($request->id);
     
@@ -84,6 +84,8 @@ class SiteViewController extends Controller
                 'item_price' => $item->price
             ];
         }
+
+    
     
         // Update the cart data in the cookie
         $response = response()->view('clientpages.cart', [
@@ -112,8 +114,7 @@ class SiteViewController extends Controller
 
     public function checkout(request $request)
     {
-        // // Retrieve the subtotal from the form data
-        // $subtotal = $request->input('subtotal');
+      
 
         // Retrieve the current cart items from the cookie
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
@@ -147,9 +148,17 @@ class SiteViewController extends Controller
     public function getCartItemCount(){
         $dataCookie = request()->cookie('cart');
         $records = json_decode($dataCookie, true);
-        $recordCount = count($records);
-        return $recordCount;
+    
+        // Check if decoding was successful and $records is not null
+        if ($records !== null) {
+            $recordCount = count($records);
+            return $recordCount;
+        } else {
+            // Handle the case when the cookie is empty or not set
+            return 0; // or handle it in some other way
+        }
     }
+    
     
 
     public function user(Request $request)
@@ -158,8 +167,9 @@ class SiteViewController extends Controller
         if (!empty(session('requestData'))) {
 
             // Retrieve data from session
-            $data =  Session::all();
-       
+            $data = session('requestData');
+          
+        
             // if the account is previously added fetch that through email
             $email = $data['email_address'];
             $user = User::where('email', $email)->first();
@@ -170,13 +180,7 @@ class SiteViewController extends Controller
                  // if user exists get its id
                 $userid = $user->id;
 
-                $itemIds = [];
-                foreach ($data['cartItems'] as $cartItem) {
-                    $itemIds[] = $cartItem['item_id'];
-                }
-                
-                // Create separate purchases for each item ID
-                foreach ($itemIds as $itemId) {
+                foreach (array_keys($data['amp;cartItems']) as $itemId) {
                     Purchase::create([
                         'user_id' => $user->id,
                         'item_id' => $itemId
@@ -197,7 +201,7 @@ class SiteViewController extends Controller
   
                     Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
                 } catch (\Exception $e) {
-                    dd($e);
+                 
                 }
 
 
@@ -218,18 +222,14 @@ class SiteViewController extends Controller
                     'password' => $hashedPassword
                 ]);
 
-                $itemIds = [];
-                foreach ($data['cartItems'] as $cartItem) {
-                    $itemIds[] = $cartItem['item_id'];
-                }
-                
-                // Create separate purchases for each item ID
-                foreach ($itemIds as $itemId) {
+              
+                foreach (array_keys($data['amp;cartItems']) as $itemId) {
                     Purchase::create([
                         'user_id' => $user->id,
                         'item_id' => $itemId
                     ]);
                 }
+                
 
               
                 // Remove cart cookie

@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
 use App\Models\User;
+use App\Models\Item;
+use App\Models\Purchase;
 use App\Helpers\SiteviewHelper;
 use PayPalHttp\HttpException;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
@@ -39,7 +41,34 @@ class StripeController extends Controller
     //  process transaction
         public function paypalcharge(Request $request)
         {
-         
+            $requestData = $request->all();
+            $email = $request['email_address'];
+            $user = User::where('email', $email)->first();
+            if ($user) {
+                $existingItemIds = [];
+                foreach (array_keys($requestData['amp;cartItems']) as $itemId) {
+                    $existingItems = Purchase::where('user_id', $user->id)
+                                             ->where('item_id', $itemId)
+                                             ->pluck('item_id')
+                                             ->toArray();
+                    if (!empty($existingItems)) {
+                        foreach ($existingItems as $itemId) {
+                            $bookName = Item::where('id', $itemId)->value('name');
+                            if ($bookName) {
+                                $existingItemIds[] = $bookName;
+                            }
+                        }
+                    }
+                }
+                return redirect()->back()->withInput()->with('errorpaypal', $existingItemIds);
+            }
+
+            
+
+
+           
+
+
             $validator = Validator::make($request->all(), [
                 'f_name' => 'required|string|max:255',
                 'l_name' => 'required|string|max:255',
@@ -53,22 +82,12 @@ class StripeController extends Controller
             if ($validator->fails()) {
                 return $this->redirectBackToCheckoutWithError($validator);
             }
-
-            
-            
-            
-            
            // Access the array
             $requestData = $request->all();
-
-            // Loop through the request data and add to session
-            foreach ($requestData as $key => $value) {
-                session([$key => $value]);
-            }
+          
 
             // Optionally, you can store the entire request data as well
             session(['requestData' => $requestData]);
-
 
             $provider = new PayPalClient;
             $provider->setApiCredentials(config('paypal'));
