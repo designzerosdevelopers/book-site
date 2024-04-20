@@ -7,6 +7,8 @@ use App\Http\Controllers\SiteViewController;
 use App\Http\Controllers\StripeController;
 use App\Mail\ExampleMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\NavbarController;
+
 
 
 /*
@@ -43,20 +45,24 @@ require __DIR__.'/auth.php';
 // clientside controller
 Route::get('/', [SiteViewController::class, 'index'])->name('index');
 Route::get('/product-details', [SiteViewController::class, 'productdetails'])->name('product.details');
-Route::get('/about', [SiteViewController::class, 'about'])->name('about');
+// Route::get('/about', [SiteViewController::class, 'about'])->name('about');
 
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
+Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
+
 Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
 Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
 Route::get('/remove-from-cart/{itemId}', [SiteViewController::class, 'removeFromCart'])->name('remove_from_cart');
 Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
-Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
+// Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
 
 // user details and profile settings 
 Route::get('/user', [SiteViewController::class, 'user'])->name('user');
 Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
+
+
 
 
  // adminside controller
@@ -68,6 +74,16 @@ Route::middleware('auth', 'checkUserRole')->group(function () {
     Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
     Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
     Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
+
+    // edit manu
+    Route::get('/navbar', [NavbarController::class, 'index'])->name('edit.manu');
+    Route::put('/navbar/update/{id}', [NavbarController::class, 'update'])->name('navitems.update');
+    // delete manu
+    Route::delete('/deletemanu', [PagesSettingController::class, 'deleteManu'])->name('delete.manu');
+
+    Route::post('/update-navigation-order', [PagesSettingController::class, 'updateOrder'])->name('update.order');
+
+
 
     //category routes
     Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
@@ -102,3 +118,10 @@ Route::middleware('auth')->group(function () {
     // purchases routes
     Route:: get('/purchases', [PagesSettingController::class, 'purchases']) -> name ('purchases.index');
 });
+
+Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
+
+// Route::post('post/{navrout}', [SiteViewController::class, 'post'])->name('dynamic.route');
+// Route::get('/dynamic/{id}/{route}', function ($id, $route) {
+//     // Your dynamic route logic here
+// })->name('dynamic.route');
