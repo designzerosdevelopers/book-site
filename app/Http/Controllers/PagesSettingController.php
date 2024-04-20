@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Navbar;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
+
+
 
 
 
@@ -227,6 +232,52 @@ class PagesSettingController extends Controller
         // Pass the data to the view
         return view('adminpages.editpages.homesetting', compact('homepage'));
     }
+
+    public function editmanu()
+    {
+          return view('adminpages.editpages.editmanu');
+    }
+
+
+    public function deleteManu(Request $request) 
+    {
+        $filename = $request->filename;
+        //   deleting the nambar
+        $id = $request->id;
+        $nav = Navbar::find($id);
+        $nav->delete();
+
+        $filename = $request->filename;
+        $filePath = resource_path("views/clientpages/{$filename}.blade.php");
+        
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+            $message = "File '{$filename}.blade.php' has been deleted successfully.";
+            return redirect()->back()->with('success', $message); 
+        } else {
+            $error = "File '{$filename}.blade.php' does not exist.";
+            return redirect()->back()->with('error', $error); 
+        }
+        
+    }
+
+    public function updateOrder(Request $request)
+    {
+       
+        foreach ($request->updated_data as $key => $value) {
+           dd($value);
+        }
+        $filtered = $request->updated_data;
+        foreach ($filtered as $value) {
+            dd($value['name']);
+        }
+       
+    }
+
+    
+
+
+
             
   
     public function updatehome(Request $request)

@@ -42,7 +42,7 @@
                 <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
                     <h2 class="mb-4 section-title">Embark on literary journeys crafted with excellent narratives.</h2>
                     <p class="mb-4">Lost in the library's embrace, she found solace among the books. Each spine a doorway to a new world, each page a whispered invitation to adventure. In that quiet sanctuary, she discovered the timeless magic of stories. </p>
-                    <p><a href="{{ route('shop') }}" class="btn">Explore</a></p>
+                    <p><a href="" class="btn">Explore</a></p>
                 </div>
                 <!-- End Column 1 -->
 

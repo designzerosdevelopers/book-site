@@ -4,6 +4,8 @@ namespace App\Helpers;
 
 use App\Models\Homepage;
 use App\Models\Settings;
+use App\Models\Navbar;
+
 class SiteviewHelper {
 
   public static function homepage()
@@ -16,6 +18,42 @@ class SiteviewHelper {
     $settings = Settings::where('key', $key)->firstOrfail('value');
     return $settings->value;
   }
+
+  
+  public static function navbar()
+  {
+    $nav_elements = Navbar::orderBy('position')->get()->toArray();
+    $navHtml = '';
+    foreach ($nav_elements as $value) {
+      $url = request()->url();
+    // Parse the URL
+    $urlComponents = parse_url($url);
+
+    // Extract the path component
+    $path = isset($urlComponents['path']) ? ltrim($urlComponents['path'], '/') : '';
+
+    // Check if the path is empty after removing the leading "/"
+    if ($path === '') {
+        // If the path is empty, set it to "/"
+        $path = '/';
+    }
+    // dd($value['route']);
+    if($value['route'] === 'index'){
+      $route = '/';
+      $navHtml .= '<li class="nav-item ' . (($route == $path) ? 'active' : '') . '">';
+      $navHtml .= '<a class="nav-link" href="' . $route. '">' . $value['name'] . '</a>';
+      $navHtml .= '</li>';
+    }else {
+      $navHtml .= '<li class="nav-item ' . (($value['route'] == $path) ? 'active' : '') . '">';
+      $navHtml .= '<a class="nav-link" href="' . $value['route'] . '">' . $value['name'] . '</a>';
+      $navHtml .= '</li>';
+    }
+ 
+}
+
+    return $navHtml;
+  }
+  
 
 
 }
