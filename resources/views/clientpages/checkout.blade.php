@@ -17,6 +17,7 @@
 		<!-- End Hero Section -->
 
 	
+	
 		
 		
 
@@ -151,12 +152,12 @@
 							@endforeach
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-								<td class="text-black">${{ $subtotal}}.00</td>
+								<td class="text-black">${{ $subtotal}}</td>
 							</tr>
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}.00</strong></td>
-								<input type="hidden" name="amount" value="{{ $subtotal }}.00">
+								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}</strong></td>
+								<input type="hidden" name="amount" value="{{ $subtotal }}">
 							</tr>
 						</tbody>
 		                </table>
