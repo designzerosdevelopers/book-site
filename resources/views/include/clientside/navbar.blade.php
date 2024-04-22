@@ -6,12 +6,15 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+      
+
         <div class="collapse navbar-collapse" id="navbarsFurni">
             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                <li class="nav-item {{ request()->routeIs('index') ? 'active' : '' }}">
+               {!! App\Helpers\SiteviewHelper::navbar() !!}
+                {{-- <li class="nav-item {{ request()->routeIs('index') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('index') }}">Home</a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
+                </li> --}}
+                {{-- <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
                     <a class="nav-link" href="{{ route('shop') }}">Shop</a>
                 </li>
                 <li class="nav-item {{ request()->routeIs('about') ? 'active' : '' }}">
@@ -22,7 +25,7 @@
                 </li>
                 <li class="nav-item {{ request()->routeIs('conteact') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contact') }}">Contact us</a>
-                </li>
+                </li> --}}
             </ul>
             
             <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
@@ -36,10 +39,6 @@
                     </span>
                   </a>
                   
-                  {{-- <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="#"><img src="clientside/images/user.svg"></a></li>
-						<li><a class="nav-link" href="cart.html"><img src="clientside/images/cart.svg"></a></li>
-					</ul> --}}
                 </li>
                 
               </ul>

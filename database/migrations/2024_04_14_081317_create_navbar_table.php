@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('navbar', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('price', 8, 2);
-            $table->string('slug');
-            $table->string('image');
-            $table->string('file');
-            $table->text('description');
-            $table->bigInteger('category');
+            $table->string('route');
+            $table->integer('position');
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('navbar');
     }
 };
