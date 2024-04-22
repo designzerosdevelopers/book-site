@@ -48,7 +48,7 @@
                                 <label class="col-sm-3 col-form-label">Image</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" value="" name="image" placeholder="Paste Image Url" >
+                                        <input type="file" class="form-control" value="" name="image" placeholder="Paste Image Url" >
                                     </div>
                                     @error('image')
                                         <span class="text-danger">{{ $message }}</span>
@@ -61,7 +61,7 @@
                                 <label class="col-sm-3 col-form-label">File</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" value="" name="bookfile" placeholder="Paste File Url" id="file"> 
+                                        <input type="file" class="form-control" value="" name="bookfile" placeholder="Paste File Url" id="file"> 
                                     </div>
                                     @error('bookfile')
                                         <span class="text-danger">{{ $message }}</span>

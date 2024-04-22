@@ -109,6 +109,7 @@
 
     </div>
 </footer>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var cartItemCountElement = document.getElementById('cartItemCount');
@@ -144,3 +145,4 @@
         xhr.send();
     });
 </script>
+  

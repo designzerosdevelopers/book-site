@@ -68,7 +68,7 @@ class SiteViewController extends Controller
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                     $response .= '<div class="product-item">';
                     $response .= '<a style="text-decoration: none;" href="' . route('product.details', ['id' => $item->id]) . '">';
-                    $response .= '<img src="' . asset($item->image) . '" class="img-fluid product-thumbnail">';
+                    $response .= '<img src="' . asset('book_images/'.$item->image) . '" class="img-fluid product-thumbnail">';
                     $response .= '<h3 class="product-title">' . $item->name . '</h3>';
                     $response .= '<div>';
                     $response .= '<strong class="product-price">$' . $item->price . '</strong>';
@@ -112,13 +112,20 @@ class SiteViewController extends Controller
                 $category = $request->category;
                 $category_id = Categories::where('category_name', $request->category)->pluck('id')->first();
                 $allitems = Item::where('category', $category_id)->paginate(1);
-                $response = '';
-                
+            
+                if ($allitems->count() == 0) {
+                    $response = '<div style="text-align: center;"><p>There are no items available in this category.</p></div>';
+
+                    return $response;
+                } else {
+                    // Code to handle displaying items
+                    $response = ''; // You can fill this with the code to display items
+
                 foreach ($allitems as $item) {
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                     $response .= '<div class="product-item">';
                     $response .= '<a style="text-decoration: none;" href="'.route('product.details', ['id' => $item->id]).'">';
-                    $response .= '<img src="'.asset($item->image).'" class="img-fluid product-thumbnail">';
+                    $response .= '<img src="'.asset('book_images/'.$item->image).'" class="img-fluid product-thumbnail">';
                     $response .= '<h3 class="product-title">'.$item->name.'</h3>';
                     $response .= '<div>';
                     $response .= '<strong class="product-price">$'.$item->price.'</strong>';
@@ -160,6 +167,8 @@ class SiteViewController extends Controller
                 return $response;
             
             }
+            }
+
             if ($request->has('page')) {
                 $data = $request->page;
                 if (strpos($data, 'category') !== false) {
@@ -177,7 +186,7 @@ class SiteViewController extends Controller
                         $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                         $response .= '<div class="product-item">';
                         $response .= '<a style="text-decoration: none;" href="'.route('product.details', ['id' => $item->id]).'">';
-                        $response .= '<img src="'.asset($item->image).'" class="img-fluid product-thumbnail">';
+                        $response .= '<img src="'.asset('book_images/'.$item->image).'" class="img-fluid product-thumbnail">';
                         $response .= '<h3 class="product-title">'.$item->name.'</h3>';
                         $response .= '<div>';
                         $response .= '<strong class="product-price">$'.$item->price.'</strong>';
@@ -229,7 +238,7 @@ class SiteViewController extends Controller
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                     $response .= '<div class="product-item">';
                     $response .= '<a style="text-decoration: none;" href="'.route('product.details', ['id' => $item->id]).'">';
-                    $response .= '<img src="'.asset($item->image).'" class="img-fluid product-thumbnail">';
+                    $response .= '<img src="'.asset('book_images/'.$item->image).'" class="img-fluid product-thumbnail">';
                     $response .= '<h3 class="product-title">'.$item->name.'</h3>';
                     $response .= '<div>';
                     $response .= '<strong class="product-price">$'.$item->price.'</strong>';
@@ -319,8 +328,6 @@ class SiteViewController extends Controller
             ];
         }
 
-    
-    
         // Update the cart data in the cookie
         $response = response()->view('clientpages.cart', [
             'cartItems' => $cart,

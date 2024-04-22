@@ -63,11 +63,6 @@ class StripeController extends Controller
                 return redirect()->back()->withInput()->with('errorpaypal', $existingItemIds);
             }
 
-            
-
-
-           
-
 
             $validator = Validator::make($request->all(), [
                 'f_name' => 'required|string|max:255',

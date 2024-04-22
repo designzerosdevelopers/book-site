@@ -36,10 +36,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $totalprice = 0;
+                                    @endphp
                                 
                                     @foreach($cartItems as $item)
                                     @php
-                                        $totalprice = $item['item_price'];
+                                        $totalprice += $item['item_price'];
                                     @endphp
                                    
                                         <tr>
