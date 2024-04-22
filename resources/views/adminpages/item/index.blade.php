@@ -44,7 +44,7 @@
                     @if(!empty($items))
                     @foreach($items as $item)
                     <tr>
-                      <td><img src="{{$item->image}}" alt="image" /></td>
+                      <td><img src="{{asset('book_images/'.$item->image)}}" alt="image" /></td>
                       <td>{{$item->name}} </td>
                       <td>{{$item->slug}} </td>
                       <td>{{$item->price}} </td>

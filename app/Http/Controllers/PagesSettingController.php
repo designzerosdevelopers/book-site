@@ -119,11 +119,13 @@ class PagesSettingController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|url',
-            'bookfile' => 'required|url',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
+            'bookfile' => 'required|file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
+            
         ]);
+
 
         // Generate slug from the name
         $slug = Str::slug($validatedData['name']); 
@@ -137,16 +139,26 @@ class PagesSettingController extends Controller
         }
 
     
-        // Process the validated data and store it in the database
         $item = new Item();
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
-        $item->image = $validatedData['image'];
-        $item->file = $validatedData['bookfile'];
+
+        // Move and get original file name for image
+        $imageName = $validatedData['image']->getClientOriginalName();
+        $validatedData['image']->move(public_path('book_images'), $imageName);
+        $item->image = $imageName;
+
+        // Move and get original file name for bookfile
+        $fileName = $validatedData['bookfile']->getClientOriginalName();
+        $validatedData['bookfile']->move(public_path('book_files'), $fileName);
+        $item->file = $fileName;
+
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
         $item->slug = $uniqueSlug;
         $item->save();
+
+        
 
         // Redirect the user or return a response indicating success
         return redirect()->route('indexitem')->with('success', 'Item added successfully!');
@@ -168,24 +180,38 @@ class PagesSettingController extends Controller
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
+            'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
-            'image' => 'url', // Example validation for image file
-            'bookfile' => 'url', // Example validation for file
+            
         ]);
+
     
         // Update item attributes with the new data
         $item->name = $request->name;
         $item->price = $request->price;
-        $item->image = $request->image;
-        $item->file = $request->bookfile;
         $item->category = $request->category;
         $item->description = $request->description;
-    
-       
-    
-        // Save the changes to the database
+
+        // Check if a new image file is provided
+        if ($request->hasFile('image')) {
+            // Move and get original file name for new image
+            $imageName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('book_images'), $imageName);
+            $item->image = $imageName;
+        }
+
+        // Check if a new file is provided
+        if ($request->hasFile('bookfile')) {
+            // Move and get original file name for new file
+            $fileName = $request->file('bookfile')->getClientOriginalName();
+            $request->file('bookfile')->move(public_path('book_files'), $fileName);
+            $item->file = $fileName;
+        }
+
         $item->save();
+
     
         return redirect()->back()->with('success', 'Item updated successfully');
     }

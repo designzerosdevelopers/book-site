@@ -144,20 +144,33 @@
 		                    <th>Price</th>
 		                  </thead>
 		                  <tbody>
-							@foreach($cartItems as $item)
-								<tr>
-									<td>{{ $item['item_name'] }} <strong class="mx-2"></strong> </td>
-									<td>${{ number_format($item['item_price'], 2) }}</td>
-								</tr>
-							@endforeach
+							@php
+							$totalPrice = 0; // Initialize the total price variable
+						@endphp
+						
+						@foreach($cartItems as $item)
+							<tr>
+								<td>{{ $item['item_name'] }}</td>
+								<td>${{ number_format($item['item_price'], 2) }}</td>
+							</tr>
+							@php
+								$totalPrice += $item['item_price'];
+							@endphp
+						@endforeach
+						
+						<tr>
+							<td><strong>Total</strong></td>
+							<td>${{ number_format($totalPrice, 2) }}</td> 
+						</tr>
+						
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-								<td class="text-black">${{ $subtotal}}</td>
+								<td>${{ number_format($totalPrice, 2) }}</td> 
 							</tr>
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}</strong></td>
-								<input type="hidden" name="amount" value="{{ $subtotal }}">
+								<td>${{ number_format($totalPrice, 2) }}</td> </strong></td>
+								<input type="hidden" name="amount" value="{{ number_format($totalPrice, 2)}}">
 							</tr>
 						</tbody>
 		                </table>
