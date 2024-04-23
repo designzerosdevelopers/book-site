@@ -53,8 +53,8 @@ Route::middleware('check.database')->group(function () {
 // clientside controller
 Route::get('/', [SiteViewController::class, 'index'])->name('index');
 Route::get('/product-details', [SiteViewController::class, 'productdetails'])->name('product.details');
-// Route::get('/about', [SiteViewController::class, 'about'])->name('about');
-
+Route::get('/about', [SiteViewController::class, 'about'])->name('about');
+Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
 
@@ -128,7 +128,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
     });
 });
 
-Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
+// Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
 
 // Route::post('post/{navrout}', [SiteViewController::class, 'post'])->name('dynamic.route');
 // Route::get('/dynamic/{id}/{route}', function ($id, $route) {

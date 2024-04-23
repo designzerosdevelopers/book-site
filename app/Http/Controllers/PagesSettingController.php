@@ -21,6 +21,8 @@ use App\Models\User;
 use App\Models\Navbar;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+
 
 
 
@@ -71,9 +73,6 @@ class PagesSettingController extends Controller
         $users = DB::table('users')
         ->where('role', 0)
         ->get();
-
-
-
 
         return view('adminpages.dashboard', [
             // sales
@@ -242,11 +241,6 @@ class PagesSettingController extends Controller
             unlink($filePath); // Deletes the file
         }
 
-       
-
-    
-      
-    
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
 
@@ -287,18 +281,18 @@ class PagesSettingController extends Controller
         
     }
 
-    public function updateOrder(Request $request)
-    {
+    // public function updateOrder(Request $request)
+    // {
        
-        foreach ($request->updated_data as $key => $value) {
-           dd($value);
-        }
-        $filtered = $request->updated_data;
-        foreach ($filtered as $value) {
-            dd($value['name']);
-        }
+    //     foreach ($request->updated_data as $key => $value) {
+    //        dd($value);
+    //     }
+    //     $filtered = $request->updated_data;
+    //     foreach ($filtered as $value) {
+    //         dd($value['name']);
+    //     }
        
-    }
+    // }
 
     
 
@@ -392,6 +386,33 @@ class PagesSettingController extends Controller
         return view('adminpages.categories', compact('categories'));
     }
 
+    public function createcategory(Request $request)
+    {
+        $rules = [
+            'category_name' => 'required|string|max:255|unique:categories,category_name',
+        ];
+        
+
+        // Custom validation messages
+        $messages = [
+            'category_name.required' => 'Category name is required.',
+            'category_name.unique' => 'Category name must be unique.',
+            // Add any other custom messages as needed
+        ];
+
+        // Validate the request
+        $validatedData = $request->validate($rules, $messages);
+
+        // Create a new category record
+        Categories::create([
+            'category_name' => $category_name = $request->category_name,
+        ]);
+    
+        // Return a redirect response with a success message
+        return redirect()->back()->with('success', 'Record Created Successfully.');
+        
+    }
+
     public function updatecategory(Request $request)
     {
     
@@ -430,17 +451,7 @@ class PagesSettingController extends Controller
         }
     }
 
-    public function createcategory(Request $request)
-    {
-        // Create a new category record
-        Categories::create([
-            'category_name' => $request->category_name,
-        ]);
-    
-        // Return a redirect response with a success message
-        return redirect()->back()->with('success', 'Record Created Successfully.');
-        
-    }
+   
 
     public function homeedit(Request $request)
     {
@@ -706,9 +717,10 @@ class PagesSettingController extends Controller
     public function settingsindex()
     {
         $settings = Settings::get(["key", "value", "display_name"]);
-
         $stripeSettings = [];
         $paypalSettings = [];
+        $paypalSettings = [];
+        $mailSettings = [];
         
         foreach ($settings as $setting) {
             if ($setting->key === 'STRIPE_KEY' || $setting->key === 'STRIPE_SECRET') {
@@ -717,33 +729,65 @@ class PagesSettingController extends Controller
                 $paypalSettings[] = $setting;
             }
         }
-       
-        return view("adminpages.setting", ['stripeSettings' => $stripeSettings, 'paypalSettings' => $paypalSettings]);
+
+
+        foreach ($settings as $setting) {
+            if ($setting->key === 'MAIL_MAILER' || $setting->key === 'MAIL_HOST' || $setting->key === 'MAIL_PORT' ||
+                $setting->key === 'MAIL_USERNAME' || $setting->key === 'MAIL_PASSWORD' || $setting->key === 'MAIL_ENCRYPTION' ||
+                $setting->key === 'MAIL_FROM_ADDRESS' || $setting->key === 'MAIL_FROM_NAME') {
+                $mailSettings[] = $setting;
+            }
+        }
+
+        return view("adminpages.setting", ['stripeSettings' => $stripeSettings, 'paypalSettings' => $paypalSettings, 'mailSettings' => $mailSettings]);
     }
 
     
     public function updatesettings(Request $request)
     {
-        // Update settings where key is 'STRIPE_KEY'
-        if (!is_null($request->STRIPE_KEY)) {
-            Settings::where('key', 'STRIPE_KEY')->update(['value' => $request->STRIPE_KEY]);
+        $mailSettings = []; 
+        $updateData = [
+            'STRIPE_KEY' => $request->STRIPE_KEY,
+            'STRIPE_SECRET' => $request->STRIPE_SECRET,
+            'PAYPAL_KEY' => $request->PAYPAL_KEY,
+            'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
+            'MAIL_MAILER' => $request->MAIL_MAILER,
+            'MAIL_HOST' => $request->MAIL_HOST,
+            'MAIL_PORT' => $request->MAIL_PORT,
+            'MAIL_USERNAME' => $request->MAIL_USERNAME,
+            'MAIL_PASSWORD' => $request->MAIL_PASSWORD,
+            'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
+            'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
+            'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
+        ];
+        
+        foreach ($updateData as $key => $value) {
+            if (!is_null($value)) {
+                Settings::where('key', $key)->update(['value' => $value]);
+            }
         }
-    
-        // Update settings where key is 'STRIPE_SECRET'
-        if (!is_null($request->STRIPE_SECRET)) {
-            Settings::where('key', 'STRIPE_SECRET')->update(['value' => $request->STRIPE_SECRET]);
+        // Fetch data from the database (example)
+        $mailSettings = Settings::all();
+
+        // Create a separate array to hold the mail configuration settings
+        $configSettings = [];
+
+        foreach ($mailSettings as $setting) {
+            // Check if the setting key matches any of the mail configuration keys
+            if (in_array($setting->key, ['MAIL_MAILER', 'MAIL_HOST', 'MAIL_PORT', 'MAIL_USERNAME', 'MAIL_PASSWORD', 'MAIL_ENCRYPTION', 'MAIL_FROM_ADDRESS', 'MAIL_FROM_NAME'])) {
+                // Add the setting to the configuration settings array
+                $configSettings[$setting->key] = $setting->value;
+            }
         }
-    
-        // Update settings where key is 'PAYPAL_KEY'
-        if (!is_null($request->PAYPAL_KEY)) {
-            Settings::where('key', 'PAYPAL_KEY')->update(['value' => $request->PAYPAL_KEY]);
-        }
-    
-        // Update settings where key is 'PAYPAL_SECRET'
-        if (!is_null($request->PAYPAL_SECRET)) {
-            Settings::where('key', 'PAYPAL_SECRET')->update(['value' => $request->PAYPAL_SECRET]);
-        }
-    
+
+        // Dynamically update the mail configuration
+        config(["mail.mailers.smtp" => $configSettings]);
+
+        // Cache the configuration
+        Artisan::call('config:cache');
+
+
+
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
     }

@@ -26,16 +26,16 @@ use Illuminate\Support\Facades\Cookie;
 class SiteViewController extends Controller
 {
 
-    public function dynamic($data)
-    {
-        if (strpos($data, '/') !== false) {
-            $latestItems = Item::latest()->take(3)->get();
-            return view('clientpages.index', ['items'=>$latestItems]);
-        }
+    // public function dynamic($data)
+    // {
+    //     // if (strpos($data, '/') !== false) {
+    //     //     $latestItems = Item::latest()->take(3)->get();
+    //     //     return view('clientpages.index', ['items'=>$latestItems]);
+    //     // }
         
-        return view('clientpages.'.$data);
-    }
-    
+    //     // return view('clientpages.'.$data);
+    // }
+
     
  /**
      * Display a listing of the resource.
@@ -59,10 +59,17 @@ class SiteViewController extends Controller
      */
     public function shop(Request $request)
     {
-            $categories = Categories::all();
+        $categories = Categories::all();
         if ($request->ajax()) {
             if ($request->has('all')) {
                 $allItems = Item::paginate(2);
+
+                if ($allItems->isEmpty()) {
+                    // Custom message for an empty page
+                    $response = "<div style='text-align: center;'><p>Sorry, there are currently no items to display on this page.</p></div>";
+                    return $response;
+                }
+                
                 $response = '';
                 foreach ($allItems as $item) {
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
@@ -118,8 +125,8 @@ class SiteViewController extends Controller
 
                     return $response;
                 } else {
-                    // Code to handle displaying items
-                    $response = ''; // You can fill this with the code to display items
+                    
+                    $response = '';
 
                 foreach ($allitems as $item) {
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';

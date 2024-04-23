@@ -74,10 +74,10 @@
                                             <label for="editName{{ $index }}">Name:</label>
                                             <input type="text" class="form-control" id="editName{{ $index }}" name="name" value="{{ $item->name }}" required>
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <label for="editRoute{{ $index }}">Route:</label>
                                             <input type="text" class="form-control" id="editRoute{{ $index }}" name="route" value="{{ $item->route }}" required>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group">
                                             <label for="editPosition{{ $index }}">Position:</label>
                                             <input type="number" class="form-control" id="editPosition{{ $index }}" name="position" value="{{ $item->position }}" required>
@@ -96,6 +96,8 @@
             </table>
         </div>
     </div>
+</div>
+</div>
 {{--     
 <hr>
 <div class="card">

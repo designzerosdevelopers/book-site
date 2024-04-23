@@ -60,7 +60,9 @@ class StripeController extends Controller
                         }
                     }
                 }
-                return redirect()->back()->withInput()->with('errorpaypal', $existingItemIds);
+                if (!empty($existingItemIds)) {
+                    return redirect()->back()->withInput()->with('errorpaypal', $existingItemIds);
+                }
             }
 
 
@@ -164,13 +166,38 @@ class StripeController extends Controller
 
     public function stripecharge(Request $request)
     {
+        $requestData = $request->all();
+        $email = $request['email_address'];
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $existingItemIds = [];
+            foreach (array_keys($requestData['amp;cartItems']) as $itemId) {
+                $existingItems = Purchase::where('user_id', $user->id)
+                                         ->where('item_id', $itemId)
+                                         ->pluck('item_id')
+                                         ->toArray();
+                if (!empty($existingItems)) {
+                    foreach ($existingItems as $itemId) {
+                        $bookName = Item::where('id', $itemId)->value('name');
+                        if ($bookName) {
+                            $existingItemIds[] = $bookName;
+                        }
+                    }
+                }
+            }
+            if (!empty($existingItemIds)) {
+                return redirect()->back()->withInput()->with('errorpaypal', $existingItemIds);
+            }
+        }
+
+
         // Access the array
         $requestData = $request->all();
 
-        // Loop through the request data and add to session
-        foreach ($requestData as $key => $value) {
-            session([$key => $value]);
-        }
+        // // Loop through the request data and add to session
+        // foreach ($requestData as $key => $value) {
+        //     session([$key => $value]);
+        // }
 
         // Optionally, you can store the entire request data as well
         session(['requestData' => $requestData]);
