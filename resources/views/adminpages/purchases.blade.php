@@ -36,14 +36,14 @@
             @foreach($cartItems as $item)
             <tr>
                 <td class="product-thumbnail">
-                    <img src="{{ asset( $item['image']) }}" alt="Image" class="img-fluid" width="30%">
+                    <img src="{{ asset('book_images/'.$item['image']) }}" alt="Image" class="img-fluid" width="30%">
                 </td>
                 <td class="product-name">
                     <h2 class="h5 text-black">{{ $item['name'] }}</h2>
                 </td>
                 <td id="price{{ $loop->index }}">${{ $item['price'] }}</td>
                 <td>
-                    <a href="" onclick="downloadFile('{{asset($item['file'])}}')" class="btn btn-success">Download</a>
+                    <a href="" onclick="downloadFile('{{asset('book_files/'.$item['file'])}}')" class="btn btn-success">Download</a>
                 </td>
             </tr>
             @endforeach
@@ -62,6 +62,7 @@
 <script>
     function downloadFile(url) {
       var link = document.createElement('a');
+      console.log(link);
       link.href = url;
       link.setAttribute('download', '');
       document.body.appendChild(link);
