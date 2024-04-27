@@ -494,7 +494,8 @@ class SiteViewController extends Controller
 
     public function about()
     {
-        return view('clientpages.about');
+        $data = Homepage::first();
+        return view('clientpages.about',['data' => $data]);
     }
 
     public function getCartItemCount(){
