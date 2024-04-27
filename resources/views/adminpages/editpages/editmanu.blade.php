@@ -45,12 +45,12 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <!-- Dropdown Items -->
                                     <button type="button" class="dropdown-item" data-toggle="modal" data-target="#editModal{{ $index }}">Edit</button>
-                                    <form action="{{ route('delete.manu',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    {{-- <form action="{{ route('delete.manu',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                         @csrf
                                         @method('DELETE')
                                         <input type="hidden" name="filename" value="{{ $item['route'] }}">
                                         <button type="submit" class="dropdown-item">Delete</button>
-                                    </form>
+                                    </form> --}}
                                    
                                 </div>
                             </div>                                
@@ -74,10 +74,10 @@
                                             <label for="editName{{ $index }}">Name:</label>
                                             <input type="text" class="form-control" id="editName{{ $index }}" name="name" value="{{ $item->name }}" required>
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <label for="editRoute{{ $index }}">Route:</label>
                                             <input type="text" class="form-control" id="editRoute{{ $index }}" name="route" value="{{ $item->route }}" required>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group">
                                             <label for="editPosition{{ $index }}">Position:</label>
                                             <input type="number" class="form-control" id="editPosition{{ $index }}" name="position" value="{{ $item->position }}" required>
@@ -96,6 +96,8 @@
             </table>
         </div>
     </div>
+</div>
+</div>
 {{--     
 <hr>
 <div class="card">
