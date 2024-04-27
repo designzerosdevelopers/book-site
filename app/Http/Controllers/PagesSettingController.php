@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Footer;
 use App\Models\Navbar;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+
 
 
 
@@ -72,9 +75,6 @@ class PagesSettingController extends Controller
         ->where('role', 0)
         ->get();
 
-
-
-
         return view('adminpages.dashboard', [
             // sales
             'totalsale' => $totalSaleAmount,
@@ -119,11 +119,13 @@ class PagesSettingController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|url',
-            'bookfile' => 'required|url',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
+            'bookfile' => 'required|file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
+            
         ]);
+
 
         // Generate slug from the name
         $slug = Str::slug($validatedData['name']); 
@@ -137,16 +139,26 @@ class PagesSettingController extends Controller
         }
 
     
-        // Process the validated data and store it in the database
         $item = new Item();
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
-        $item->image = $validatedData['image'];
-        $item->file = $validatedData['bookfile'];
+
+        // Move and get original file name for image
+        $imageName = $validatedData['image']->getClientOriginalName();
+        $validatedData['image']->move(public_path('book_images'), $imageName);
+        $item->image = $imageName;
+
+        // Move and get original file name for bookfile
+        $fileName = $validatedData['bookfile']->getClientOriginalName();
+        $validatedData['bookfile']->move(public_path('book_files'), $fileName);
+        $item->file = $fileName;
+
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
         $item->slug = $uniqueSlug;
         $item->save();
+
+        
 
         // Redirect the user or return a response indicating success
         return redirect()->route('indexitem')->with('success', 'Item added successfully!');
@@ -168,24 +180,38 @@ class PagesSettingController extends Controller
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
+            'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
-            'image' => 'url', // Example validation for image file
-            'bookfile' => 'url', // Example validation for file
+            
         ]);
+
     
         // Update item attributes with the new data
         $item->name = $request->name;
         $item->price = $request->price;
-        $item->image = $request->image;
-        $item->file = $request->bookfile;
         $item->category = $request->category;
         $item->description = $request->description;
-    
-       
-    
-        // Save the changes to the database
+
+        // Check if a new image file is provided
+        if ($request->hasFile('image')) {
+            // Move and get original file name for new image
+            $imageName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('book_images'), $imageName);
+            $item->image = $imageName;
+        }
+
+        // Check if a new file is provided
+        if ($request->hasFile('bookfile')) {
+            // Move and get original file name for new file
+            $fileName = $request->file('bookfile')->getClientOriginalName();
+            $request->file('bookfile')->move(public_path('book_files'), $fileName);
+            $item->file = $fileName;
+        }
+
         $item->save();
+
     
         return redirect()->back()->with('success', 'Item updated successfully');
     }
@@ -216,12 +242,13 @@ class PagesSettingController extends Controller
             unlink($filePath); // Deletes the file
         }
 
-       
+        return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
+    }
 
     
-      
-    
-        return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
+    public function editmanu()
+    {
+          return view('adminpages.editpages.editmanu');
     }
 
     public function indexhome()
@@ -233,129 +260,262 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('homepage'));
     }
 
-    public function editmanu()
-    {
-          return view('adminpages.editpages.editmanu');
-    }
 
 
-    public function deleteManu(Request $request) 
-    {
-        $filename = $request->filename;
-        //   deleting the nambar
-        $id = $request->id;
-        $nav = Navbar::find($id);
-        $nav->delete();
+    // public function deleteManu(Request $request) 
+    // {
+    //     $filename = $request->filename;
+    //     //   deleting the nambar
+    //     $id = $request->id;
+    //     $nav = Navbar::find($id);
+    //     $nav->delete();
 
-        $filename = $request->filename;
-        $filePath = resource_path("views/clientpages/{$filename}.blade.php");
+    //     $filename = $request->filename;
+    //     $filePath = resource_path("views/clientpages/{$filename}.blade.php");
         
-        if (File::exists($filePath)) {
-            File::delete($filePath);
-            $message = "File '{$filename}.blade.php' has been deleted successfully.";
-            return redirect()->back()->with('success', $message); 
-        } else {
-            $error = "File '{$filename}.blade.php' does not exist.";
-            return redirect()->back()->with('error', $error); 
-        }
+    //     if (File::exists($filePath)) {
+    //         File::delete($filePath);
+    //         $message = "File '{$filename}.blade.php' has been deleted successfully.";
+    //         return redirect()->back()->with('success', $message); 
+    //     } else {
+    //         $error = "File '{$filename}.blade.php' does not exist.";
+    //         return redirect()->back()->with('error', $error); 
+    //     }
         
-    }
-
-    public function updateOrder(Request $request)
-    {
-       
-        foreach ($request->updated_data as $key => $value) {
-           dd($value);
-        }
-        $filtered = $request->updated_data;
-        foreach ($filtered as $value) {
-            dd($value['name']);
-        }
-       
-    }
+    // }
 
     
-
-
-
             
   
     public function updatehome(Request $request)
     {
-        // Validate the request
-        $request->validate([
-            'hero_heading' => 'required|string',
-            'hero_paragraph' => 'required|string',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
-        ]);
+        $formType = $request->input('section');
 
-        // Fetch the existing homepage record
-        $homepage = Homepage::first();
+       
+        switch ($formType) {
+            case 'hero_section':
+                // You can access form data using $request->input('field_name')
+                // Validate the request
+                $request->validate([
+                    'hero_heading' => 'required|string',
+                    'hero_paragraph' => 'required|string',
+                    'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
+                ]);
 
-        if ($homepage) {
-            // Update only if the user uploaded a new image
-            if ($request->hasFile('hero_image')) {
-                // Delete the existing image file if it exists
-                if (file_exists(public_path('clientside/images/' . $homepage->hero_image))) {
-                    unlink(public_path('clientside/images/' . $homepage->hero_image));
+                // Fetch the existing homepage record
+                $homepage = Homepage::first();
+
+                if ($homepage) {
+                    // Update only if the user uploaded a new image
+                    if ($request->hasFile('hero_image')) {
+                        if(!empty($homepage->hero_image)) {
+                            // Delete the existing image file if it exists
+                            if (file_exists(public_path('clientside/images/' . $homepage->hero_image))) {
+                                unlink(public_path('clientside/images/' . $homepage->hero_image));
+                            }
+
+                        }
+                        
+                        // Get the original file name and extension
+                        $original_image = $request->hero_image->getClientOriginalName();
+                        $extension = $request->hero_image->getClientOriginalExtension();
+
+                        // Generate a unique file name
+                        $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
+
+                        // Move the uploaded file to a temporary location
+                        $request->hero_image->storeAs('temp', $unique_image);
+
+                        // Update the homepage record in the database
+                        $homepage->update([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                            'hero_image' => $unique_image,
+                        ]);
+
+                        // Move the uploaded file to the public images folder with its original extension
+                        $request->hero_image->move(public_path('/clientside/images'), $unique_image);
+                        return redirect()->back()->with('status', 'Product section Updated Successfully.');
+                    } else {
+                        // Update only text fields if no new image is uploaded
+                        $update = $homepage->update([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                        ]);
+                        if($update){
+                            return redirect()->back()->with('status', 'Product section Updated Successfully, but image is not given');
+                        }
+                       
+                    }
+
+                
+                } else {
+                    // If no homepage record exists, create a new one
+                    if ($request->hasFile('hero_image')) {
+                        // Get the original file name and extension
+                        $original_image = $request->hero_image->getClientOriginalName();
+                        $extension = $request->hero_image->getClientOriginalExtension();
+
+                        $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
+
+                        $request->hero_image->move(public_path('/clientside/images'), $unique_image);
+
+                        $home = Homepage::create([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                            'hero_image' => $unique_image,
+                        ]);
+                        if($home){
+                            return redirect()->back()->with('status', 'Product section created Successfully.');
+                        }
+                    } else {                       
+                        Homepage::create([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                        ]);
+                        return redirect()->back()->with('status', 'Product section created Successfully. but image is not given!');
+                    }
+
+                }
+                break;
+            case 'product_section':
+              
+            // Fetch only the specified fields from the homepage table
+            $homepage = Homepage::first();
+
+            // Check if the record exists
+            if ($homepage) {
+                // Update the fields
+                $homepage->ps_title = $request->section_title;
+                $homepage->ps_description = $request->section_description;
+
+                // Save the changes to the database
+                $homepage->save();
+
+                // Optionally, you can return a success message or perform other actions
+                return redirect()->back()->with("status", " Product section title and description updated successfully.");
+            } else {
+                // Create a new record with the provided data
+                $homepage = Homepage::create([
+                    'ps_title' => $request->section_title,
+                    'ps_description' => $request->section_description,
+                ]);
+            
+                // Optionally, you can return a success message or perform other actions
+                return redirect()->back()->with("status", " section title and description created successfully.");
+            }
+                break;
+            case 'why_choose_us':
+                $data = $request->only([
+                    'section_title',
+                    'section_description',
+                    'feature_1',
+                    'feature_1_description',
+                    'feature_2',
+                    'feature_2_description',
+                    'feature_3',
+                    'feature_3_description',
+                    'feature_4',
+                    'feature_4_description'
+                ]);
+
+               $columns =  ['wcu_title',
+                'wcu_description',
+                'wcu_feature_1_title',
+                'wcu_feature_1_description',
+                'wcu_feature_2_title',
+                'wcu_feature_2_description',
+                'wcu_feature_3_title',
+                'wcu_feature_3_description',
+                'wcu_feature_4_title',
+                'wcu_feature_4_description',
+               ];
+
+               $homepage = Homepage::first();
+                if ($homepage) {
+                    $update = $homepage->update([
+                        $homepage->wcu_title = $data['section_title'],
+                        $homepage->wcu_description = $data['section_description'],
+                        $homepage->wcu_feature_1_title = $data['feature_1'],
+                        $homepage->wcu_feature_1_description = $data['feature_1_description'],
+                        $homepage->wcu_feature_2_title = $data['feature_2'],
+                        $homepage->wcu_feature_2_description = $data['feature_2_description'],
+                        $homepage->wcu_feature_3_title = $data['feature_3'],
+                        $homepage->wcu_feature_3_description = $data['feature_3_description'],
+                        $homepage->wcu_feature_4_title = $data['feature_4'],
+                        $homepage->wcu_feature_4_description = $data['feature_4_description'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'Why choose us section updated successfully!');
+                    }
+                } else {
+                    $create = Homepage::create(array_combine($columns, $data));
+                    if($create){
+                        return redirect()->back()->with('status', 'Why choose us section created successfully!');
+                    }
                 }
 
-                // Get the original file name and extension
-                $original_image = $request->hero_image->getClientOriginalName();
-                $extension = $request->hero_image->getClientOriginalExtension();
-
-                // Generate a unique file name
-                $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
-
-                // Move the uploaded file to a temporary location
-                $request->hero_image->storeAs('temp', $unique_image);
-
-                // Update the homepage record in the database
-                $homepage->update([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                    'hero_image' => $unique_image,
+                break;
+            case 'we_help':
+                $columns = [
+                    'wh_title',
+                    'wh_description',
+                    'wh_feature_1',
+                    'wh_feature_2',
+                    'wh_feature_3',
+                    'wh_feature_4',
+                ];
+                $data = $request->only([
+                    'we_help_title',
+                    'we_help_description',
+                    'feature_1',
+                    'feature_2',
+                    'feature_3',
+                    'feature_4',
                 ]);
+                $homepage = Homepage::first();
+                if ($homepage) {
+                    $update = $homepage->update([
+                        $homepage->wh_title = $data['we_help_title'],
+                        $homepage->wh_description = $data['we_help_description'],
+                        $homepage->wh_feature_1 = $data['feature_1'],
+                        $homepage->wh_feature_2 = $data['feature_2'],
+                        $homepage->wh_feature_3 = $data['feature_3'],
+                        $homepage->wh_feature_4 = $data['feature_4'],
 
-                // Move the uploaded file to the public images folder with its original extension
-                $request->hero_image->move(public_path('/clientside/images'), $unique_image);
-            } else {
-                // Update only text fields if no new image is uploaded
-                $homepage->update([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                ]);
-            }
-
-            // Return a redirect response with a success message
-            return redirect()->back()->with('status', 'Update Successful.');
-        } else {
-            // If no homepage record exists, create a new one
-            if ($request->hasFile('hero_image')) {
-                // Get the original file name and extension
-                $original_image = $request->hero_image->getClientOriginalName();
-                $extension = $request->hero_image->getClientOriginalExtension();
-
-                $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
-
-                $request->hero_image->move(public_path('/clientside/images'), $unique_image);
-
-                Homepage::create([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                    'hero_image' => $unique_image,
-                ]);
-            } else {
-               
-                Homepage::create([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                ]);
-            }
-
-
-            return redirect()->back()->with('status', 'Homepage Created Successfully.');
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'We help section updated successfully!');
+                    }
+                } else {
+                    $create = Homepage::create(array_combine($columns, $data));
+                    if($create){
+                        return redirect()->back()->with('status', 'We help section created successfully!');
+                    }
+                }
+                break;
+            default:
+            return redirect()->back()->with('error', 'Invalid Request');
+                break;
         }
+       
+    }
+
+    public function footer()
+    {
+        $footerData = Footer::orderBy('id', 'asc')->first();
+        $footer = $footerData->footer;
+        return view('adminpages.editpages.footer', ['footer' => $footer]);
+
+    }
+    public function update_footer(Request $request)
+    {
+        $footer = Footer::orderBy('id', 'asc')->first();
+        $html = $request->htmlInput;
+        $footer->footer = $html;
+        $footer->save();
+        return redirect()->back()->with('success', 'Footer updated successfully');
+        
     }
 
     public function indexcategories(Request $request)
@@ -364,6 +524,33 @@ class PagesSettingController extends Controller
         $data = Categories::all();
         $categories =  $data->toArray();
         return view('adminpages.categories', compact('categories'));
+    }
+
+    public function createcategory(Request $request)
+    {
+        $rules = [
+            'category_name' => 'required|string|max:255|unique:categories,category_name',
+        ];
+        
+
+        // Custom validation messages
+        $messages = [
+            'category_name.required' => 'Category name is required.',
+            'category_name.unique' => 'Category name must be unique.',
+            // Add any other custom messages as needed
+        ];
+
+        // Validate the request
+        $validatedData = $request->validate($rules, $messages);
+
+        // Create a new category record
+        Categories::create([
+            'category_name' => $category_name = $request->category_name,
+        ]);
+    
+        // Return a redirect response with a success message
+        return redirect()->back()->with('success', 'Record Created Successfully.');
+        
     }
 
     public function updatecategory(Request $request)
@@ -404,17 +591,7 @@ class PagesSettingController extends Controller
         }
     }
 
-    public function createcategory(Request $request)
-    {
-        // Create a new category record
-        Categories::create([
-            'category_name' => $request->category_name,
-        ]);
-    
-        // Return a redirect response with a success message
-        return redirect()->back()->with('success', 'Record Created Successfully.');
-        
-    }
+   
 
     public function homeedit(Request $request)
     {
@@ -680,9 +857,10 @@ class PagesSettingController extends Controller
     public function settingsindex()
     {
         $settings = Settings::get(["key", "value", "display_name"]);
-
         $stripeSettings = [];
         $paypalSettings = [];
+        $paypalSettings = [];
+        $mailSettings = [];
         
         foreach ($settings as $setting) {
             if ($setting->key === 'STRIPE_KEY' || $setting->key === 'STRIPE_SECRET') {
@@ -691,33 +869,65 @@ class PagesSettingController extends Controller
                 $paypalSettings[] = $setting;
             }
         }
-       
-        return view("adminpages.setting", ['stripeSettings' => $stripeSettings, 'paypalSettings' => $paypalSettings]);
+
+
+        foreach ($settings as $setting) {
+            if ($setting->key === 'MAIL_MAILER' || $setting->key === 'MAIL_HOST' || $setting->key === 'MAIL_PORT' ||
+                $setting->key === 'MAIL_USERNAME' || $setting->key === 'MAIL_PASSWORD' || $setting->key === 'MAIL_ENCRYPTION' ||
+                $setting->key === 'MAIL_FROM_ADDRESS' || $setting->key === 'MAIL_FROM_NAME') {
+                $mailSettings[] = $setting;
+            }
+        }
+
+        return view("adminpages.setting", ['stripeSettings' => $stripeSettings, 'paypalSettings' => $paypalSettings, 'mailSettings' => $mailSettings]);
     }
 
     
     public function updatesettings(Request $request)
     {
-        // Update settings where key is 'STRIPE_KEY'
-        if (!is_null($request->STRIPE_KEY)) {
-            Settings::where('key', 'STRIPE_KEY')->update(['value' => $request->STRIPE_KEY]);
+        $mailSettings = []; 
+        $updateData = [
+            'STRIPE_KEY' => $request->STRIPE_KEY,
+            'STRIPE_SECRET' => $request->STRIPE_SECRET,
+            'PAYPAL_KEY' => $request->PAYPAL_KEY,
+            'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
+            'MAIL_MAILER' => $request->MAIL_MAILER,
+            'MAIL_HOST' => $request->MAIL_HOST,
+            'MAIL_PORT' => $request->MAIL_PORT,
+            'MAIL_USERNAME' => $request->MAIL_USERNAME,
+            'MAIL_PASSWORD' => $request->MAIL_PASSWORD,
+            'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
+            'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
+            'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
+        ];
+        
+        foreach ($updateData as $key => $value) {
+            if (!is_null($value)) {
+                Settings::where('key', $key)->update(['value' => $value]);
+            }
         }
-    
-        // Update settings where key is 'STRIPE_SECRET'
-        if (!is_null($request->STRIPE_SECRET)) {
-            Settings::where('key', 'STRIPE_SECRET')->update(['value' => $request->STRIPE_SECRET]);
+        // Fetch data from the database (example)
+        $mailSettings = Settings::all();
+
+        // Create a separate array to hold the mail configuration settings
+        $configSettings = [];
+
+        foreach ($mailSettings as $setting) {
+            // Check if the setting key matches any of the mail configuration keys
+            if (in_array($setting->key, ['MAIL_MAILER', 'MAIL_HOST', 'MAIL_PORT', 'MAIL_USERNAME', 'MAIL_PASSWORD', 'MAIL_ENCRYPTION', 'MAIL_FROM_ADDRESS', 'MAIL_FROM_NAME'])) {
+                // Add the setting to the configuration settings array
+                $configSettings[$setting->key] = $setting->value;
+            }
         }
-    
-        // Update settings where key is 'PAYPAL_KEY'
-        if (!is_null($request->PAYPAL_KEY)) {
-            Settings::where('key', 'PAYPAL_KEY')->update(['value' => $request->PAYPAL_KEY]);
-        }
-    
-        // Update settings where key is 'PAYPAL_SECRET'
-        if (!is_null($request->PAYPAL_SECRET)) {
-            Settings::where('key', 'PAYPAL_SECRET')->update(['value' => $request->PAYPAL_SECRET]);
-        }
-    
+
+        // Dynamically update the mail configuration
+        config(["mail.mailers.smtp" => $configSettings]);
+
+        // Cache the configuration
+        Artisan::call('config:cache');
+
+
+
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
     }

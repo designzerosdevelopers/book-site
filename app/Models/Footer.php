@@ -5,13 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Navbar extends Model
+class Footer extends Model
 {
-    protected $table = 'navbar'; 
+    use HasFactory;
+    protected $table = 'footer'; 
+    protected $fillable = ['footer'];
 
-    protected $fillable = ['name', 'position'];
 }
-
-
-
-

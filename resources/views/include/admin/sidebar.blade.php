@@ -18,6 +18,7 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('indexhome') }}">Home</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">Manu</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('footer') }}">Footer</a></li>
           </ul>
           
         </div>
@@ -40,12 +41,12 @@
           <i class="mdi mdi-package  menu-icon"></i>
         </a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link" href="{{ route('uploads.index') }}">
           <span class="menu-title">Uploads</span>
           <i class="mdi mdi-upload  menu-icon"></i>
         </a>
-      </li>
+      </li> --}}
       <li class="nav-item">
         <a class="nav-link" href="{{ route('settings.index') }}">
           <span class="menu-title">Settings</span>
@@ -63,5 +64,6 @@
 
     </ul>
   </nav>
+
 
   

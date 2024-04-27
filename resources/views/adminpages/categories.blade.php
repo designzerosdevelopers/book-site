@@ -36,6 +36,9 @@
                             <input type="text" class="form-control" placeholder="Enter category name" name="category_name" aria-label="Enter category name" aria-describedby="basic-addon2">
                             <button class="btn btn-gradient-success" type="submit">Create</button>
                         </div>
+                        @error('category_name')
+                           <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </form>
 
                 
@@ -55,9 +58,7 @@
                                                 @method('PUT')
                                                 <div class="input-group">
                                                     <input type="text" name="category_name" value="{{ $category['category_name'] }}" class="form-control">
-                                                    @error('category_name')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
+                                                   
                                                 </div>
                                         </td>
                                         <td>

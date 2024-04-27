@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\Homepage;
 use App\Models\Settings;
 use App\Models\Navbar;
+use App\Models\Footer;
 
 class SiteviewHelper {
 
@@ -26,33 +27,38 @@ class SiteviewHelper {
     $navHtml = '';
     foreach ($nav_elements as $value) {
       $url = request()->url();
-    // Parse the URL
-    $urlComponents = parse_url($url);
+      // Parse the URL
+      $urlComponents = parse_url($url);
 
-    // Extract the path component
-    $path = isset($urlComponents['path']) ? ltrim($urlComponents['path'], '/') : '';
+      // Extract the path component
+      $path = isset($urlComponents['path']) ? ltrim($urlComponents['path'], '/') : '';
 
-    // Check if the path is empty after removing the leading "/"
-    if ($path === '') {
-        // If the path is empty, set it to "/"
-        $path = '/';
+      // Check if the path is empty after removing the leading "/"
+      if ($path === '') {
+          // If the path is empty, set it to "/"
+          $path = '/';
+      }
+      // dd($value['route']);
+      if($value['route'] === 'index'){
+        $route = '/';
+        $navHtml .= '<li class="nav-item ' . (($route == $path) ? 'active' : '') . '">';
+        $navHtml .= '<a class="nav-link" href="' . $route. '">' . $value['name'] . '</a>';
+        $navHtml .= '</li>';
+      }else {
+        $navHtml .= '<li class="nav-item ' . (($value['route'] == $path) ? 'active' : '') . '">';
+        $navHtml .= '<a class="nav-link" href="' . $value['route'] . '">' . $value['name'] . '</a>';
+        $navHtml .= '</li>';
+      }
     }
-    // dd($value['route']);
-    if($value['route'] === 'index'){
-      $route = '/';
-      $navHtml .= '<li class="nav-item ' . (($route == $path) ? 'active' : '') . '">';
-      $navHtml .= '<a class="nav-link" href="' . $route. '">' . $value['name'] . '</a>';
-      $navHtml .= '</li>';
-    }else {
-      $navHtml .= '<li class="nav-item ' . (($value['route'] == $path) ? 'active' : '') . '">';
-      $navHtml .= '<a class="nav-link" href="' . $value['route'] . '">' . $value['name'] . '</a>';
-      $navHtml .= '</li>';
-    }
- 
-}
-
     return $navHtml;
   }
+
+  public static function footer() 
+{
+    $footers = Footer::all(); // Assuming you want to fetch all footers
+    return $footers->pluck('footer')->implode("");
+}
+
   
 
 

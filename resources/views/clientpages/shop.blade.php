@@ -20,18 +20,19 @@
     <div class="untree_co-section product-section before-footer-section">
         <div class="container">
             <div class="row">
-            <div class="col-md-12 mb-3 my-5">
-                <ul class="nav justify-content-center">
-                    @foreach($categories as $category)
-                        <li class="nav-item">
-                            <a class="nav-link category-link" href="#" data-category="{{ $category->category_name }}">{{ $category->category_name }}</a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                <div class="col-md-12 mb-3 my-5">
+                    <ul class="nav justify-content-center">
+                        @foreach($categories as $category)
+                            <li class="nav-item">
+                                <a class="nav-link category-link" href="#" data-category="{{ $category->category_name }}">{{ $category->category_name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
-            <div id="items-container" class="row">
+                <div id="items-container" class="row">
 
+                </div>
             </div>
 
                 {{-- @foreach($allitems as $item)
@@ -86,21 +87,24 @@
 <!-- JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    // for first time it loads all items and shows with pagination links
+    // request to load all items
     $(document).ready(function (){
-        $.ajax({
-            url: "{{ route('shop') }}",
-            type: "GET",
-            data: { 'all': true },
-            success: function(response) {
-                $('#items-container').html(response);
-            },
-            error: function(xhr) {
-                console.log(xhr.responseText);
-            }
-        });
+        if (!window.location.search) {
+            $.ajax({
+                url: "{{ route('shop') }}",
+                type: "GET",
+                data: { 'all': true },
+                success: function(response) {
+                    $('#items-container').html(response);
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+        
 
-        // trigers and gets data when category link is clicked
+        // request for categories
         $('.category-link').on('click', function(e) {
             e.preventDefault();
             var category = $(this).attr('data-category');
@@ -117,10 +121,11 @@
             });
         });
  
-        //  trigers and loads pages when pagination link is clicked, if category is present and not with if else 
+        //  pagination request of category
         $(document).on('click', '.page-link',function(event){
             event.preventDefault();
             var page = $(this).attr('href').split('page=')[1];
+            console.log(page);
             if (page.includes('?category')) {
                 $.ajax({
                     url: '/shop',
@@ -134,6 +139,23 @@
                         console.error(error);
                     }
                 });
+
+            }else if(page.includes('?search')) {
+                console.log('search hitted');
+                $.ajax({
+                    url: '/shop', 
+                    type: 'GET',
+                    data: { search: page },
+                    success: function(response) {
+                        $('#items-container').html(response)
+                    
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors here
+                        console.error(error);
+                    }
+                });
+                // pagination request for all search results.
             }else {
                 $.ajax({
                     url: '/shop', 
@@ -150,4 +172,30 @@
             }
         });
     });
+
+
+    // request for searched item, out of shop page 
+    if (window.location.search) {
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search'); 
+            $.ajax({
+                url: '/shop', 
+                method: 'GET',
+                data: {query: searchQuery},
+                success: function(response) {
+                    $('#items-container').html(response);  
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    console.error(error);
+                }
+            });
+        });
+    }
+
+
+    
+
+
 </script>
