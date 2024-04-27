@@ -28,46 +28,46 @@
 	<div class="container">
 		<div class="row justify-content-between align-items-center">
 			<div class="col-lg-6">
-				<h2 class="section-title">Why Choose Us</h2>
-				<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+				<h2 class="section-title">{{ $data['wcu_title'] }}</h2>
+				<p>{{ $data['wcu_description'] }}</p>
 				<div class="row my-5">
 					<div class="col-6 col-md-6">
 						<div class="feature">
 							<div class="icon">
-								<img src="images/truck.svg" alt="Image" class="imf-fluid">
+								<img src="{{asset('clientside/images/truck.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>Fast &amp; Free Shipping</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>{{ $data['wcu_feature_1_title'] }}</h3>
+							<p>{{ $data['wcu_feature_1_description'] }}</p>
 						</div>
 					</div>
 
 					<div class="col-6 col-md-6">
 						<div class="feature">
 							<div class="icon">
-								<img src="images/bag.svg" alt="Image" class="imf-fluid">
+								<img src="{{asset('clientside/images/bag.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>Easy to Shop</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>{{ $data['wcu_feature_2_title'] }}</h3>
+							<p>{{ $data['wcu_feature_2_description'] }}</p>
 						</div>
 					</div>
 
 					<div class="col-6 col-md-6">
 						<div class="feature">
 							<div class="icon">
-								<img src="images/support.svg" alt="Image" class="imf-fluid">
+								<img src="{{asset('clientside/images/support.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>24/7 Support</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>{{ $data['wcu_feature_3_title'] }}</h3>
+							<p>{{ $data['wcu_feature_3_description'] }}</p>
 						</div>
 					</div>
 
 					<div class="col-6 col-md-6">
 						<div class="feature">
 							<div class="icon">
-								<img src="images/return.svg" alt="Image" class="imf-fluid">
+								<img src="{{asset('clientside/images/return.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>Hassle Free Returns</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>{{ $data['wcu_feature_4_title'] }}</h3>
+							<p>{{ $data['wcu_feature_4_description'] }}</p>
 						</div>
 					</div>
 
@@ -75,7 +75,7 @@
 			</div>
 			<div class="col-lg-5">
 				<div class="img-wrap">
-					<img src="images/why-choose-us-img.jpg" alt="Image" class="img-fluid">
+					<img src="{{asset('clientside/images/down1.png')}}" alt="Image" class="img-fluid">
 				</div>
 			</div>
 
