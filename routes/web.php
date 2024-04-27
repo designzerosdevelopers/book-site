@@ -9,7 +9,7 @@ use App\Mail\ExampleMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\NavbarController;
 
-
+//
 Route::get('setup', [App\Http\Controllers\SetupController::class, 'create'])->name('setup.create');
 Route::post('check/database', [App\Http\Controllers\SetupController::class, 'setConfig'])->name('setup.config');
 Route::post('admin/register', [App\Http\Controllers\SetupController::class, 'migrate'])->name('db.migrate');
