@@ -1,5 +1,10 @@
 <footer class="footer-section ">
-    <div class="container relative">
+
+
+    {!! App\Helpers\SiteviewHelper::footer() !!}
+
+
+    {{-- <div class="container relative">
 
         <style>
             @media only screen and (max-width: 767px) {
@@ -107,9 +112,11 @@
             </div>
         </div>
 
-    </div>
-</footer>
+    </div> --}}
 
+
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var cartItemCountElement = document.getElementById('cartItemCount');
@@ -144,5 +151,7 @@
         // Send the request
         xhr.send();
     });
+
+
 </script>
   

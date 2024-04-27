@@ -18,6 +18,7 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('indexhome') }}">Home</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">Manu</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('footer') }}">Footer</a></li>
           </ul>
           
         </div>

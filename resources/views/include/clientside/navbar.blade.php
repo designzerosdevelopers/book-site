@@ -29,11 +29,16 @@
             </ul>
             
             <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+ 
+                
                 <li class="search-item">
                     <a class="nav-link" href="#" id="searchIcon">
                         <img src="clientside/images/search.svg" alt="Search">
                     </a>
                 </li>
+               
+
+
                 <li><a class="nav-link" href="{{ route('login') }}"><img src="clientside/images/user.svg"></a></li>
                 <li class="cart-item">
                     <a class="nav-link" href="{{ route('cart') }}">
@@ -45,34 +50,35 @@
                 </li>
                 
             </ul>
-            
-            <!-- Modal -->
-<div class="modal" id="searchModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5 class="modal-title">Search</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <form id="searchForm">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+           
+            <div class="modal" id="searchModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h5 class="modal-title">Search</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <form id="searchForm">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </form>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+         
+        
 
             
         </div>
     </div>
 </nav>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Get the modal
@@ -95,12 +101,18 @@
         // When the user submits the search form, handle the search
         searchForm.onsubmit = function(event) {
             event.preventDefault(); // Prevent form submission
-
+            
             // Get the search input value
             var searchQuery = document.getElementById("searchInput").value;
 
-            // Perform the search (you can implement your search logic here)
-            console.log("Search query:", searchQuery);
+           // Check if the current URL is not '/shop' redirect to shop for search query
+            if (window.location.pathname !== '/shop') {
+                window.location.href = '/shop?search=' + searchQuery;
+            }
+             // Check if the current URL is '/shop' redirect to shop for search query
+            if (window.location.pathname == '/shop') {
+                window.location.href = '/shop?search=' + searchQuery;
+            }
 
             // Close the modal
             modal.style.display = "none";
@@ -118,4 +130,10 @@
             }
         }
     });
+
+   
+
+
+
+
 </script>

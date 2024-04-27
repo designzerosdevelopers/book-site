@@ -57,12 +57,10 @@ Route::get('/about', [SiteViewController::class, 'about'])->name('about');
 Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
-
 Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
 Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
 Route::get('/remove-from-cart/{itemId}', [SiteViewController::class, 'removeFromCart'])->name('remove_from_cart');
 Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
-// Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
 
@@ -78,20 +76,19 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         // dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-    //homepage setting  route
-    Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
-    Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
-    Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
+        //homepage setting  route
+        Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
+        Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
+        Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
+        Route::get('/footer', [PagesSettingController::class, 'footer'])->name('footer');
+        Route::post('/footer', [PagesSettingController::class, 'update_footer'])->name('update.footer');
 
-    // edit manu
-    Route::get('/navbar', [NavbarController::class, 'index'])->name('edit.manu');
-    Route::put('/navbar/update/{id}', [NavbarController::class, 'update'])->name('navitems.update');
-    // delete manu
-    Route::delete('/deletemanu', [PagesSettingController::class, 'deleteManu'])->name('delete.manu');
-
-    Route::post('/update-navigation-order', [PagesSettingController::class, 'updateOrder'])->name('update.order');
-
-
+        // edit manu
+        Route::get('/navbar', [NavbarController::class, 'index'])->name('edit.manu');
+        Route::put('/navbar/update/{id}', [NavbarController::class, 'update'])->name('navitems.update');
+        // delete manu
+        // Route::delete('/deletemanu', [PagesSettingController::class, 'deleteManu'])->name('delete.manu');
+        
 
         //category routes
         Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');

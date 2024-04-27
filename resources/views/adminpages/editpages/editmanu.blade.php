@@ -45,12 +45,12 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <!-- Dropdown Items -->
                                     <button type="button" class="dropdown-item" data-toggle="modal" data-target="#editModal{{ $index }}">Edit</button>
-                                    <form action="{{ route('delete.manu',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    {{-- <form action="{{ route('delete.manu',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                         @csrf
                                         @method('DELETE')
                                         <input type="hidden" name="filename" value="{{ $item['route'] }}">
                                         <button type="submit" class="dropdown-item">Delete</button>
-                                    </form>
+                                    </form> --}}
                                    
                                 </div>
                             </div>                                
