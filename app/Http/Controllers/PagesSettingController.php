@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Footer;
 use App\Models\Navbar;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
@@ -244,6 +245,12 @@ class PagesSettingController extends Controller
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
 
+    
+    public function editmanu()
+    {
+          return view('adminpages.editpages.editmanu');
+    }
+
     public function indexhome()
     {
         // Fetch the homepage data
@@ -253,129 +260,262 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('homepage'));
     }
 
-    public function editmanu()
-    {
-          return view('adminpages.editpages.editmanu');
-    }
 
 
-    public function deleteManu(Request $request) 
-    {
-        $filename = $request->filename;
-        //   deleting the nambar
-        $id = $request->id;
-        $nav = Navbar::find($id);
-        $nav->delete();
-
-        $filename = $request->filename;
-        $filePath = resource_path("views/clientpages/{$filename}.blade.php");
-        
-        if (File::exists($filePath)) {
-            File::delete($filePath);
-            $message = "File '{$filename}.blade.php' has been deleted successfully.";
-            return redirect()->back()->with('success', $message); 
-        } else {
-            $error = "File '{$filename}.blade.php' does not exist.";
-            return redirect()->back()->with('error', $error); 
-        }
-        
-    }
-
-    // public function updateOrder(Request $request)
+    // public function deleteManu(Request $request) 
     // {
-       
-    //     foreach ($request->updated_data as $key => $value) {
-    //        dd($value);
+    //     $filename = $request->filename;
+    //     //   deleting the nambar
+    //     $id = $request->id;
+    //     $nav = Navbar::find($id);
+    //     $nav->delete();
+
+    //     $filename = $request->filename;
+    //     $filePath = resource_path("views/clientpages/{$filename}.blade.php");
+        
+    //     if (File::exists($filePath)) {
+    //         File::delete($filePath);
+    //         $message = "File '{$filename}.blade.php' has been deleted successfully.";
+    //         return redirect()->back()->with('success', $message); 
+    //     } else {
+    //         $error = "File '{$filename}.blade.php' does not exist.";
+    //         return redirect()->back()->with('error', $error); 
     //     }
-    //     $filtered = $request->updated_data;
-    //     foreach ($filtered as $value) {
-    //         dd($value['name']);
-    //     }
-       
+        
     // }
 
     
-
-
-
             
   
     public function updatehome(Request $request)
     {
-        // Validate the request
-        $request->validate([
-            'hero_heading' => 'required|string',
-            'hero_paragraph' => 'required|string',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
-        ]);
+        $formType = $request->input('section');
 
-        // Fetch the existing homepage record
-        $homepage = Homepage::first();
+       
+        switch ($formType) {
+            case 'hero_section':
+                // You can access form data using $request->input('field_name')
+                // Validate the request
+                $request->validate([
+                    'hero_heading' => 'required|string',
+                    'hero_paragraph' => 'required|string',
+                    'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
+                ]);
 
-        if ($homepage) {
-            // Update only if the user uploaded a new image
-            if ($request->hasFile('hero_image')) {
-                // Delete the existing image file if it exists
-                if (file_exists(public_path('clientside/images/' . $homepage->hero_image))) {
-                    unlink(public_path('clientside/images/' . $homepage->hero_image));
+                // Fetch the existing homepage record
+                $homepage = Homepage::first();
+
+                if ($homepage) {
+                    // Update only if the user uploaded a new image
+                    if ($request->hasFile('hero_image')) {
+                        if(!empty($homepage->hero_image)) {
+                            // Delete the existing image file if it exists
+                            if (file_exists(public_path('clientside/images/' . $homepage->hero_image))) {
+                                unlink(public_path('clientside/images/' . $homepage->hero_image));
+                            }
+
+                        }
+                        
+                        // Get the original file name and extension
+                        $original_image = $request->hero_image->getClientOriginalName();
+                        $extension = $request->hero_image->getClientOriginalExtension();
+
+                        // Generate a unique file name
+                        $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
+
+                        // Move the uploaded file to a temporary location
+                        $request->hero_image->storeAs('temp', $unique_image);
+
+                        // Update the homepage record in the database
+                        $homepage->update([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                            'hero_image' => $unique_image,
+                        ]);
+
+                        // Move the uploaded file to the public images folder with its original extension
+                        $request->hero_image->move(public_path('/clientside/images'), $unique_image);
+                        return redirect()->back()->with('status', 'Product section Updated Successfully.');
+                    } else {
+                        // Update only text fields if no new image is uploaded
+                        $update = $homepage->update([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                        ]);
+                        if($update){
+                            return redirect()->back()->with('status', 'Product section Updated Successfully, but image is not given');
+                        }
+                       
+                    }
+
+                
+                } else {
+                    // If no homepage record exists, create a new one
+                    if ($request->hasFile('hero_image')) {
+                        // Get the original file name and extension
+                        $original_image = $request->hero_image->getClientOriginalName();
+                        $extension = $request->hero_image->getClientOriginalExtension();
+
+                        $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
+
+                        $request->hero_image->move(public_path('/clientside/images'), $unique_image);
+
+                        $home = Homepage::create([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                            'hero_image' => $unique_image,
+                        ]);
+                        if($home){
+                            return redirect()->back()->with('status', 'Product section created Successfully.');
+                        }
+                    } else {                       
+                        Homepage::create([
+                            'hero_heading' => $request->hero_heading,
+                            'hero_paragraph' => $request->hero_paragraph,
+                        ]);
+                        return redirect()->back()->with('status', 'Product section created Successfully. but image is not given!');
+                    }
+
+                }
+                break;
+            case 'product_section':
+              
+            // Fetch only the specified fields from the homepage table
+            $homepage = Homepage::first();
+
+            // Check if the record exists
+            if ($homepage) {
+                // Update the fields
+                $homepage->ps_title = $request->section_title;
+                $homepage->ps_description = $request->section_description;
+
+                // Save the changes to the database
+                $homepage->save();
+
+                // Optionally, you can return a success message or perform other actions
+                return redirect()->back()->with("status", " Product section title and description updated successfully.");
+            } else {
+                // Create a new record with the provided data
+                $homepage = Homepage::create([
+                    'ps_title' => $request->section_title,
+                    'ps_description' => $request->section_description,
+                ]);
+            
+                // Optionally, you can return a success message or perform other actions
+                return redirect()->back()->with("status", " section title and description created successfully.");
+            }
+                break;
+            case 'why_choose_us':
+                $data = $request->only([
+                    'section_title',
+                    'section_description',
+                    'feature_1',
+                    'feature_1_description',
+                    'feature_2',
+                    'feature_2_description',
+                    'feature_3',
+                    'feature_3_description',
+                    'feature_4',
+                    'feature_4_description'
+                ]);
+
+               $columns =  ['wcu_title',
+                'wcu_description',
+                'wcu_feature_1_title',
+                'wcu_feature_1_description',
+                'wcu_feature_2_title',
+                'wcu_feature_2_description',
+                'wcu_feature_3_title',
+                'wcu_feature_3_description',
+                'wcu_feature_4_title',
+                'wcu_feature_4_description',
+               ];
+
+               $homepage = Homepage::first();
+                if ($homepage) {
+                    $update = $homepage->update([
+                        $homepage->wcu_title = $data['section_title'],
+                        $homepage->wcu_description = $data['section_description'],
+                        $homepage->wcu_feature_1_title = $data['feature_1'],
+                        $homepage->wcu_feature_1_description = $data['feature_1_description'],
+                        $homepage->wcu_feature_2_title = $data['feature_2'],
+                        $homepage->wcu_feature_2_description = $data['feature_2_description'],
+                        $homepage->wcu_feature_3_title = $data['feature_3'],
+                        $homepage->wcu_feature_3_description = $data['feature_3_description'],
+                        $homepage->wcu_feature_4_title = $data['feature_4'],
+                        $homepage->wcu_feature_4_description = $data['feature_4_description'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'Why choose us section updated successfully!');
+                    }
+                } else {
+                    $create = Homepage::create(array_combine($columns, $data));
+                    if($create){
+                        return redirect()->back()->with('status', 'Why choose us section created successfully!');
+                    }
                 }
 
-                // Get the original file name and extension
-                $original_image = $request->hero_image->getClientOriginalName();
-                $extension = $request->hero_image->getClientOriginalExtension();
-
-                // Generate a unique file name
-                $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
-
-                // Move the uploaded file to a temporary location
-                $request->hero_image->storeAs('temp', $unique_image);
-
-                // Update the homepage record in the database
-                $homepage->update([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                    'hero_image' => $unique_image,
+                break;
+            case 'we_help':
+                $columns = [
+                    'wh_title',
+                    'wh_description',
+                    'wh_feature_1',
+                    'wh_feature_2',
+                    'wh_feature_3',
+                    'wh_feature_4',
+                ];
+                $data = $request->only([
+                    'we_help_title',
+                    'we_help_description',
+                    'feature_1',
+                    'feature_2',
+                    'feature_3',
+                    'feature_4',
                 ]);
+                $homepage = Homepage::first();
+                if ($homepage) {
+                    $update = $homepage->update([
+                        $homepage->wh_title = $data['we_help_title'],
+                        $homepage->wh_description = $data['we_help_description'],
+                        $homepage->wh_feature_1 = $data['feature_1'],
+                        $homepage->wh_feature_2 = $data['feature_2'],
+                        $homepage->wh_feature_3 = $data['feature_3'],
+                        $homepage->wh_feature_4 = $data['feature_4'],
 
-                // Move the uploaded file to the public images folder with its original extension
-                $request->hero_image->move(public_path('/clientside/images'), $unique_image);
-            } else {
-                // Update only text fields if no new image is uploaded
-                $homepage->update([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                ]);
-            }
-
-            // Return a redirect response with a success message
-            return redirect()->back()->with('status', 'Update Successful.');
-        } else {
-            // If no homepage record exists, create a new one
-            if ($request->hasFile('hero_image')) {
-                // Get the original file name and extension
-                $original_image = $request->hero_image->getClientOriginalName();
-                $extension = $request->hero_image->getClientOriginalExtension();
-
-                $unique_image = uniqid() . '-' . 'hero_image.' . $extension;
-
-                $request->hero_image->move(public_path('/clientside/images'), $unique_image);
-
-                Homepage::create([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                    'hero_image' => $unique_image,
-                ]);
-            } else {
-               
-                Homepage::create([
-                    'hero_heading' => $request->hero_heading,
-                    'hero_paragraph' => $request->hero_paragraph,
-                ]);
-            }
-
-
-            return redirect()->back()->with('status', 'Homepage Created Successfully.');
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'We help section updated successfully!');
+                    }
+                } else {
+                    $create = Homepage::create(array_combine($columns, $data));
+                    if($create){
+                        return redirect()->back()->with('status', 'We help section created successfully!');
+                    }
+                }
+                break;
+            default:
+            return redirect()->back()->with('error', 'Invalid Request');
+                break;
         }
+       
+    }
+
+    public function footer()
+    {
+        $footerData = Footer::orderBy('id', 'asc')->first();
+        $footer = $footerData->footer;
+        return view('adminpages.editpages.footer', ['footer' => $footer]);
+
+    }
+    public function update_footer(Request $request)
+    {
+        $footer = Footer::orderBy('id', 'asc')->first();
+        $html = $request->htmlInput;
+        $footer->footer = $html;
+        $footer->save();
+        return redirect()->back()->with('success', 'Footer updated successfully');
+        
     }
 
     public function indexcategories(Request $request)
