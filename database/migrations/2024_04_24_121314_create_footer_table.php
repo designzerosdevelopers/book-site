@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('footer', function (Blueprint $table) {
-            $table->id();
-            $table->TEXT('footer');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('footer')) {
+            Schema::create('footer', function (Blueprint $table) {
+                $table->id();
+                $table->TEXT('footer');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
