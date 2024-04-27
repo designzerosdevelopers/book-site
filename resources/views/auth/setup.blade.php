@@ -4,7 +4,7 @@
         <div class="container-fluid page-body-wrapper full-page-wrapper">
             <div class="content-wrapper d-flex align-items-center auth">
                 <div class="row flex-grow">
-                    <div class="col-lg-4 mx-auto">
+                    <div class="col-lg-6 mx-auto">
                         <div class="auth-form-light text-left p-5">
                             <div class="brand-logo">
                                 <img src="{{ asset('admin/images/digital-store.jpg') }}">
@@ -16,7 +16,7 @@
                                     {{ Session::get('db_error') }}
                                 </div>
                             @endif
-                            <form class="pt-3" method="POST" action="{{ route('setup.store') }}">
+                            <form class="pt-3" method="POST" action="{{ route('setup.config') }}">
                                 @csrf
                                 <div class="form-group">
                                     <input id="db_name" class="form-control form-control-lg" type="text" name="db_name"

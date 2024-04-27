@@ -17,8 +17,8 @@ return new class extends Migration
                 $table->string('name');
                 $table->string('last_name')->nullable();
                 $table->string('address')->nullable();
-                $table->string('state/country')->nullable();
-                $table->integer('postal/zip')->nullable();
+                $table->string('country')->nullable();
+                $table->integer('zip')->nullable();
                 $table->string('email')->unique();
                 $table->string('phone')->nullable();
                 $table->integer('role')->default(0);
@@ -27,6 +27,7 @@ return new class extends Migration
                 $table->rememberToken();
                 $table->timestamps();
             });
+            
         }
     }
     /**
@@ -35,5 +36,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+
     }
 };
