@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('navbar', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('route');
-            $table->integer('position');
-            $table->timestamps();
-        });
-        
+        if (!Schema::hasTable('navbar')) {
+            Schema::create('navbar', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('route');
+                $table->integer('position');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

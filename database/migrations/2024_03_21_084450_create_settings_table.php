@@ -14,8 +14,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('users')) {
-
+        if (!Schema::hasTable('settings')) {
             Schema::create('settings', function (Blueprint $table) {
                 $table->id();
                 $table->string('key');
@@ -25,30 +24,25 @@ return new class extends Migration
             });
 
 
+            $stripeKeys = [
+                'STRIPE_KEY' => 'Stripe key',
+                'STRIPE_SECRET' => 'Stripe secret',
+                'PAYPAL_KEY' => 'Paypal key',
+                'PAYPAL_SECRET' => 'Paypal secret'
+            ];
 
-            // // Retrieve keys and display names
-            // $stripeKeys = [
-            //     'STRIPE_KEY' => 'Stripe key',
-            //     'STRIPE_SECRET' => 'Stripe secret',
-            //     'PAYPAL_KEY' => 'Paypal key',
-            //     'PAYPAL_SECRET' => 'Paypal secret'
-            // ];
+            $data = [];
 
-            // // Create an array to hold the data for bulk insertion
-            // $data = [];
+            foreach ($stripeKeys as $key => $display) {
+                $data[] = [
+                    'key' => $key,
+                    'display_name' => $display,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
 
-            // // Loop through the keys array
-            // foreach ($stripeKeys as $key => $display) {
-            //     $data[] = [
-            //         'key' => $key,
-            //         'display_name' => $display,
-            //         'created_at' => now(),
-            //         'updated_at' => now(),
-            //     ];
-            // }
-
-            // // Insert records directly into the settings table
-            // DB::table('settings')->insert($data);
+            DB::table('settings')->insert($data);
         }
     }
     /**
