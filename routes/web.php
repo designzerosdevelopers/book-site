@@ -115,5 +115,4 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
     Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
 });
 
-// Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
 
