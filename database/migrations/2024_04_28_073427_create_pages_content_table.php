@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('page_content')) {
+        if (!Schema::hasTable('pages_content')) {
             Schema::create('pages_content', function (Blueprint $table) {
                 $table->id();
                 $table->string('hero_heading')->nullable();
