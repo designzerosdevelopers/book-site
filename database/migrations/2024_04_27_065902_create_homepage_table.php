@@ -34,6 +34,10 @@ return new class extends Migration
             $table->string('wh_feature_2')->nullable();
             $table->string('wh_feature_3')->nullable();
             $table->string('wh_feature_4')->nullable();
+            $table->string('about_hs_title')->nullable();
+            $table->string('about_hs_description')->nullable();
+            $table->string('contact_hs_title')->nullable();
+            $table->string('contact_hs_description')->nullable();
             $table->timestamps();            
         });
     }

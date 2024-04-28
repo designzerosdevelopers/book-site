@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Homepage;
+use App\Models\Pages;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Categories;
@@ -31,7 +31,7 @@ class SiteViewController extends Controller
      */
     public function index()
     {
-        $data = Homepage::first();
+        $data = Pages::first();
         $latestItems = Item::latest()->take(3)->get();
         return view('clientpages.index', ['items'=>$latestItems, 'data' => $data]);
     }
@@ -481,7 +481,8 @@ class SiteViewController extends Controller
 
     public function contact()
     {
-        return view('clientpages.contact');
+        $data = Pages::first();
+        return view('clientpages.contact',['contact' => $data]);
     }
 
 
@@ -494,7 +495,7 @@ class SiteViewController extends Controller
 
     public function about()
     {
-        $data = Homepage::first();
+        $data = Pages::first();
         return view('clientpages.about',['data' => $data]);
     }
 

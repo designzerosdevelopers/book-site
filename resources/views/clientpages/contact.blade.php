@@ -9,14 +9,14 @@
 					<div class="row justify-content-between">
 						<div class="col-lg-5">
 							<div class="intro-excerpt">
-								<h1>Contact</h1>
-								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+								<h1>{{  $contact['contact_hs_title'] }}</h1>
+								<p class="mb-4">{{  $contact['contact_hs_description'] }}</p>
 								<p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
 							</div>
 						</div>
 						<div class="col-lg-7">
 							<div class="hero-img-wrap">
-								<img src="images/couch.png" class="img-fluid">
+                <img src="{{asset('clientside/images/'.$contact['contact_hs_image'])}}" alt="Image" class="img-fluid" width="50%">
 							</div>
 						</div>
 					</div>
@@ -28,14 +28,9 @@
 		<!-- Start Contact Form -->
 		<div class="untree_co-section">
       <div class="container">
-
         <div class="block">
           <div class="row justify-content-center">
-
-
             <div class="col-md-8 col-lg-8 pb-4">
-
-
               <div class="row mb-5">
                 <div class="col-lg-4">
                   <div  class="service no-shadow align-items-center link horizontal d-flex active" data-aos="fade-left" data-aos-delay="0">
