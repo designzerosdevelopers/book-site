@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 use App\Models\User;
 
 class SetupController extends Controller
@@ -31,6 +31,8 @@ class SetupController extends Controller
                 // If there are no users with role 1, redirect to the setup page
                 return view('auth.setup')->with('error', 'No users with role 1 found.');
             }
+
+            return redirect()->route('index');
         } catch (\Exception $e) {
             return view('auth.setup');
         }
@@ -38,52 +40,53 @@ class SetupController extends Controller
         return view('auth.setup');
     }
 
-    public function store(Request $request)
+    public function setConfig(Request $request)
     {
-        // Validate the form data
-
         $validator = Validator::make($request->all(), [
             'db_name' => 'required|string',
             'db_username' => 'required|string',
             'db_host' => 'required',
         ]);
 
-        // If validation fails, redirect back with errors
         if ($validator->fails()) {
             return redirect()->route('setup.create')->withErrors($validator)->withInput();
         }
 
 
-        // If validation passes, update the .env file with the new database connection settings
-        $envContent = file_get_contents(base_path('.env'));
-        $envContent = preg_replace('/DB_DATABASE=.*\n/', 'DB_DATABASE=' . $request->input('db_name') . "\n", $envContent);
-        $envContent = preg_replace('/DB_USERNAME=.*\n/', 'DB_USERNAME=' . $request->input('db_username') . "\n", $envContent);
-        $envContent = preg_replace('/DB_PASSWORD=.*\n/', 'DB_PASSWORD=' . $request->input('db_password') . "\n", $envContent);
-        $envContent = preg_replace('/DB_HOST=.*\n/', 'DB_HOST=' . $request->input('db_host') . "\n", $envContent);
 
-        file_put_contents(base_path('.env'), $envContent);
+        $configFile = config_path('database.php');
+        $configContent = file_get_contents($configFile);
 
-        try {
-            DB::connection()->getPdo();
+        $configContent = preg_replace("/'host' => '.*?'/", "'host' => '{$request->input('db_host')}'", $configContent);
+        $configContent = preg_replace("/'database' => '.*?'/", "'database' => '{$request->input('db_name')}'", $configContent);
+        $configContent = preg_replace("/'username' => '.*?'/", "'username' => '{$request->input('db_username')}'", $configContent);
+        $configContent = preg_replace("/'password' => '.*?'/", "'password' => '{$request->input('db_password')}'", $configContent);
 
-            $this->mig();
-
-            return view('auth.admin.register')->with('success', 'Database connection settings updated successfully.');
-        } catch (\Exception $e) {
-            $errorMessage = 'Database connection failed: ' . (strpos($e->getMessage(), ':') !== false ? explode(':', $e->getMessage(), 2)[1] : $e->getMessage());
-            // Flash the error message to the session
-            Session::flash('db_error', $errorMessage);
-            return redirect()->route('setup.create');
-        }
-        return view('auth.admin.register')->with('success', 'Database connection settings updated successfully.');
+        file_put_contents($configFile, $configContent);
+        Artisan::call('config:clear');
+        return view('auth.admin.test_db');
     }
 
-    public function mig()
+
+    public function migrate()
     {
-        if (!Schema::hasTable('users')) {
-            Artisan::call('optimize:clear');
-            Artisan::call('migrate');
-            return view('auth.admin.register')->with('success', 'Database connection settings updated successfully.');
+        try {
+            DB::reconnect('mysql');
+            DB::connection()->getPdo();
+
+            if (!Schema::hasTable('users')) {
+                Artisan::call('migrate');
+                Session::flash('db_success', 'Database setup successful');
+                return redirect()->route('register');
+            }
+        } catch (\Exception $e) {
+            Session::flash('db_error', substr($e->getMessage(), strrpos($e->getMessage(), ']') + 2));
+            return redirect()->route('setup.create');
+        }
+
+        if (Schema::hasTable('users')) {
+            Session::flash('db_success', 'Database setup successful');
+            return redirect()->route('register');
         }
     }
 }

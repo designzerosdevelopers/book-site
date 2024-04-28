@@ -10,25 +10,16 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\NavbarController;
 
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 Route::get('setup', [App\Http\Controllers\SetupController::class, 'create'])->name('setup.create');
-Route::post('admin/register', [App\Http\Controllers\SetupController::class, 'store'])->name('setup.store');
-Route::post('admin/registered', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])->name('admin.store');
+Route::post('check/database', [App\Http\Controllers\SetupController::class, 'setConfig'])->name('setup.config');
+Route::post('admin/register', [App\Http\Controllers\SetupController::class, 'migrate'])->name('db.migrate');
+Route::get('register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])
+->name('register');
+Route::post('register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
+
 
 Route::middleware('check.database')->group(function () {
     // Your routes here
-    Route::post('admin/store', function(){return view('auth.admin.register');})->name('admin.register');
-
     Route::get('createTransaction', [StripeController::class, 'createTransaction'])->name('createTransaction');
     Route::get('process-transaction', [StripeController::class, 'processTransaction'])->name('processTransaction');
     Route::get('success-transaction', [StripeController::class, 'successTransaction'])->name('successTransaction');
@@ -37,10 +28,6 @@ Route::middleware('check.database')->group(function () {
 
     Route::post('/stripecharge', [StripeController::class, 'stripecharge'])->name('stripecharge');
     Route::get('/checkout/cancel',  [StripeController::class, 'cancel'])->name('checkout.cancel');
-
-
-
-
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -73,6 +60,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
     // adminside controller
     Route::middleware('auth', 'checkUserRole')->group(function () {
+        
         // dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -123,11 +111,8 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         // purchases routes
         Route::get('/purchases', [PagesSettingController::class, 'purchases'])->name('purchases.index');
     });
+
+    Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
 });
 
-// Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
 
-// Route::post('post/{navrout}', [SiteViewController::class, 'post'])->name('dynamic.route');
-// Route::get('/dynamic/{id}/{route}', function ($id, $route) {
-//     // Your dynamic route logic here
-// })->name('dynamic.route');
