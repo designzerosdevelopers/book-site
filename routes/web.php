@@ -76,9 +76,9 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         // dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-        //homepage setting  route
-        Route::get('/indexhomesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
-        Route::put('/updatehomesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
+        //pages setting  route
+        Route::get('/pagesettings', [PagesSettingController::class, 'indexhome'])->name('indexhome');
+        Route::put('/updatepagesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
         Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
         Route::get('/footer', [PagesSettingController::class, 'footer'])->name('footer');
         Route::post('/footer', [PagesSettingController::class, 'update_footer'])->name('update.footer');

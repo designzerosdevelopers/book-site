@@ -20,7 +20,7 @@
             <div class="col-lg-5">
                 <div class="hero-img-wrap">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage() ))
-                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="90%">
+                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="70%">
                     @else
                         No  Image
                     @endif
@@ -129,7 +129,7 @@
 
                 <div class="col-lg-5">
                     <div class="img-wrap">
-                        <img src="{{asset('clientside/images/down1.png')}}" alt="Image" class="img-fluid">
+                        <img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
                     </div>
                 </div>
 

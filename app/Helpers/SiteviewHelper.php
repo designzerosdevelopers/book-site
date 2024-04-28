@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Homepage;
+use App\Models\Pages;
 use App\Models\Settings;
 use App\Models\Navbar;
 use App\Models\Footer;
@@ -11,7 +11,7 @@ class SiteviewHelper {
 
   public static function homepage()
   {
-    return Homepage::first();
+    return Pages::first();
   }
 
   public static function getsettings($key)

@@ -7,14 +7,14 @@
 		<div class="row justify-content-between">
 			<div class="col-lg-5">
 				<div class="intro-excerpt">
-					<h1>About Us</h1>
-					<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+					<h1>{{ $data['about_hs_title'] }}</h1>
+					<p class="mb-4">{{ $data['about_hs_description'] }}</p>
 					<p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
 				</div>
 			</div>
 			<div class="col-lg-7">
 				<div class="hero-img-wrap">
-					<img src="{{asset('clientside/images/.png')}}" class="img-fluid">
+					<img src="{{asset('clientside/images/'.$data['about_hs_image'])}}" class="img-fluid" width="50%">
 				</div>
 			</div>
 		</div>
@@ -75,7 +75,7 @@
 			</div>
 			<div class="col-lg-5">
 				<div class="img-wrap">
-					<img src="{{asset('clientside/images/down1.png')}}" alt="Image" class="img-fluid">
+					<img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
 				</div>
 			</div>
 

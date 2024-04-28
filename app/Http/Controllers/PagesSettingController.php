@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Homepage;
+use App\Models\Pages;
 use App\Models\Upload;
 use App\Models\Settings;
 use App\Models\Categories;
@@ -96,8 +96,8 @@ class PagesSettingController extends Controller
 
     public function indexitem()
     {
-        // Fetch the homepage data
-        $items = Item::get(); // Retrieve the first homepage record
+        // Fetch the pages data
+        $items = Item::get(); // Retrieve the first pages record
    
         // Pass the data to the view
         return view('adminpages.item.index', ['items'=> $items]);
@@ -253,11 +253,11 @@ class PagesSettingController extends Controller
 
     public function indexhome()
     {
-        // Fetch the homepage data
-        $homepage = Homepage::first(); // Retrieve the first homepage record
+        // Fetch the pages data
+        $pages = Pages::first(); // Retrieve the first pages record
     
         // Pass the data to the view
-        return view('adminpages.editpages.homesetting', compact('homepage'));
+        return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
 
@@ -302,16 +302,16 @@ class PagesSettingController extends Controller
                     'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
                 ]);
 
-                // Fetch the existing homepage record
-                $homepage = Homepage::first();
+                // Fetch the existing pages record
+                $pages = Pages::first();
 
-                if ($homepage) {
+                if ($pages) {
                     // Update only if the user uploaded a new image
                     if ($request->hasFile('hero_image')) {
-                        if(!empty($homepage->hero_image)) {
+                        if(!empty($pages->hero_image)) {
                             // Delete the existing image file if it exists
-                            if (file_exists(public_path('clientside/images/' . $homepage->hero_image))) {
-                                unlink(public_path('clientside/images/' . $homepage->hero_image));
+                            if (file_exists(public_path('clientside/images/' . $pages->hero_image))) {
+                                unlink(public_path('clientside/images/' . $pages->hero_image));
                             }
 
                         }
@@ -326,8 +326,8 @@ class PagesSettingController extends Controller
                         // Move the uploaded file to a temporary location
                         $request->hero_image->storeAs('temp', $unique_image);
 
-                        // Update the homepage record in the database
-                        $homepage->update([
+                        // Update the pages record in the database
+                        $pages->update([
                             'hero_heading' => $request->hero_heading,
                             'hero_paragraph' => $request->hero_paragraph,
                             'hero_image' => $unique_image,
@@ -338,7 +338,7 @@ class PagesSettingController extends Controller
                         return redirect()->back()->with('status', 'Product section Updated Successfully.');
                     } else {
                         // Update only text fields if no new image is uploaded
-                        $update = $homepage->update([
+                        $update = $pages->update([
                             'hero_heading' => $request->hero_heading,
                             'hero_paragraph' => $request->hero_paragraph,
                         ]);
@@ -350,7 +350,7 @@ class PagesSettingController extends Controller
 
                 
                 } else {
-                    // If no homepage record exists, create a new one
+                    // If no pages record exists, create a new one
                     if ($request->hasFile('hero_image')) {
                         // Get the original file name and extension
                         $original_image = $request->hero_image->getClientOriginalName();
@@ -360,7 +360,7 @@ class PagesSettingController extends Controller
 
                         $request->hero_image->move(public_path('/clientside/images'), $unique_image);
 
-                        $home = Homepage::create([
+                        $home = Pages::create([
                             'hero_heading' => $request->hero_heading,
                             'hero_paragraph' => $request->hero_paragraph,
                             'hero_image' => $unique_image,
@@ -369,7 +369,7 @@ class PagesSettingController extends Controller
                             return redirect()->back()->with('status', 'Product section created Successfully.');
                         }
                     } else {                       
-                        Homepage::create([
+                        Pages::create([
                             'hero_heading' => $request->hero_heading,
                             'hero_paragraph' => $request->hero_paragraph,
                         ]);
@@ -380,23 +380,23 @@ class PagesSettingController extends Controller
                 break;
             case 'product_section':
               
-            // Fetch only the specified fields from the homepage table
-            $homepage = Homepage::first();
+            // Fetch only the specified fields from the pages table
+            $pages = Pages::first();
 
             // Check if the record exists
-            if ($homepage) {
+            if ($pages) {
                 // Update the fields
-                $homepage->ps_title = $request->section_title;
-                $homepage->ps_description = $request->section_description;
+                $pages->ps_title = $request->section_title;
+                $pages->ps_description = $request->section_description;
 
                 // Save the changes to the database
-                $homepage->save();
+                $pages->save();
 
                 // Optionally, you can return a success message or perform other actions
                 return redirect()->back()->with("status", " Product section title and description updated successfully.");
             } else {
                 // Create a new record with the provided data
-                $homepage = Homepage::create([
+                $pages = Pages::create([
                     'ps_title' => $request->section_title,
                     'ps_description' => $request->section_description,
                 ]);
@@ -416,7 +416,8 @@ class PagesSettingController extends Controller
                     'feature_3',
                     'feature_3_description',
                     'feature_4',
-                    'feature_4_description'
+                    'feature_4_description',
+                    'wcu_image'
                 ]);
 
                $columns =  ['wcu_title',
@@ -429,31 +430,56 @@ class PagesSettingController extends Controller
                 'wcu_feature_3_description',
                 'wcu_feature_4_title',
                 'wcu_feature_4_description',
+                'home_wcu_image',
                ];
+                $request->validate([
+                    'wcu_image' => 'image|mimes:jpeg,png,jpg,gif',
+                ]);
+               $pages = Pages::first();
 
-               $homepage = Homepage::first();
-                if ($homepage) {
-                    $update = $homepage->update([
-                        $homepage->wcu_title = $data['section_title'],
-                        $homepage->wcu_description = $data['section_description'],
-                        $homepage->wcu_feature_1_title = $data['feature_1'],
-                        $homepage->wcu_feature_1_description = $data['feature_1_description'],
-                        $homepage->wcu_feature_2_title = $data['feature_2'],
-                        $homepage->wcu_feature_2_description = $data['feature_2_description'],
-                        $homepage->wcu_feature_3_title = $data['feature_3'],
-                        $homepage->wcu_feature_3_description = $data['feature_3_description'],
-                        $homepage->wcu_feature_4_title = $data['feature_4'],
-                        $homepage->wcu_feature_4_description = $data['feature_4_description'],
-                    ]);
-                    if($update){
-                        return redirect()->back()->with('status', 'Why choose us section updated successfully!');
+                if ($pages) {
+                        if ($request->hasFile('wcu_image')) {
+                            if(!empty($pages->home_wcu_image)) {
+                                // Delete the existing image file if it exists
+                                if (file_exists(public_path('clientside/images/' . $pages->home_wcu_image))) {
+                                    unlink(public_path('clientside/images/' . $pages->home_wcu_image));
+                                }
+    
+                            }
+                            
+                            // Get the original file name and extension
+                            $original_image = $request->wcu_image->getClientOriginalName();
+                            $extension = $request->wcu_image->getClientOriginalExtension();
+    
+                            // Generate a unique file name
+                            $unique_image = uniqid() . '-' . 'image.' . $extension;
+    
+                            // Move the uploaded file to a temporary location
+                            $request->wcu_image->storeAs('temp', $unique_image);
+    
+                            // Move the uploaded file to the public images folder with its original extension
+                            $request->wcu_image->move(public_path('/clientside/images'), $unique_image);
+                          
+                            $update = $pages->update([
+                                $pages->wcu_title = $data['section_title'],
+                                $pages->wcu_description = $data['section_description'],
+                                $pages->wcu_feature_1_title = $data['feature_1'],
+                                $pages->wcu_feature_1_description = $data['feature_1_description'],
+                                $pages->wcu_feature_2_title = $data['feature_2'],
+                                $pages->wcu_feature_2_description = $data['feature_2_description'],
+                                $pages->wcu_feature_3_title = $data['feature_3'],
+                                $pages->wcu_feature_3_description = $data['feature_3_description'],
+                                $pages->wcu_feature_4_title = $data['feature_4'],
+                                $pages->wcu_feature_4_description = $data['feature_4_description'],
+                                $pages->home_wcu_image = $unique_image,
+                            ]);
+                            if($update){
+                                return redirect()->back()->with('status', 'Why choose us section updated successfully!');
+                            }
+                        } 
                     }
-                } else {
-                    $create = Homepage::create(array_combine($columns, $data));
-                    if($create){
-                        return redirect()->back()->with('status', 'Why choose us section created successfully!');
-                    }
-                }
+                      
+                   
 
                 break;
             case 'we_help':
@@ -473,24 +499,76 @@ class PagesSettingController extends Controller
                     'feature_3',
                     'feature_4',
                 ]);
-                $homepage = Homepage::first();
-                if ($homepage) {
-                    $update = $homepage->update([
-                        $homepage->wh_title = $data['we_help_title'],
-                        $homepage->wh_description = $data['we_help_description'],
-                        $homepage->wh_feature_1 = $data['feature_1'],
-                        $homepage->wh_feature_2 = $data['feature_2'],
-                        $homepage->wh_feature_3 = $data['feature_3'],
-                        $homepage->wh_feature_4 = $data['feature_4'],
+                $pages = Pages::first();
+                if ($pages) {
+                    $update = $pages->update([
+                        $pages->wh_title = $data['we_help_title'],
+                        $pages->wh_description = $data['we_help_description'],
+                        $pages->wh_feature_1 = $data['feature_1'],
+                        $pages->wh_feature_2 = $data['feature_2'],
+                        $pages->wh_feature_3 = $data['feature_3'],
+                        $pages->wh_feature_4 = $data['feature_4'],
 
                     ]);
                     if($update){
                         return redirect()->back()->with('status', 'We help section updated successfully!');
                     }
                 } else {
-                    $create = Homepage::create(array_combine($columns, $data));
+                    $create = Pages::create(array_combine($columns, $data));
                     if($create){
                         return redirect()->back()->with('status', 'We help section created successfully!');
+                    }
+                }
+                break;
+            case 'about_us':
+                $data = $request->only([
+                    'about_us_title',
+                    'about_us_description',
+                ]);
+                $pages = Pages::first();
+                if ($pages) {
+                    $update = $pages->update([
+                        'about_hs_title' => $data['about_us_title'],
+                        'about_hs_description' => $data['about_us_description'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'About Us section updated successfully!');
+                    }
+                } else {
+                    $update = $pages->create([
+                        'about_hs_title' => $data['about_us_title'],
+                        'about_hs_description' => $data['about_us_description'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'About Us section created successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'About Us section could not be Created/updated!');
+                    }
+                }
+                break;
+            case 'contact':
+                $data = $request->only([
+                    'contact_hs_title',
+                    'contact_hs_description',
+                ]);
+                $pages = Pages::first();
+                if ($pages) {
+                    $update = $pages->update([
+                        'contact_hs_title' => $data['contact_hs_title'],
+                        'contact_hs_description' => $data['contact_hs_description'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'Contact section updated successfully!');
+                    }
+                } else {
+                    $update = $pages->create([
+                        'contact_hs_title' => $data['contact_hs_title'],
+                        'contact_hs_description' => $data['contact_hs_description'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', 'Contact section created successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Contact section could not be Created/updated!');
                     }
                 }
                 break;
