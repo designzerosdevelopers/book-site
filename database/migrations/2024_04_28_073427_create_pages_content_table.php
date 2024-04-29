@@ -64,7 +64,7 @@ return new class extends Migration
                 'wcu_feature_4_title' => 'User-Friendly Experience',
                 'wcu_feature_4_description' => 'Navigate our platform with ease and find your next favorite read quickly with our intuitive interface and robust search features.',
                 'wh_title' => 'We\'re Here to Help',
-                'wh_description' => 'Meet the dedicated team committed to ensuring your experience with DigitalStore is nothing short of excellent. From assistance with purchases to resolving any issues, we\'re here to support you every step of the way. Discover the benefits of choosing DigitalStore for all your digital book needs. From an extensive library to convenient access options, we offer everything you need for an enjoyable reading experience.',
+                 'wh_description' => 'Meet the dedicated team committed to ensuring your experience with DigitalStore is nothing short of excellent. From assistance with purchases to resolving any issues, we\'re here to support you every step of the way. Discover the benefits of choosing DigitalStore for all your digital book needs. From an extensive library to convenient access options, we offer everything you need for an enjoyable reading experience.',
                 'wh_feature_1' => 'John Doe - CEO',
                 'wh_feature_2' => 'Jane Smith ',
                 'wh_feature_3' => 'David Johnson - Content Curator',
