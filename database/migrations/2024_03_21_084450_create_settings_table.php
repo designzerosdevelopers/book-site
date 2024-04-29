@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-
+use App\Models\Settings;
 
 return new class extends Migration
 {
@@ -30,7 +30,7 @@ return new class extends Migration
             $stripeKeys = [
                 'STRIPE_KEY' => 'Stripe key',
                 'STRIPE_SECRET' => 'Stripe secret',
-                'PAYPAL_KEY' => 'Paypal key',
+                'PAYPAL_KEY' => 'Paypal key', 
                 'PAYPAL_SECRET' => 'Paypal secret',
                 'MAIL_MAILER' => 'Mail mailer',
                 'MAIL_HOST' => 'Mail host',
@@ -57,6 +57,15 @@ return new class extends Migration
 
             // Insert records directly into the settings table
             DB::table('settings')->insert($data);
+
+            $valuekey = Settings::find(3); 
+            $valuekey->value = 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r';
+            $valuekey->save();
+            
+            $valuesecret = Settings::find(4); 
+            $valuesecret->value = 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP';
+            $valuesecret->save();
+             
         }
     }
     /**

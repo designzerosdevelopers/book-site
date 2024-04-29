@@ -16,13 +16,6 @@
 			</div>
 		<!-- End Hero Section -->
 
-	
-	
-		
-		
-
-	
-	
 		<div class="untree_co-section">
 		    <div class="container">
 					<form id="paymentForm"  method="post" action="">
@@ -175,11 +168,17 @@
 						</tbody>
 		                </table>
 		                <div class="form-group">
-		                  <!-- Stripe Payment Button -->
+
+		               @if($stripe)
+							<!-- Stripe Payment Button -->
 							<input type="submit" id="stripeButton" class="btn btn-black btn-lg py-3 btn-block" value="Pay with Stripe">
-							
+						@endif
+
+						@if($paypal)
 							<!-- Paypal Payment Button -->
 							<input type="submit" id="paypalButton" class="btn btn-black btn-lg py-3 btn-block" value="Pay with Paypal">
+						@endif
+
 		                </div>
 
 		              </div>
