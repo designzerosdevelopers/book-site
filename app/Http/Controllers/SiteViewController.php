@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pages;
+use App\Models\Settings;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Categories;
@@ -468,14 +469,27 @@ class SiteViewController extends Controller
 
     public function checkout(request $request)
     {
-      
-
         // Retrieve the current cart items from the cookie
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
         foreach ($cartItems as $value) {
            $subtotal = $value['item_price'];
         }
-        return view('clientpages.checkout', ['cartItems' => $cartItems], ['subtotal' => $subtotal]);
+
+        $stripeIds = [1, 2];
+        $stripeSettings = Settings::find($stripeIds)->pluck('value');
+        $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
+        
+        $paypalIds = [3, 4];
+        $paypalSettings = Settings::find($paypalIds)->pluck('value');
+        $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
+        
+        return view('clientpages.checkout', [
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'paypal' => $paypal,
+            'stripe' => $stripe
+        ]);
+        
     }
     
 
