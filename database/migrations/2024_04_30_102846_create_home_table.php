@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Database\Seeders\Page_Content_Seeder;
 
 return new class extends Migration
 {
@@ -12,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('pages_content')) {
-            Schema::create('pages_content', function (Blueprint $table) {
+        if (!Schema::hasTable('home')) {
+            Schema::create('home', function (Blueprint $table) {
                 $table->id();
                 $table->string('hero_heading')->nullable();
                 $table->text('hero_paragraph')->nullable();
@@ -37,15 +36,13 @@ return new class extends Migration
                 $table->string('wh_feature_2')->nullable();
                 $table->string('wh_feature_3')->nullable();
                 $table->string('wh_feature_4')->nullable();
-                $table->string('about_hs_title')->nullable();
-                $table->text('about_hs_description')->nullable();
-                $table->string('about_hs_image')->nullable();
-                $table->string('contact_hs_title')->nullable();
-                $table->string('contact_hs_description')->nullable();
-                $table->string('contact_hs_image')->nullable();
+                $table->string('button_1_name')->nullable();
+                $table->string('button_1_url')->nullable();
+                $table->string('button_2_name')->nullable();
+                $table->string('button_2_url')->nullable();
                 $table->timestamps();
             });
-            DB::table('pages_content')->insert([
+            DB::table('home')->insert([
                 'hero_heading' => 'Welcome to DigitalStore',
                 'hero_paragraph' => 'Discover a vast collection of digital books for every reader. Whether you enjoy diving into thrilling mysteries, exploring fantastical worlds, or delving into thought-provoking non-fiction, DigitalStore has something for you.',
                 'hero_image' => 'hero_image.png',
@@ -69,25 +66,21 @@ return new class extends Migration
                 'wh_feature_2' => 'Jane Smith ',
                 'wh_feature_3' => 'David Johnson - Content Curator',
                 'wh_feature_4' => 'Emily Brown - Marketing Manager',
+                'button_1_name' => 'Read More',
+                'button_1_url' => '#',
+                'button_2_name' => 'Contact Us',
+                'button_2_url' => '#',
 
-                'about_hs_title' => 'About Us',
-                'about_hs_description' => 'DigitalStore is dedicated to providing readers with access to a vast and diverse collection of digital books. Our mission is to inspire a love for reading and make great literature accessible to everyone, everywhere. With a commitment to quality and innovation, we strive to create an exceptional reading experience for our customers.',
-                'about_hs_image' => 'about_us_image.jpg',
-                'contact_hs_title' => 'Contact Us',
-                'contact_hs_description' => 'We value your feedback and are here to assist you with any inquiries or concerns you may have. Feel free to reach out to us via email, phone, or our online contact form. Our dedicated support team is available to provide prompt and helpful assistance.',
-                'contact_hs_image' => 'dummy_contact_hs_image.jpg',
+
             ]);
-
         }
     }
-
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages_content');
+        Schema::dropIfExists('home');
     }
 };

@@ -177,7 +177,6 @@
                 </div>
             </div>
         </div>
-        <hr style="height: 7px;">
         <div class="row">
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
@@ -213,22 +212,21 @@
                 </div>
             </div>
         </div>
-        <hr style="height: 7px;">
         <div class="row">
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">About Us Page</h3>
+                        <h3 class="card-title">Button 1</h3>
                         <form action="{{ route('updatehome') }}" method="post">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="section" value="about_us">
+                            <input type="hidden" name="section" value="home_button_1">
                             <div class="form-group">
-                                <label for="about_us_title">Page title:</label><br>
-                                <input type="text" id="about_us_title" name="about_us_title" value="{{ $pages->about_hs_title }}" class="form-control" required><br><br>
+                                <label for="button_1">Button 1 name:</label><br>
+                                <input type="text" id="button_1" name="button_1_name" class="form-control" value="{{ $pages->button_1_name }}" required><br>
 
-                                <label for="about_us_description">Page Description:</label><br>
-                                <input type="text" id="about_us_description" name="about_us_description" value="{{ $pages->about_hs_description }}" class="form-control" required><br><br>
+                                <label for="button_1">Button 1 Url:</label><br>
+                                <input type="text" id="button_1" name="button_1_url" class="form-control" value="{{ $pages->button_1_url }}"  required><br>
                             </div>
                             <button type="submit" class="btn btn-gradient-success me-2">Save</button>
                         </form>
@@ -236,22 +234,21 @@
                 </div>
             </div>
         </div>
-        <hr style="height: 7px;">
         <div class="row">
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">Contact Page</h3>
+                        <h3 class="card-title">Button 2</h3>
                         <form action="{{ route('updatehome') }}" method="post">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="section" value="contact">
+                            <input type="hidden" name="section" value="home_button_2">
                             <div class="form-group">
-                                <label for="contact_hs_title">Page title:</label><br>
-                                <input type="text" id="contact_hs_title" name="contact_hs_title" value="{{ $pages->contact_hs_title }}" class="form-control" required><br><br>
+                                <label for="button_2">Button 2 name:</label><br>
+                                <input type="text" id="button_2" name="button_2_name" class="form-control" value="{{ $pages->button_2_name }}" required><br>
 
-                                <label for="contact_hs_description">Page Description:</label><br>
-                                <input type="text" id="contact_hs_description" name="contact_hs_description" value="{{ $pages->contact_hs_description }}" class="form-control" required><br><br>
+                                <label for="button_2">Button 2 Url:</label><br>
+                                <input type="text" id="button_2" name="button_2_url" class="form-control" value="{{ $pages->button_2_url }}"  required><br>
                             </div>
                             <button type="submit" class="btn btn-gradient-success me-2">Save</button>
                         </form>
