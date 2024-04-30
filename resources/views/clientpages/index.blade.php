@@ -13,8 +13,8 @@
                     @else
                         No  Data
                     @endif
-                    
-                    <p><a href="" class="btn btn-secondary me-2">Shop now</a><a href="" class="btn btn-white-outline">Explore</a></p>
+                   
+                    <p><a href="{{ $data['button_1_url'] }}" class="btn btn-secondary me-2">{{ $data['button_1_name'] }}</a><a href="{{ $data['button_2_url'] }}" class="btn btn-white-outline">{{ $data['button_2_name'] }}</a></p>
                 </div>
             </div>
             <div class="col-lg-5">
@@ -66,10 +66,6 @@
                 </div> 
                 @endforeach
                 <!-- End Column 2 -->
-
-
-
-
             </div>
         </div>
     </div>

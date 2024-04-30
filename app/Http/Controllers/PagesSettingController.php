@@ -8,6 +8,9 @@ use App\Models\Upload;
 use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
+use App\Models\Home;
+use App\Models\Contact;
+use App\Models\About;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -254,7 +257,7 @@ class PagesSettingController extends Controller
     public function indexhome()
     {
         // Fetch the pages data
-        $pages = Pages::first(); // Retrieve the first pages record
+        $pages = Home::first(); // Retrieve the first pages record
     
         // Pass the data to the view
         return view('adminpages.editpages.homesetting', compact('pages'));
@@ -303,7 +306,7 @@ class PagesSettingController extends Controller
                 ]);
 
                 // Fetch the existing pages record
-                $pages = Pages::first();
+                $pages = Home::first();
 
                 if ($pages) {
                     // Update only if the user uploaded a new image
@@ -360,7 +363,7 @@ class PagesSettingController extends Controller
 
                         $request->hero_image->move(public_path('/clientside/images'), $unique_image);
 
-                        $home = Pages::create([
+                        $home = Home::create([
                             'hero_heading' => $request->hero_heading,
                             'hero_paragraph' => $request->hero_paragraph,
                             'hero_image' => $unique_image,
@@ -369,7 +372,7 @@ class PagesSettingController extends Controller
                             return redirect()->back()->with('status', 'Product section created Successfully.');
                         }
                     } else {                       
-                        Pages::create([
+                        Home::create([
                             'hero_heading' => $request->hero_heading,
                             'hero_paragraph' => $request->hero_paragraph,
                         ]);
@@ -381,7 +384,7 @@ class PagesSettingController extends Controller
             case 'product_section':
               
             // Fetch only the specified fields from the pages table
-            $pages = Pages::first();
+            $pages = Home::first();
 
             // Check if the record exists
             if ($pages) {
@@ -396,7 +399,7 @@ class PagesSettingController extends Controller
                 return redirect()->back()->with("status", " Product section title and description updated successfully.");
             } else {
                 // Create a new record with the provided data
-                $pages = Pages::create([
+                $pages = Home::create([
                     'ps_title' => $request->section_title,
                     'ps_description' => $request->section_description,
                 ]);
@@ -435,7 +438,7 @@ class PagesSettingController extends Controller
                 $request->validate([
                     'wcu_image' => 'image|mimes:jpeg,png,jpg,gif',
                 ]);
-               $pages = Pages::first();
+               $pages = Home::first();
 
                 if ($pages) {
                         if ($request->hasFile('wcu_image')) {
@@ -499,7 +502,7 @@ class PagesSettingController extends Controller
                     'feature_3',
                     'feature_4',
                 ]);
-                $pages = Pages::first();
+                $pages = Home::first();
                 if ($pages) {
                     $update = $pages->update([
                         $pages->wh_title = $data['we_help_title'],
@@ -514,7 +517,7 @@ class PagesSettingController extends Controller
                         return redirect()->back()->with('status', 'We help section updated successfully!');
                     }
                 } else {
-                    $create = Pages::create(array_combine($columns, $data));
+                    $create = Home::create(array_combine($columns, $data));
                     if($create){
                         return redirect()->back()->with('status', 'We help section created successfully!');
                     }
@@ -525,7 +528,7 @@ class PagesSettingController extends Controller
                     'about_us_title',
                     'about_us_description',
                 ]);
-                $pages = Pages::first();
+                $pages = About::first();
                 if ($pages) {
                     $update = $pages->update([
                         'about_hs_title' => $data['about_us_title'],
@@ -551,7 +554,7 @@ class PagesSettingController extends Controller
                     'contact_hs_title',
                     'contact_hs_description',
                 ]);
-                $pages = Pages::first();
+                $pages = Contact::first();
                 if ($pages) {
                     $update = $pages->update([
                         'contact_hs_title' => $data['contact_hs_title'],
@@ -572,11 +575,123 @@ class PagesSettingController extends Controller
                     }
                 }
                 break;
+                case 'home_button_1':
+                   $data =  $request->only([
+                       'button_1_name',
+                       'button_1_url',
+                    ]);
+                    $pages = Home::first();
+                    $update = $pages->update([
+                      $pages->button_1_name = $data['button_1_name'],
+                      $pages->button_1_url = $data['button_1_url'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', ' Section updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Section could not be Created/updated!');
+                    }
+
+                    break;
+                case 'home_button_2':
+                    $data =  $request->only([
+                        'button_2_name',
+                        'button_2_url',
+                    ]);
+                    $pages = Home::first();
+                    $update = $pages->update([
+                        $pages->button_2_name = $data['button_2_name'],
+                        $pages->button_2_url = $data['button_2_url'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', ' Section updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Section could not be Created/updated!');
+                    }
+                
+                    break;
+                case 'about_button_1':
+                    $data =  $request->only([
+                        'button_1_name',
+                        'button_1_url',
+                    ]);
+                    $pages = About::first();
+                    $update = $pages->update([
+                       $pages->button_1_name = $data['button_1_name'],
+                       $pages->button_1_url = $data['button_1_url'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', ' Section updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Section could not be Created/updated!');
+                    }
+                    break;
+                case 'about_button_2':
+                    $data =  $request->only([
+                        'button_2_name',
+                        'button_2_url',
+                     ]);
+                     $pages = About::first();
+                     $update = $pages->update([
+                        $pages->button_2_name = $data['button_2_name'],
+                        $pages->button_2_url = $data['button_2_url'],
+                     ]);
+                     if($update){
+                        return redirect()->back()->with('status', ' Section updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Section could not be Created/updated!');
+                    }
+                
+                    break;
+                case 'contact_button_1':
+                    $data =  $request->only([
+                        'button_1_name',
+                        'button_1_url',
+                    ]);
+                    $pages = Contact::first();
+                    $update = $pages->update([
+                        $pages->button_1_name = $data['button_1_name'],
+                        $pages->button_1_url = $data['button_1_url'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', ' Section updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Section could not be Created/updated!');
+                    }
+        
+                    break;
+                case 'contact_button_2':
+                    $data =  $request->only([
+                        'button_2_name',
+                        'button_2_url',
+                    ]);
+                    $pages = Contact::first();
+                    $update = $pages->update([
+                        $pages->button_2_name = $data['button_2_name'],
+                        $pages->button_2_url = $data['button_2_url'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', ' Section updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', 'Section could not be Created/updated!');
+                    }
+                    break;
             default:
             return redirect()->back()->with('error', 'Invalid Request');
                 break;
         }
        
+    }
+
+    public function about_edit()
+    {
+        $pages = About::first();
+        return view('adminpages.editpages.about', compact('pages'));
+    }
+
+    public function contact_edit()
+    {
+        $pages = Contact::first();
+        return view('adminpages.editpages.contact', compact('pages'));
     }
 
     public function footer()
