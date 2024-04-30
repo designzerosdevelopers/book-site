@@ -36,8 +36,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/truck.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_1_title'] }}</h3>
-							<p>{{ $data['wcu_feature_1_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_1_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_1_description'] }}</p>
 						</div>
 					</div>
 
@@ -46,8 +46,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/bag.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_2_title'] }}</h3>
-							<p>{{ $data['wcu_feature_2_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_2_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_2_description'] }}</p>
 						</div>
 					</div>
 
@@ -56,8 +56,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/support.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_3_title'] }}</h3>
-							<p>{{ $data['wcu_feature_3_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_3_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_3_description'] }}</p>
 						</div>
 					</div>
 
@@ -66,8 +66,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/return.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_4_title'] }}</h3>
-							<p>{{ $data['wcu_feature_4_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_4_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_4_description'] }}</p>
 						</div>
 					</div>
 
@@ -75,7 +75,7 @@
 			</div>
 			<div class="col-lg-5">
 				<div class="img-wrap">
-					<img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
+					<img src="{{asset('clientside/images/'.$pages['home_wcu_image'])}}" alt="Image" class="img-fluid">
 				</div>
 			</div>
 
