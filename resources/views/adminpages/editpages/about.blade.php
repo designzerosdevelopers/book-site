@@ -22,7 +22,7 @@
 
                               
                                 <label for="about_us_description">Page Description:</label><br>
-                                <textarea name="about_us_description" id="about_us_description" cols="15" rows="5" class="form-control">{{ $pages->about_hs_description }}</textarea>
+                                <textarea name="about_us_description" id="editor9" cols="15" rows="5" class="form-control">{{ $pages->about_hs_description }}</textarea>
 
                                 
                             </div>
