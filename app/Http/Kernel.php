@@ -24,10 +24,7 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        // Other middleware entries...
-    
         'check.database' => \App\Http\Middleware\CheckDatabase::class,
-        'check.database.success' => \App\Http\Middleware\CheckDatabaseSuccess::class,
     ];
 
     /**
