@@ -21,8 +21,8 @@
                                 <input type="text" id="contact_hs_title" name="contact_hs_title" value="{{ $pages->contact_hs_title }}" class="form-control" required><br><br>
 
                                 <br>
-                                <label for="contact_hs_description">Page Description:</label><br>
-                                <textarea name="contact_hs_description" id="contact_hs_description" cols="15" rows="5" class="form-control">{{ $pages->contact_hs_description }}</textarea>
+                                <label for="editor10">Page Description:</label><br>
+                                <textarea name="contact_hs_description" id="editor10" cols="15" rows="5" class="form-control">{{ $pages->contact_hs_description }}</textarea>
 
                             </div>
                             <button type="submit" class="btn btn-gradient-success me-2">Save</button>
