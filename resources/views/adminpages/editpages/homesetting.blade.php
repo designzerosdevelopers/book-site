@@ -11,8 +11,16 @@
             </ol>
         </nav>
     </div>
+     
+    @if(session('status'))
+    <div class="alert alert-success" role="alert" id="updateSuccessAlert">
+        {{ session('status') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
+           
+
             <div class="card">
                 <div class="card-body">
                     <!-- Display the image dynamically -->
@@ -26,11 +34,6 @@
                         @endif
                     </div>
 
-                    @if(session('status'))
-                    <div class="alert alert-success" role="alert" id="updateSuccessAlert">
-                        {{ session('status') }}
-                    </div>
-                    @endif
                     @error('wcu_image')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -91,6 +94,28 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
+                        <h3 class="card-title">Site name</h3>
+                        <br>
+                        <form action="{{ route('updatehome') }}" method="post">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="section" value="site_name">
+                            <div class="form-group">
+                                <label for="site_name">Enter the site name</label><br>
+                                <input type="text" id="site_name" name="site_name" class="form-control" value="{{ $pages->site_name }}" required><br><br>
+                            </div>
+                      
+                            <button type="submit" class="btn btn-gradient-success me-2">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
                         <h3 class="card-title">Product Section</h3>
                         <br>
                         <form action="{{ route('updatehome') }}" method="post">
@@ -111,7 +136,6 @@
                 </div>
             </div>
         </div>
-        <br>
         <div class="row">
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">

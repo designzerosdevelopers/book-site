@@ -675,6 +675,20 @@ class PagesSettingController extends Controller
                         return redirect()->back()->with('error', 'Section could not be Created/updated!');
                     }
                     break;
+                case 'site_name':
+                    $data =  $request->only([
+                        'site_name',
+                    ]);
+                    $pages = Home::first();
+                    $update = $pages->update([
+                        $pages->site_name = $data['site_name'],
+                    ]);
+                    if($update){
+                        return redirect()->back()->with('status', ' Site name updated successfully!');
+                    }else {
+                        return redirect()->back()->with('error', ' Site name could not be Created/updated!');
+                    }
+                    break;
             default:
             return redirect()->back()->with('error', 'Invalid Request');
                 break;

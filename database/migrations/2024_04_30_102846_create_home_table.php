@@ -14,6 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('home')) {
             Schema::create('home', function (Blueprint $table) {
                 $table->id();
+                $table->string('site_name')->nullable();
                 $table->string('hero_heading')->nullable();
                 $table->text('hero_paragraph')->nullable();
                 $table->string('hero_image')->nullable();
@@ -43,6 +44,7 @@ return new class extends Migration
                 $table->timestamps();
             });
             DB::table('home')->insert([
+                'site_name' => 'DigitalStore',
                 'hero_heading' => 'Welcome to DigitalStore',
                 'hero_paragraph' => 'Discover a vast collection of digital books for every reader. Whether you enjoy diving into thrilling mysteries, exploring fantastical worlds, or delving into thought-provoking non-fiction, DigitalStore has something for you.',
                 'hero_image' => 'hero_image.png',
