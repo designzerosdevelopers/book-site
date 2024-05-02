@@ -13,14 +13,14 @@
                     @else
                         No  Data
                     @endif
-                    
-                    <p><a href="" class="btn btn-secondary me-2">Shop now</a><a href="" class="btn btn-white-outline">Explore</a></p>
+                   
+                    <p><a href="{{ $data['button_1_url'] }}" class="btn btn-secondary me-2">{{ $data['button_1_name'] }}</a><a href="{{ $data['button_2_url'] }}" class="btn btn-white-outline">{{ $data['button_2_name'] }}</a></p>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="hero-img-wrap">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage() ))
-                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="90%">
+                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="70%">
                     @else
                         No  Image
                     @endif
@@ -66,10 +66,6 @@
                 </div> 
                 @endforeach
                 <!-- End Column 2 -->
-
-
-
-
             </div>
         </div>
     </div>
@@ -129,7 +125,7 @@
 
                 <div class="col-lg-5">
                     <div class="img-wrap">
-                        <img src="{{asset('clientside/images/down1.png')}}" alt="Image" class="img-fluid">
+                        <img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
                     </div>
                 </div>
 

@@ -7,14 +7,14 @@
 		<div class="row justify-content-between">
 			<div class="col-lg-5">
 				<div class="intro-excerpt">
-					<h1>About Us</h1>
-					<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-					<p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+					<h1>{{ $data['about_hs_title'] }}</h1>
+					<p class="mb-4">{{ $data['about_hs_description'] }}</p>
+					<p><a href="{{ $data['button_1_url'] }}" class="btn btn-secondary me-2">{{ $data['button_1_name'] }}</a><a href="{{ $data['button_2_url'] }}" class="btn btn-white-outline">{{ $data['button_2_name'] }}</a></p>
 				</div>
 			</div>
 			<div class="col-lg-7">
 				<div class="hero-img-wrap">
-					<img src="{{asset('clientside/images/.png')}}" class="img-fluid">
+					<img src="{{asset('clientside/images/'.$data['about_hs_image'])}}" class="img-fluid" width="50%">
 				</div>
 			</div>
 		</div>
@@ -36,8 +36,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/truck.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_1_title'] }}</h3>
-							<p>{{ $data['wcu_feature_1_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_1_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_1_description'] }}</p>
 						</div>
 					</div>
 
@@ -46,8 +46,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/bag.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_2_title'] }}</h3>
-							<p>{{ $data['wcu_feature_2_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_2_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_2_description'] }}</p>
 						</div>
 					</div>
 
@@ -56,8 +56,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/support.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_3_title'] }}</h3>
-							<p>{{ $data['wcu_feature_3_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_3_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_3_description'] }}</p>
 						</div>
 					</div>
 
@@ -66,8 +66,8 @@
 							<div class="icon">
 								<img src="{{asset('clientside/images/return.svg')}}" alt="Image" class="imf-fluid">
 							</div>
-							<h3>{{ $data['wcu_feature_4_title'] }}</h3>
-							<p>{{ $data['wcu_feature_4_description'] }}</p>
+							<h3>{{ $pages['wcu_feature_4_title'] }}</h3>
+							<p>{{ $pages['wcu_feature_4_description'] }}</p>
 						</div>
 					</div>
 
@@ -75,7 +75,7 @@
 			</div>
 			<div class="col-lg-5">
 				<div class="img-wrap">
-					<img src="{{asset('clientside/images/down1.png')}}" alt="Image" class="img-fluid">
+					<img src="{{asset('clientside/images/'.$pages['home_wcu_image'])}}" alt="Image" class="img-fluid">
 				</div>
 			</div>
 

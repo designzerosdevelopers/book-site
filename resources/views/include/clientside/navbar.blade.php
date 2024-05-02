@@ -1,6 +1,6 @@
 <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('index') }}">Digital store<span>.</span></a>
+        <a class="navbar-brand" href="{{ route('index') }}">{{ App\Helpers\SiteviewHelper::homepage()->site_name }}<span>.</span></a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -12,7 +12,7 @@
             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                {!! App\Helpers\SiteviewHelper::navbar() !!}
                 {{-- <li class="nav-item {{ request()->routeIs('index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('index') }}">Home</a>
+                     <a class="nav-link" href="{{ route('index') }}">Home</a>
                 </li> --}}
                 {{-- <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
                     <a class="nav-link" href="{{ route('shop') }}">Shop</a>

@@ -1,10 +1,9 @@
-<footer class="footer-section ">
+{!! App\Helpers\SiteviewHelper::footer() !!}
 
 
-    {!! App\Helpers\SiteviewHelper::footer() !!}
+{{-- <footer class="footer-section ">
 
-
-    {{-- <div class="container relative">
+      <div class="container relative">
 
         <style>
             @media only screen and (max-width: 767px) {
@@ -18,13 +17,13 @@
           </style>
           
           <div class="sofa-img mt-5 ">
-            <img src="{{asset('clientside/images/download.png')}}" alt="Image" class="img-fluid">
+            <img src="clientside/images/download.png" alt="Image" class="img-fluid">
           </div>
 
         <div class="row">
             <div class="col-lg-8">
                 <div class="subscription-form">
-                    <h3 class="d-flex align-items-center"><span class="me-1"><img src="{{asset('clientside/images/envelope-outline.svg')}}" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
+                    <h3 class="d-flex align-items-center"><span class="me-1"><img src="clientside/images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
 
                     <form action="#" class="row g-3">
                         <div class="col-auto">
@@ -112,10 +111,9 @@
             </div>
         </div>
 
-    </div> --}}
+    </div> 
+</footer> --}}
 
-
-</footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -151,7 +149,4 @@
         // Send the request
         xhr.send();
     });
-
-
 </script>
-  
