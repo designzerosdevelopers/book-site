@@ -17,7 +17,7 @@ tinymce.init({
     },
     menubar: 'favs file edit view insert format tools table',
     content_css: [
-        '/clientside/css/style.css',
+        'clientside/css/style.css',
         'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
 
     ]
