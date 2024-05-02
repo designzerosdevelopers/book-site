@@ -12,7 +12,7 @@
             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                {!! App\Helpers\SiteviewHelper::navbar() !!}
                 {{-- <li class="nav-item {{ request()->routeIs('index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('index') }}">Home</a>
+                     <a class="nav-link" href="{{ route('index') }}">Home</a>
                 </li> --}}
                 {{-- <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
                     <a class="nav-link" href="{{ route('shop') }}">Shop</a>
