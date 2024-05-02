@@ -15,6 +15,7 @@ return new class extends Migration
             Schema::create('footer', function (Blueprint $table) {
                 $table->id();
                 $table->TEXT('footer');
+                $table->TEXT('css');
                 $table->timestamps();
             });
 
@@ -130,9 +131,11 @@ return new class extends Migration
             
                 </div>
             ',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            'css' => 'dummy css',
+            'created_at' => now(),
+            'updated_at' => now()
+           ]);
+
         }
 
 

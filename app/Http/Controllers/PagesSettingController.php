@@ -696,9 +696,11 @@ class PagesSettingController extends Controller
 
     public function footer()
     {
+
         $footerData = Footer::orderBy('id', 'asc')->first();
         $footer = $footerData->footer;
-        return view('adminpages.editpages.footer', ['footer' => $footer]);
+        $css = $footerData->css;
+        return view('adminpages.editpages.footer', ['footer' => $footer, 'css' => $css]);
 
     }
     public function update_footer(Request $request)

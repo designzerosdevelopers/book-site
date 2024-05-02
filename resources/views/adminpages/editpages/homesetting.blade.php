@@ -73,7 +73,7 @@
                         <!-- Add the paragraph textarea -->
                         <div class="form-group">
                             <label for="editor">Paragraph</label>
-                            <textarea class="form-control" id="editor" rows="3" name="hero_paragraph">{{ $pages->hero_paragraph ?? '' }}</textarea>
+                            <textarea class="form-control" id="editor1" rows="3" name="hero_paragraph">{{ $pages->hero_paragraph ?? '' }}</textarea>
                         </div>
 
                         @error('hero_paragraph')
@@ -101,8 +101,8 @@
                                 <label for="section_title">Product Section title:</label><br>
                                 <input type="text" id="section_title" name="section_title" class="form-control" value="{{ $pages->ps_title }}" required><br><br>
                         
-                                <label for="section_description">Product Section Description:</label><br>
-                                <textarea id="section_description" name="section_description" rows="5" cols="10" class="form-control" required>{{ $pages->ps_description }} </textarea><br><br>
+                                <label for="editor2">Product Section Description:</label><br>
+                                <textarea id="editor2" name="section_description" rows="5" cols="10" class="form-control" required>{{ $pages->ps_description }} </textarea><br><br>
                             </div>
                       
                             <button type="submit" class="btn btn-gradient-success me-2">Save</button>
@@ -125,8 +125,8 @@
                                 <label for="section_title">Section title:</label><br>
                                 <input type="text" id="section_title" name="section_title" class="form-control" value="{{ $pages->wcu_title }} " required><br><br>
                         
-                                <label for="section_description"> Section Description:</label><br>
-                                <textarea id="section_description" name="section_description" rows="10" cols="50" class="form-control"required> {{ $pages->wcu_description }}  </textarea><br>
+                                <label for="editor3"> Section Description:</label><br>
+                                <textarea id="editor3" name="section_description" rows="5" cols="10" class="form-control"required> {{ $pages->wcu_description }}  </textarea><br>
 
                                 <hr class="bg-success" style="height: 7px;">
 
@@ -134,8 +134,8 @@
                                 <input type="text" id="feature_1" name="feature_1" class="form-control" value=" {{ $pages->wcu_feature_1_title }}"  required><br>
                                 
                                 
-                                <label for="feature_1_description">Feature 1 Description:</label><br>
-                                <textarea id="feature_1_description" name="feature_1_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_1_description }}</textarea><br><br>
+                                <label for="editor4">Feature 1 Description:</label><br>
+                                <textarea id="editor4" name="feature_1_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_1_description }}</textarea><br><br>
 
                                 <hr class="bg-success" style="height: 7px;">
                                 
@@ -143,8 +143,8 @@
                                 <input type="text" id="feature_2" name="feature_2" class="form-control" value=" {{ $pages->wcu_feature_2_title }}" required><br>
                                 
                                 
-                                <label for="feature_2_description">Feature 2 Description:</label><br>
-                                <textarea id="feature_2_description" name="feature_2_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_2_description }}</textarea><br><br>
+                                <label for="editor5">Feature 2 Description:</label><br>
+                                <textarea id="editor5" name="feature_2_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_2_description }}</textarea><br><br>
                                 
                                 <hr class="bg-success" style="height: 7px;">
 
@@ -152,8 +152,8 @@
                                 <input type="text" id="feature_3" name="feature_3" class="form-control" value=" {{ $pages->wcu_feature_3_title }}" required><br>
                                 
                                 
-                                <label for="feature_3_description">Feature 3 Description:</label><br>
-                                <textarea id="feature_3_description" name="feature_3_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_3_description }}</textarea><br><br>
+                                <label for="editor6">Feature 3 Description:</label><br>
+                                <textarea id="editor6" name="feature_3_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_3_description }}</textarea><br><br>
                                 
                                 <hr class="bg-success" style="height: 7px;">
                                 
@@ -161,8 +161,8 @@
                                 <input type="text" id="feature_4" name="feature_4" class="form-control" value=" {{ $pages->wcu_feature_4_title }}" required><br>
                                 
                                 
-                                <label for="feature_4_description">Feature 4 Description:</label><br>
-                                <textarea id="feature_4_description" name="feature_4_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_4_description }}</textarea><br>
+                                <label for="editor7">Feature 4 Description:</label><br>
+                                <textarea id="editor7" name="feature_4_description" rows="4" cols="50" class="form-control" required>{{ $pages->wcu_feature_4_description }}</textarea><br>
                             </div>
  
                             <hr class="bg-success" style="height: 7px;">
@@ -190,8 +190,8 @@
                                 <label for="we_help_title">Section title:</label><br>
                                 <input type="text" id="we_help_title" name="we_help_title" value="{{ $pages->wh_title }}" class="form-control" required><br><br>
                         
-                                <label for="we_help_description">Section Description:</label><br>
-                                <textarea id="we_help_description" name="we_help_description" rows="10" cols="50" class="form-control" required>{{ $pages->wh_description }}</textarea><b><br>
+                                <label for="editor8">Section Description:</label><br>
+                                <textarea id="editor8" name="we_help_description" rows="5" cols="10" class="form-control" required>{{ $pages->wh_description }}</textarea><b><br>
 
                                 <label for="feature_1">Feature 1 :</label><br>
                                 <input type="text" id="feature_1" name="feature_1" class="form-control" value="{{ $pages->wh_feature_1 }}" required><br>
@@ -260,8 +260,8 @@
 </div>
 @stop
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     // Wait for the document to be ready
     $(document).ready(function() {
