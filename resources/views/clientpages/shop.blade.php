@@ -1,7 +1,14 @@
 @extends('layouts.clientside-layout.app')
 @section('content')
 
-    <!-- Start Hero Section -->
+
+	@if (!empty(App\Helpers\SiteviewHelper::page('shop')))
+	{!! App\Helpers\SiteviewHelper::page('shop')->html !!}
+	@else
+		No  Data
+	@endif
+
+    {{-- <!-- Start Hero Section -->
     <div class="hero">
         <div class="container">
             <div class="row justify-content-between">
@@ -34,8 +41,12 @@
 
                 </div>
             </div>
+        </div>
+    </div> --}}
 
-                {{-- @foreach($allitems as $item)
+@stop
+
+        {{-- @foreach($allitems as $item)
                     <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                         <div class="product-item">
                             <a style="text-decoration: none;" href="{{ route('product.details', ['id' => $item->id]) }}">
@@ -77,12 +88,6 @@
                 </div>
             </div>
             <!-- End Pagination Links --> --}}
-            
-
-        </div>
-    </div>
-
-@stop
 
 <!-- JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

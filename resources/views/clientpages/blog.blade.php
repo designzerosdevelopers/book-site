@@ -1,6 +1,7 @@
 @extends('layouts.clientside-layout.app')
 @section('content')
-		<!-- Start Hero Section -->
+
+		{{-- <!-- Start Hero Section -->
 			<div class="hero">
 				<div class="container">
 					<div class="row justify-content-between">
@@ -140,7 +141,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- End Blog Section -->	
+		<!-- End Blog Section -->	 --}}
 
 		
 
