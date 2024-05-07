@@ -1,6 +1,17 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
+	@if (!empty(App\Helpers\SiteviewHelper::page('contact')))
+	{!! App\Helpers\SiteviewHelper::page('contact')->html !!}
+	@else
+		No  Data
+	@endif
+
+
+
+{{-- @extends('layouts.clientside-layout.app')
+
+@section('content')
 
 
 		<!-- Start Hero Section  -->
@@ -112,7 +123,7 @@
     </div>
   </div>
 
-  <!-- End Contact Form -->
+  <!-- End Contact Form --> --}}
 @stop
 		
 

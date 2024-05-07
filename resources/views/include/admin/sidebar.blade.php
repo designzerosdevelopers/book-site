@@ -21,6 +21,8 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('contact.edit') }}">Contact</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">Manu</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('footer') }}">Footer</a></li>
+            {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">Product</a></li> --}}
+            <li class="nav-item"> <a class="nav-link" href="{{ route('shop.index') }}">Shop</a></li>
           </ul>
           
         </div>

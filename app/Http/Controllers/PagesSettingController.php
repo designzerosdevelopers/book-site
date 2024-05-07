@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pages;
 use App\Models\Upload;
+use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
@@ -696,11 +697,61 @@ class PagesSettingController extends Controller
        
     }
 
+    public function update_component(Request $r)
+    { 
+        $component = Component::where('name', $r->comp_data);
+        $status = $component->update([
+            'html' => $r->html
+        ]);
+
+        if($status ==1 ) {
+            return redirect()->back()->with('status', 'Component updated successfully!');
+        }else {
+            return redirect()->back()->with('error', 'Component could not be updated!');
+        }
+    }
+
+
     public function about_edit()
     {
         $pages = About::first();
         return view('adminpages.editpages.about', compact('pages'));
     }
+
+    public function product()
+    {
+        return view('adminpages.editpages.product');
+    }
+
+
+    public function shop()
+    {
+        return view('adminpages.editpages.shop');
+    }
+  
+    public function update_shop(Request $request)
+    {
+        // Validate incoming request data
+        $validatedData = $request->validate([
+            'shop' => 'required',
+        ]);
+    
+        try {
+
+            $shop = Component::where('name', 'shop')->firstOrFail();
+
+            $shop->html = $request->input('shop');
+
+            $shop->save();
+
+         // If successful, redirect back with success message
+         return redirect()->back()->with('success', 'Shop data updated successfully');
+        } catch (\Exception $e) {
+            // If an error occurs, redirect back with error message
+            return redirect()->back()->with('error', 'Failed to update shop data: ' . $e->getMessage());
+        }
+    }
+    
 
     public function contact_edit()
     {
