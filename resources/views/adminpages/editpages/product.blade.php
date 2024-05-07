@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 @extends('layouts.admin-layout.app')
-
 @section('content')
-    <div class="content-wrapper">
-        <div class="card">
-            <div class="card-body">
-                <form action="{{ route('update.shop') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="comp_data" value="contact">
-                    <textarea name="html"  rows="10" cols="50" id="editor1">
-                        @if (!empty(App\Helpers\SiteviewHelper::page('contact')))
-                            {!! App\Helpers\SiteviewHelper::page('contact')->html !!}
-                        @else
-                            No Data
-                        @endif
-                    </textarea>
-                    <br>
-                    <button type="submit" class="btn btn-gradient-success me-2">Save</button>
-                </form>
-            </div>
+<!-- partial -->
+<div class="content-wrapper">
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('update.shop') }}" method="post">
+                @csrf
+                <input type="hidden" name="comp_data" value="product">
+                <textarea name="html" rows="10" cols="50" id="editor1">
+                    @if (!empty(App\Helpers\SiteviewHelper::page('product')))
+                        {!! App\Helpers\SiteviewHelper::page('product')->html !!}
+                    @else
+                        No Data
+                    @endif
+                </textarea>
+                <br>
+                <button type="submit" class="btn btn-gradient-success me-2">Save</button>
+            </form>
         </div>
     </div>
+</div>
+@stop
 
     
+   
+
     <script src="{{asset('tinymce/tinymce.min.js')}}"></script>
     <script>
         tinymce.init({
@@ -46,18 +49,4 @@
                 "https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
             ]
         });
-</script>
-
-    
-@stop
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
-    // Wait for the document to be ready
-    $(document).ready(function() {
-        // Slide up the error messages after a delay
-        $("#updateSuccessAlert").delay(8000).slideUp(300);
-        $("#updateerrorAlert").delay(3000).slideUp(300);
-    });
 </script>

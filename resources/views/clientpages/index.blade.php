@@ -1,15 +1,19 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
+@if (!empty(App\Helpers\SiteviewHelper::page('home')))
+{!! App\Helpers\SiteviewHelper::page('home')->html !!}
+@else
+    No  Data
+@endif
   <!-- Start Hero Section -->
-<div class="hero">
+{{-- <div class="hero">
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-lg-7">
                 <div class="intro-excerpt">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage()))
-                    <h1>{{ App\Helpers\SiteviewHelper::homepage()->hero_heading }}</h1>
-                    <p class="mb-4">{!! App\Helpers\SiteviewHelper::homepage()->hero_paragraph !!}</p>
+                    {{ App\Helpers\SiteviewHelper::homepage()->html }}
                     @else
                         No  Data
                     @endif
@@ -161,7 +165,7 @@
                 
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- End We Help Section -->
 
     {{-- <!-- Start Popular Product -->
@@ -269,4 +273,6 @@
         </div>
     </div>
     <!-- End Blog Section -->	 --}}
+
+    
     @stop

@@ -73,6 +73,11 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/footer', [PagesSettingController::class, 'footer'])->name('footer');
         Route::post('/footer', [PagesSettingController::class, 'update_footer'])->name('update.footer');
 
+        Route::get('/products', [PagesSettingController::class, 'product'])->name('product.index');
+        Route::get('/shopadmin', [PagesSettingController::class, 'shop'])->name('shop.index');
+        Route::post('/shop', [PagesSettingController::class, 'update_component'])->name('update.shop');
+
+
         // edit manu
         Route::get('/navbar', [NavbarController::class, 'index'])->name('edit.manu');
         Route::put('/navbar/update/{id}', [NavbarController::class, 'update'])->name('navitems.update');
@@ -114,7 +119,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/purchases', [PagesSettingController::class, 'purchases'])->name('purchases.index');
     });
 
-    Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
+    // Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
 });
 
 

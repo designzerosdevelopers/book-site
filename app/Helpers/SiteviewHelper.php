@@ -3,15 +3,16 @@
 namespace App\Helpers;
 
 use App\Models\Home;
+use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Navbar;
 use App\Models\Footer;
 
 class SiteviewHelper {
 
-  public static function homepage()
+  public static function page($page)
   {
-    return Home::first();
+    return Component::where('name', $page)->first();
   }
 
   public static function getsettings($key)
