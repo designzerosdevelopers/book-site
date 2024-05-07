@@ -1,4 +1,13 @@
 @extends('layouts.clientside-layout.app')
+
+@section('content')
+	@if (!empty(App\Helpers\SiteviewHelper::page('about')))
+	{!! App\Helpers\SiteviewHelper::page('about')->html !!}
+	@else
+		No  Data
+	@endif
+@stop
+{{-- @extends('layouts.clientside-layout.app')
 @section('content')
 
 <!-- Start Hero Section -->
@@ -82,7 +91,7 @@
 		</div>
 	</div>
 </div>
-<!-- End Why Choose Us Section -->
+<!-- End Why Choose Us Section --> --}}
 
 		{{-- <!-- Start Team Section -->
 		<div class="untree_co-section">
@@ -154,7 +163,7 @@
 
 		
 	
-@stop
+
 	<script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/tiny-slider.js"></script>
 	<script src="js/custom.js"></script>
