@@ -1,4 +1,6 @@
-<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+{!! App\Helpers\SiteviewHelper::page('navbar')->html !!}
+
+{{-- <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
     <div class="container">
         <a class="navbar-brand" href="{{ route('index') }}">Digitalstore<span>.</span></a>
 
@@ -14,7 +16,7 @@
                 {{-- <li class="nav-item {{ request()->routeIs('index') ? 'active' : '' }}">
                      <a class="nav-link" href="{{ route('index') }}">Home</a>
                 </li> --}}
-                {{-- <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
+{{-- <li class="nav-item {{ request()->routeIs('shop') ? 'active' : ''}}">
                     <a class="nav-link" href="{{ route('shop') }}">Shop</a>
                 </li>
                 <li class="nav-item {{ request()->routeIs('about') ? 'active' : '' }}">
@@ -25,60 +27,53 @@
                 </li>
                 <li class="nav-item {{ request()->routeIs('conteact') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contact') }}">Contact us</a>
-                </li> --}}
-            </ul>
-            
-            <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
- 
-                
-                <li class="search-item">
-                    <a class="nav-link" href="#" id="searchIcon">
-                        <img src="clientside/images/search.svg" alt="Search">
-                    </a>
-                </li>
-               
+                </li> 
+</ul>
+
+<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 
 
-                <li><a class="nav-link" href="{{ route('login') }}"><img src="clientside/images/user.svg"></a></li>
-                <li class="cart-item">
-                    <a class="nav-link" href="{{ route('cart') }}">
-                        <img src="{{ asset('clientside/images/cart.svg')}}" alt="Cart">
-                        <span class="cart-count-container" style="opacity:0;">
-                            <span class="cart-count" id="cartItemCount">0</span>
-                        </span>
-                    </a>
-                </li>
-                
-            </ul>
-           
-            <div class="modal" id="searchModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Search</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                            <form id="searchForm">
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="searchInput" placeholder="Search...">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    <li class="search-item">
+        <a class="nav-link" href="#" id="searchIcon">
+            <img src="clientside/images/search.svg" alt="Search">
+        </a>
+    </li>
+    <li><a class="nav-link" href="{{ route('login') }}"><img src="clientside/images/user.svg"></a></li>
+    <li class="cart-item">
+        <a class="nav-link" href="{{ route('cart') }}">
+            <img src="{{ asset('clientside/images/cart.svg') }}" alt="Cart">
+            <span class="cart-count-container" style="opacity:0;">
+                <span class="cart-count" id="cartItemCount">0</span>
+            </span>
+        </a>
+    </li>
+
+</ul>
+
+<div class="modal" id="searchModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-         
-        
-
-            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="searchForm">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
         </div>
     </div>
-</nav>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</div>
+</div>
+</div>
+</nav> --}}
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Get the modal
@@ -136,4 +131,4 @@
 
 
 
-</script>
+</script> --}}

@@ -17,9 +17,9 @@
                 </div>
             @endif
             
-            <form action="{{ route('update.shop') }}" method="post">
+            <form action="{{ route('update.page') }}" method="post">
                 @csrf
-                <input type="hidden" name="comp_data" value="shop">
+                <input type="hidden" name="comp_name" value="shop">
                 <textarea name="html" rows="10" cols="50" id="editor1">
                     @if (!empty(App\Helpers\SiteviewHelper::page('shop')))
                         {!! App\Helpers\SiteviewHelper::page('shop')->html !!}

@@ -86,9 +86,16 @@ class SiteviewHelper
     return $navHtml;
   }
 
-  public static function footer()
+  public static function getFooterColor()
   {
-    $footers = Footer::all();
-    return $footers->pluck('footer')->implode("");
+$footerHtml = Component::where('name', 'footer')->value('html');
+
+$matches = [];
+preg_match('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', $footerHtml, $matches);
+
+return $matches[1];
+
+
+     
   }
 }

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 @extends('layouts.admin-layout.app')
-
 @section('content')
     <div class="content-wrapper">
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('update.shop') }}" method="post">
+                <form action="{{ route('update.page') }}" method="post">
                     @csrf
-                    <input type="hidden" name="comp_data" value="about">
+                    <input type="hidden" name="comp_name" value="about">
                     <textarea name="html"  rows="10" cols="50" id="editor1">
                         @if (!empty(App\Helpers\SiteviewHelper::page('about')))
                             {!! App\Helpers\SiteviewHelper::page('about')->html !!}

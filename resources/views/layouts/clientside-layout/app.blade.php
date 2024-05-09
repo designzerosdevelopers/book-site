@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 @include('include.clientside.head')
-	<body>
+<body style="background-color: {{ App\Helpers\SiteviewHelper::page('site_bg')->css }}">
 
 		<!-- Start Header/Navigation -->
 		@include('include.clientside.navbar')
@@ -12,8 +12,6 @@
 		<!-- Start Footer Section -->
 		@include('include.clientside.footer')
 		<!-- End Footer Section -->	
-
-
 		<script src="{{asset('clientside/js/bootstrap.bundle.min.js')}}"></script>
 		<script src="{{asset('clientside/js/tiny-slider.js')}}"></script>
 		<script src="{{asset('clientside/js/custom.js')}}"></script>
