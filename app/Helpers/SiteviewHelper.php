@@ -10,7 +10,7 @@ use App\Models\Item;
 
 class SiteviewHelper
 {
-  
+
 
   public static function item($limit = '')
   {
@@ -24,9 +24,8 @@ class SiteviewHelper
     $itemdata = '';
 
     foreach ($items as $item) {
-      $currentPart = $part[1]; // Save the original part for this iteration
-
-      // Replace dynamic content in the current part
+      $currentPart = $part[1]; 
+      
       $currentPart = str_replace('Book title', $item->name, $currentPart);
       $currentPart = str_replace('00.00', $item->price, $currentPart);
       $currentPart = preg_replace('/href="(.*?)"/', 'href="example.com"', $currentPart);
