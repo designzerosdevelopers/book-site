@@ -75,7 +75,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
         Route::get('/products', [PagesSettingController::class, 'product'])->name('product.index');
         Route::get('/shopadmin', [PagesSettingController::class, 'shop'])->name('shop.index');
-        Route::post('/shop', [PagesSettingController::class, 'update_component'])->name('update.shop');
+        Route::post('/updatepage', [PagesSettingController::class, 'updatePage'])->name('update.page');
 
 
         // edit manu

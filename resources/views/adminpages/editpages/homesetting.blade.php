@@ -6,9 +6,9 @@
     <div class="card">
         <div class="card-body">
       
-            <form action="{{ route('update.shop') }}" method="post">
+            <form action="{{ route('update.page') }}" method="post">
                 @csrf
-                <input type="hidden" name="comp_data" value="home">
+                <input type="hidden" name="comp_name" value="home">
                 <textarea name="html"  rows="10" cols="50" id="editor1">
                     @if (!empty(App\Helpers\SiteviewHelper::page('home')))
                         {!! App\Helpers\SiteviewHelper::page('home')->html !!}
@@ -17,6 +17,10 @@
                     @endif
                 </textarea>
                 <br>
+                <div class="form-group">
+                    <label for="colorPicker">Choose site background color:</label>
+                    <input type="color" id="colorPicker" name="site_bg" value="{{ App\Helpers\SiteviewHelper::page('site_bg')->css }}">
+                </div>
                 <button type="submit" class="btn btn-gradient-success me-2">Save</button>
             </form>
         </div>
