@@ -6,39 +6,52 @@ use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Navbar;
 use App\Models\Footer;
-use App\Models\item;
+use App\Models\Item;
 
 class SiteviewHelper
 {
+  
 
-  public static function item($limit = '' )
+  public static function item($limit = '')
   {
     $items = ($limit) ? Item::take($limit)->get() : Item::get();
-
 
     $itemDesign = Component::where('name', 'home')->first();
 
     $part = explode('<!-- Column 1 -->', $itemDesign->html);
+    
     $image = explode('<!-- img -->', $itemDesign->html)[1];
     $itemdata = '';
+
     foreach ($items as $item) {
+      $currentPart = $part[1]; // Save the original part for this iteration
 
-      $part[1] = str_replace('Book title', $item->name, $part[1]);
-      $part[1] = str_replace('00.00', $item->price, $part[1]);
+      // Replace dynamic content in the current part
+      $currentPart = str_replace('Book title', $item->name, $currentPart);
+      $currentPart = str_replace('00.00', $item->price, $currentPart);
+      $currentPart = preg_replace('/href="(.*?)"/', 'href="example.com"', $currentPart);
+      $imageChanged = preg_replace('/src="(.*?)"/', 'src="' . asset('book_images/' . $item->image) . '"', $image);
 
-      $part[1] = preg_replace('/href="(.*?)"/', 'href="example.com"', $part[1]);
-
-      $imageChanged = preg_replace('/src="(.*?)"/', 'src="' . asset('book_images/'.$item->image) . '"', $image);
-      $itemdata .= str_replace($image, $imageChanged, $part[1]);
+      $itemdata .= str_replace($image, $imageChanged, $currentPart);
     }
 
     return $itemdata;
   }
 
-
   public static function page($page)
   {
-    return Component::where('name', $page)->first();
+
+      return Component::where('name', $page)->first();
+
+  }
+
+  public static function homepage()
+  {
+
+      $home = Component::where('name', 'home')->first();
+      $itemDesign = explode('<!-- Column 1 -->', $home->html);
+      return $itemDesign[0].self::item(3).$itemDesign[2];
+
   }
 
   public static function getsettings($key)
