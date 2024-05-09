@@ -1,8 +1,8 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
-@if (!empty(App\Helpers\SiteviewHelper::page('home')))
-{!! App\Helpers\SiteviewHelper::page('home')->html !!}
+@if (!empty(App\Helpers\SiteviewHelper::homepage()))
+{!! App\Helpers\SiteviewHelper::homepage() !!}
 @else
     No  Data
 @endif
