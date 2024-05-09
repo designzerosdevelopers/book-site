@@ -16,7 +16,8 @@
                             No Data
                             @endif
                 </textarea>
-                    {{-- <br>
+                    {{-- <br>//s
+
                     <div class="form-group">
                         <label for="colorPicker">Choose footer color:</label>
                         <input type="color" id="colorPicker" name="footer_bg" value="{{ App\Helpers\SiteviewHelper::getFooterColor()}}">
@@ -25,6 +26,7 @@
                 </form>
             </div>
         </div>
+
 
 
 
