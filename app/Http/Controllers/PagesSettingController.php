@@ -701,11 +701,11 @@ class PagesSettingController extends Controller
             ]);
         }
 
-        if ($r->comp_name == 'footer') {
+        // if ($r->comp_name == 'footer') {
 
-          //  $r->html = str_replace('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', '<footer style="background-color: '.$r->footer_bg.';"', $r->html);
+        //   //  $r->html = str_replace('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', '<footer style="background-color: '.$r->footer_bg.';"', $r->html);
 
-        }
+        // }
         $component = Component::where('name', $r->comp_name);
         $status = $component->update([
             'html' => $r->html
