@@ -12,8 +12,7 @@ class NavbarController extends Controller
 {
     public function index()
     {
-        $navbarItems = Navbar::get();
-        return view('adminpages.editpages.editmanu', compact('navbarItems'));
+        return view('adminpages.editpages.editmanu');
     }
 
     public function update(Request $request, $id)
