@@ -23,6 +23,7 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('footer') }}">Footer</a></li>
             {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">Product</a></li> --}}
             <li class="nav-item"> <a class="nav-link" href="{{ route('shop.index') }}">Shop</a></li> 
+            <li class="nav-item"> <a class="nav-link" href="{{ route('update.page') }}">Navbar</a></li> 
           </ul>
           
         </div>
