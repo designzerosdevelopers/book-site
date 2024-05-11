@@ -19,11 +19,10 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('indexhome') }}">Home</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('about.edit') }}">About Us</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('contact.edit') }}">Contact</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">Manu</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">NavBar</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('footer') }}">Footer</a></li>
             {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">Product</a></li> --}}
-            <li class="nav-item"> <a class="nav-link" href="{{ route('shop.index') }}">Shop</a></li> 
-            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">Navbar</a></li> 
+            <li class="nav-item"> <a class="nav-link" href="{{ route('shop.index') }}">Shop</a></li>
           </ul>
         </div>
       </li>
