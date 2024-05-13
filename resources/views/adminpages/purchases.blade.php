@@ -43,7 +43,7 @@
                 </td>
                 <td id="price{{ $loop->index }}">${{ $item['price'] }}</td>
                 <td>
-                    <a href="" onclick="downloadFile('{{asset('book_files/'.$item['file'])}}')" class="btn btn-success">Download</a>
+                    <a href="" onclick="downloadFile('{{asset($item['file'])}}')" class="btn btn-success">Download</a>
                 </td>
             </tr>
             @endforeach
