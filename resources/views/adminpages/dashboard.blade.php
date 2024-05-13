@@ -19,25 +19,68 @@
     <div class="col-md-4 stretch-card grid-margin">
       <div class="card bg-gradient-danger card-img-holder text-white">
         <div class="card-body">
-          <img src="{{asset('admin/images/dashboard/circle.svg')}}" class="card-img-absolute" alt="circle-image" />
-          <h4 class="font-weight-normal mb-3">Total Sales <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-          </h4>
-          <h2 class="mb-5">${{ $totalsale }}</h2>
-          {{-- <h6 class="card-text">Increased by 60%</h6> --}}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 stretch-card grid-margin">
+          <!-- Total Sales -->
+          <div class="total-sales mb-4">
+            <div class="card-content">
+              <img src="{{asset('admin/images/dashboard/circle.svg')}}" class="card-img-absolute" alt="circle-image" />
+              <h5 class="font-weight-normal mb-2">Total Sales <i class="mdi mdi-chart-line mdi-24px float-right"></i></h5>
+              <h3 class="mb-0" style="font-size: 30px">${{ $totalsale }}</h3>
+            </div>
+          </div>
+          <!-- Weekly and Monthly Sales -->
+          <div class="row">
+              <!-- Last Week Sales -->
+              <div class="col-md-6">
+                  <div class="last-week-sales card-content mb-3">
+                      <h5 class="font-weight-normal mb-2">Last 07 Days</h5>
+                      <h3 class="mb-0">${{ $lastweek }}</h3>
+                  </div>
+              </div>
+              <!-- Last Month Sales -->
+              <div class="col-md-6">
+                <div class="last-month-sales card-content mb-3">
+                  <h5 class="font-weight-normal mb-2">Last 30 Days</h5>
+                  <h3 class="mb-0">${{ $lastmonth }}</h3>
+                </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+
+     <div class="col-md-4 stretch-card grid-margin">
       <div class="card bg-gradient-info card-img-holder text-white">
         <div class="card-body">
-          <img src="{{asset('admin/images/dashboard/circle.svg')}}" class="card-img-absolute" alt="circle-image" />
-          <h4 class="font-weight-normal mb-3">Weekly Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-          </h4>
-          <h2 class="mb-5">45,6334</h2>
-          {{-- <h6 class="card-text">Decreased by 10%</h6> --}}
-        </div>
-      </div>
-    </div>
+          <!-- Total Sales -->
+          <div class="total-sales mb-4">
+            <div class="card-content">
+              <img src="{{ asset('admin/images/dashboard/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
+              <h5 class="font-weight-normal mb-2">Total Sold <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i></h5>
+              <h3 class="mb-0" style="font-size: 30px">{{ $total_item_sold }}</h3>
+            </div>
+          </div>
+          <!-- Weekly and Monthly Sales -->
+          <div class="row">
+              <!-- Last Week Sales -->
+              <div class="col-md-6">
+                  <div class="last-week-sales card-content mb-3">
+                      <h5 class="font-weight-normal mb-2">Last 07 Days</h5>
+                      <h3 class="mb-0">{{ $last7days_items_sold }}</h3>
+                  </div>
+              </div>
+              <!-- Last Month Sales -->
+              <div class="col-md-6">
+                <div class="last-month-sales card-content mb-3">
+                  <h5 class="font-weight-normal mb-2">Last 30 Days</h5>
+                  <h3 class="mb-0">{{ $last30days_items_sold }}</h3>
+                </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+        
+
     <div class="col-md-4 stretch-card grid-margin">
       <div class="card bg-gradient-success card-img-holder text-white">
         <div class="card-body">
@@ -45,7 +88,7 @@
           <h4 class="font-weight-normal mb-3">Visitors Online <i class="mdi mdi-diamond mdi-24px float-right"></i>
           </h4>
           <h2 class="mb-5">95,5741</h2>
-          {{-- <h6 class="card-text">Increased by 5%</h6> --}}
+          {{-- <h6 class="card-text">Increased by 5%</h6>  --}}
         </div>
       </div>
     </div>
@@ -54,63 +97,31 @@
     <div class="col-12 grid-margin">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Recent Tickets</h4>
+          <h4 class="card-title">Registered Users</h4>
           <div class="table-responsive">
             <table class="table">
               <thead>
                 <tr>
-                  <th> Assignee </th>
-                  <th> Subject </th>
-                  <th> Status </th>
-                  <th> Last Update </th>
-                  <th> Tracking ID </th>
+                  <th> Full Name </th>
+                  <th> Email </th>
+                  <th> Registered date </th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <img src="{{asset('admin/images/faces/face1.jpg')}}" class="me-2" alt="image"> David Grey
-                  </td>
-                  <td> Fund is not recieved </td>
-                  <td>
-                    <label class="badge badge-gradient-success">DONE</label>
-                  </td>
-                  <td> Dec 5, 2017 </td>
-                  <td> WD-12345 </td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="{{asset('admin/images/faces/face2.jpg')}}" class="me-2" alt="image"> Stella Johnson
-                  </td>
-                  <td> High loading time </td>
-                  <td>
-                    <label class="badge badge-gradient-warning">PROGRESS</label>
-                  </td>
-                  <td> Dec 12, 2017 </td>
-                  <td> WD-12346 </td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="{{asset('admin/images/faces/face3.jpg')}}" class="me-2" alt="image"> Marina Michel
-                  </td>
-                  <td> Website down for one week </td>
-                  <td>
-                    <label class="badge badge-gradient-info">ON HOLD</label>
-                  </td>
-                  <td> Dec 16, 2017 </td>
-                  <td> WD-12347 </td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="{{asset('admin/images/faces/face4.jpg')}}" class="me-2" alt="image"> John Doe
-                  </td>
-                  <td> Loosing control on server </td>
-                  <td>
-                    <label class="badge badge-gradient-danger">REJECTED</label>
-                  </td>
-                  <td> Dec 3, 2017 </td>
-                  <td> WD-12348 </td>
-                </tr>
+            
+                  @foreach ($users as $user)
+                      <tr>
+                          <td>
+                            {{ $user->name.' '.$user->last_name }} 
+                          </td>
+                          <td> {{ $user->email }} </td>
+                          <td> {{ \Carbon\Carbon::parse($user->created_at)->format('M d, Y') }} </td>
+                      </tr>
+                  @endforeach
+              
+                  
+                 
+
               </tbody>
             </table>
           </div>
