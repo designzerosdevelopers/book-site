@@ -444,7 +444,7 @@ class SiteViewController extends Controller
                 'item_price' => $item->price
             ];
         }
-
+    
         // Update the cart data in the cookie
         $response = response()->view('clientpages.cart', [
             'cartItems' => $cart,
@@ -472,6 +472,9 @@ class SiteViewController extends Controller
 
     public function checkout(request $request)
     {
+        // // Retrieve the subtotal from the form data
+        // $subtotal = $request->input('subtotal');
+
         // Retrieve the current cart items from the cookie
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
         foreach ($cartItems as $value) {

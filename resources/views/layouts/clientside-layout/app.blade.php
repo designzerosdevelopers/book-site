@@ -2,6 +2,7 @@
 <html lang="en">
 @include('include.clientside.head')
 <body>
+
 		<!-- Start Header/Navigation -->
 		@include('include.clientside.navbar')
 		<!-- End Header/Navigation -->
