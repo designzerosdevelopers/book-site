@@ -691,32 +691,55 @@ class PagesSettingController extends Controller
         }
     }
 
-    public function updatePage(Request $r)
+    public function upload_image()
     {
-
-        if ($r->comp_name == 'home') {
-            $component = Component::where('name', 'site_bg');
-            $status = $component->update([
-                'css' => $r->site_bg
-            ]);
-        }
-
-        // if ($r->comp_name == 'footer') {
-
-        //   //  $r->html = str_replace('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', '<footer style="background-color: '.$r->footer_bg.';"', $r->html);
-
-        // }
-        $component = Component::where('name', $r->comp_name);
-        $status = $component->update([
-            'html' => $r->html
-        ]);
-
-        if ($status == 1) {
-            return redirect()->back()->with('status', 'Component updated successfully!');
-        } else {
-            return redirect()->back()->with('error', 'Component could not be updated!');
-        }
+        // Simulate an error response
+        return response()->json(['status' => 'success', 'message' => 'request successt'], 200);
     }
+    
+
+    public function updatePage(Request $r)
+{
+    if ($r->isXmlHttpRequest()) {
+        // Handle AJAX request
+        $image = $r->file('image');
+        $imageName = $image->getClientOriginalName(); // Use the original filename
+        $imagePath = public_path('images');
+        
+        // Move the new image to the images folder
+        $image->move($imagePath, $imageName);
+        $imageUrl = asset('images/' . $imageName);
+        
+        return response()->json(['url' => $imageUrl]);
+    }
+    
+    
+
+    // Handle non-AJAX request
+    if ($r->comp_name == 'home') {
+        $component = Component::where('name', 'site_bg');
+        $status = $component->update([
+            'css' => $r->site_bg
+        ]);
+    }
+
+    // Uncomment the code below to handle footer component
+    // if ($r->comp_name == 'footer') {
+    //     // Handle footer component update
+    // }
+
+    $component = Component::where('name', $r->comp_name);
+    $status = $component->update([
+        'html' => $r->html
+    ]);
+
+    if ($status == 1) {
+        return redirect()->back()->with('status', 'Component updated successfully!');
+    } else {
+        return redirect()->back()->with('error', 'Component could not be updated!');
+    }
+}
+
 
 
     public function about_edit()
