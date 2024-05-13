@@ -11,12 +11,29 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-          <span class="menu-title">Page Edits</span>
+          <span class="menu-title">General Settings</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">NavBar</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('footer') }}">Footer</a></li>
+            {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">Product</a></li> --}}
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.manu') }}">Site settings</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+          <span class="menu-title">Pages</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="ui-basic">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('indexhome') }}">Home</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('about.edit') }}">About Us</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('contact.edit') }}">Contact</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('shop.index') }}">Shop</a></li>
           </ul>
         </div>
       </li>
@@ -38,12 +55,12 @@
           <i class="mdi mdi-package  menu-icon"></i>
         </a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link" href="{{ route('uploads.index') }}">
           <span class="menu-title">Uploads</span>
           <i class="mdi mdi-upload  menu-icon"></i>
         </a>
-      </li>
+      </li> --}}
       <li class="nav-item">
         <a class="nav-link" href="{{ route('settings.index') }}">
           <span class="menu-title">Settings</span>
@@ -61,3 +78,6 @@
 
     </ul>
   </nav>
+
+
+  

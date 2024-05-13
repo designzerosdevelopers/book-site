@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('homepage', function (Blueprint $table) {
+        Schema::create('components', function (Blueprint $table) {
             $table->id();
-            $table->string('hero_heading');
-            $table->text('hero_paragraph');
-            $table->string('hero_image');
+            $table->string('name');
+            $table->TEXT('html');
+            $table->TEXT('css');
+            $table->TEXT('javascript');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('homepage');
+        Schema::dropIfExists('components');
     }
 };

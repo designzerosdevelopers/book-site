@@ -1,5 +1,4 @@
 @extends('layouts.admin-layout.app')
-
 @section('content')
 <div class="content-wrapper">
     <div class="container my-5 py-5">
