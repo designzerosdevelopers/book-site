@@ -64,6 +64,8 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         // dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
+        Route::get('/upload-image', [PagesSettingController::class, 'upload_image'])->name('upload.image');
+
         //pages setting route
         Route::get('/home', [PagesSettingController::class, 'indexhome'])->name('indexhome');
         Route::get('/About', [PagesSettingController::class, 'about_edit'])->name('about.edit');
@@ -105,7 +107,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::post('/storeitem', [PagesSettingController::class, 'storeitem'])->name('storeitem');
         Route::delete('/deleteitem/{id}', [PagesSettingController::class, 'deleteitem'])->name('deleteitem');
 
-        // uploads routes
+        // uploads routes updatePage
         Route::get('/uploadsindex', [PagesSettingController::class, 'uploadsindex'])->name('uploads.index');
         Route::post('/saveuploads', [PagesSettingController::class, 'saveuploads'])->name('save.uploads');
         Route::get('/deleteuploads', [PagesSettingController::class, 'deleteuploads'])->name('delete.uploads');
