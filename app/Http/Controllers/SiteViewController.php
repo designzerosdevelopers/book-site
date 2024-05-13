@@ -395,6 +395,7 @@ class SiteViewController extends Controller
             }
             
         }
+        
         return view('clientpages.shop', ['categories' => $categories]);
     }
 

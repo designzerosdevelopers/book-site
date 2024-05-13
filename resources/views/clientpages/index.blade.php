@@ -1,11 +1,45 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
-@if (!empty(App\Helpers\SiteviewHelper::homepage()))
-{!! App\Helpers\SiteviewHelper::homepage() !!}
-@else
-    No  Data
-@endif
+
+{!! App\Helpers\SiteviewHelper::ClientSidePage(3,'home') !!}
+
+
+   
+@stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <!-- Start Hero Section -->
 {{-- <div class="hero">
     <div class="container">
@@ -274,5 +308,4 @@
     </div>
     <!-- End Blog Section -->	 --}}
 
-    
-    @stop
+ 
