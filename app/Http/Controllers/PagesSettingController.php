@@ -10,6 +10,7 @@ use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Home;
+use App\Models\Footer;
 use App\Models\Contact;
 use App\Models\About;
 use App\Models\Purchase;
