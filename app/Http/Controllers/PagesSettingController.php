@@ -267,17 +267,46 @@ class PagesSettingController extends Controller
 
     public function updatePage(Request $r)
     {
-        $component = Component::where('name', $r->comp_name);
-        $status = $component->update([
-            'html' => $r->html
-        ]);
+        if ($r->isXmlHttpRequest()) {
+            // Handle AJAX request
+        
+            // Retrieve the uploaded image
+            $image = $r->file('image');
+        
+            // Get the original name of the uploaded image
+            $imageName = $image->getClientOriginalName();
+        
+            // Construct the path for the uploaded image
+            $imagePath = public_path('images/' . $imageName);
+        
+            // Check if the same image already exists
+            if (file_exists($imagePath)) {
+                // If the image exists, delete it
+                unlink($imagePath);
+            }
+        
 
-    if ($status == 1) {
-        return redirect()->back()->with('status', 'Component updated successfully!');
-    } else {
-        return redirect()->back()->with('error', 'Component could not be updated!');
+            $image->move(public_path('images'), $imageName);
+        
+            $imageUrl = asset('images/' . $imageName);
+
+            return response()->json(['url' => $imageUrl]);
+        }
+        
+        
+        
+        
+            $component = Component::where('name', $r->comp_name);
+            $status = $component->update([
+                'html' => $r->html
+            ]);
+
+        if ($status == 1) {
+            return redirect()->back()->with('status', 'Component updated successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Component could not be updated!');
+        }
     }
-}
 
 
     public function indexcategories(Request $request)
@@ -556,6 +585,7 @@ class PagesSettingController extends Controller
             return 'No file uploaded.';
         }
     }
+   
 
 
     public function deleteUploads(Request $request)
