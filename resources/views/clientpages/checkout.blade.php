@@ -16,12 +16,6 @@
 			</div>
 		<!-- End Hero Section -->
 
-	
-		
-		
-
-	
-	
 		<div class="untree_co-section">
 		    <div class="container">
 					<form id="paymentForm"  method="post" action="">
@@ -143,29 +137,48 @@
 		                    <th>Price</th>
 		                  </thead>
 		                  <tbody>
-							@foreach($cartItems as $item)
-								<tr>
-									<td>{{ $item['item_name'] }} <strong class="mx-2"></strong> </td>
-									<td>${{ number_format($item['item_price'], 2) }}</td>
-								</tr>
-							@endforeach
+							@php
+							$totalPrice = 0; // Initialize the total price variable
+						@endphp
+						
+						@foreach($cartItems as $item)
+							<tr>
+								<td>{{ $item['item_name'] }}</td>
+								<td>${{ number_format($item['item_price'], 2) }}</td>
+							</tr>
+							@php
+								$totalPrice += $item['item_price'];
+							@endphp
+						@endforeach
+						
+						<tr>
+							<td><strong>Total</strong></td>
+							<td>${{ number_format($totalPrice, 2) }}</td> 
+						</tr>
+						
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-								<td class="text-black">${{ $subtotal}}.00</td>
+								<td>${{ number_format($totalPrice, 2) }}</td> 
 							</tr>
 							<tr>
 								<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-								<td class="text-black font-weight-bold"><strong>${{ $subtotal }}.00</strong></td>
-								<input type="hidden" name="amount" value="{{ $subtotal }}.00">
+								<td>${{ number_format($totalPrice, 2) }}</td> </strong></td>
+								<input type="hidden" name="amount" value="{{ number_format($totalPrice, 2)}}">
 							</tr>
 						</tbody>
 		                </table>
 		                <div class="form-group">
-		                  <!-- Stripe Payment Button -->
+
+		               @if($stripe)
+							<!-- Stripe Payment Button -->
 							<input type="submit" id="stripeButton" class="btn btn-black btn-lg py-3 btn-block" value="Pay with Stripe">
-							
+						@endif
+
+						@if($paypal)
 							<!-- Paypal Payment Button -->
 							<input type="submit" id="paypalButton" class="btn btn-black btn-lg py-3 btn-block" value="Pay with Paypal">
+						@endif
+
 		                </div>
 
 		              </div>

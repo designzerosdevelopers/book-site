@@ -36,10 +36,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  @php
-                                          $totalprice = 0;
-                                  @endphp
-                                
+                                    @php
+                                        $totalprice = 0;
+                                    @endphp
                                 
                                     @foreach($cartItems as $item)
                                     @php
@@ -48,7 +47,7 @@
                                    
                                         <tr>
                                             <td class="product-thumbnail">
-                                                <img src="{{ asset( $item['item_image']) }}" alt="Image" class="img-fluid" width="30%">
+                                                <img src="{{ asset('book_images/'. $item['item_image']) }}" alt="Image" class="img-fluid" width="25%">
                                             </td>
                                             <td class="product-name">
                                                 <h2 class="h5 text-black">{{ $item['item_name'] }}</h2>
@@ -104,7 +103,7 @@
                                         <span class="text-black">Subtotal</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black" id="subtotal">${{$totalprice}}</strong>
+                                        <strong class="text-black" id="subtotal">${{$totalprice}}.00</strong>
                                     </div>
                                 </div>
                                 <div class="row mb-5">
@@ -112,7 +111,7 @@
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black" id="totalprice">${{$totalprice}}</strong>
+                                        <strong class="text-black" id="totalprice">${{$totalprice}}.00</strong>
                                     </div>
                                 </div>
                                 <div class="row">

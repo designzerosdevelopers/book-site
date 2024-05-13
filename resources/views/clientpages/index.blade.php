@@ -1,26 +1,30 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
+@if (!empty(App\Helpers\SiteviewHelper::homepage()))
+{!! App\Helpers\SiteviewHelper::homepage() !!}
+@else
+    No  Data
+@endif
   <!-- Start Hero Section -->
-<div class="hero">
+{{-- <div class="hero">
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-lg-7">
                 <div class="intro-excerpt">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage()))
-                    <h1>{{ App\Helpers\SiteviewHelper::homepage()->hero_heading }}</h1>
-                    <p class="mb-4">{!! App\Helpers\SiteviewHelper::homepage()->hero_paragraph !!}</p>
+                    {{ App\Helpers\SiteviewHelper::homepage()->html }}
                     @else
                         No  Data
                     @endif
-                    
-                    <p><a href="" class="btn btn-secondary me-2">Shop now</a><a href="" class="btn btn-white-outline">Explore</a></p>
+                   
+                    <p><a href="{{ $data['button_1_url'] }}" class="btn btn-secondary me-2">{{ $data['button_1_name'] }}</a><a href="{{ $data['button_2_url'] }}" class="btn btn-white-outline">{{ $data['button_2_name'] }}</a></p>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="hero-img-wrap">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage() ))
-                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="90%">
+                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="70%">
                     @else
                         No  Image
                     @endif
@@ -40,9 +44,9 @@
 
                 <!-- Start Column 1 -->
                 <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-                    <h2 class="mb-4 section-title">Embark on literary journeys crafted with excellent narratives.</h2>
-                    <p class="mb-4">Lost in the library's embrace, she found solace among the books. Each spine a doorway to a new world, each page a whispered invitation to adventure. In that quiet sanctuary, she discovered the timeless magic of stories. </p>
-                    <p><a href="{{ route('shop') }}" class="btn">Explore</a></p>
+                    <h2 class="mb-4 section-title">{{ $data['ps_title'] }}</h2>
+                    <p class="mb-4">{{ $data['ps_description'] }} </p>
+                    <p><a href="" class="btn">Explore</a></p>
                 </div>
                 <!-- End Column 1 -->
 
@@ -51,7 +55,7 @@
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <div class="product-item">
                         <a  style="text-decoration: none;" href="{{ route('product.details', ['id' => $item->id]) }}">
-                        <img src="{{ asset($item->image)}}" class="img-fluid product-thumbnail">
+                        <img src="{{asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
                         <h3 class="product-title">{{$item->name}}</h3>
                         <div>
                         <strong class="product-price">${{$item->price}}</strong>
@@ -66,10 +70,6 @@
                 </div> 
                 @endforeach
                 <!-- End Column 2 -->
-
-
-
-
             </div>
         </div>
     </div>
@@ -80,8 +80,8 @@
         <div class="container">
             <div class="row justify-content-between">
                 <div class="col-lg-6">
-                    <h2 class="section-title">Why Choose Us</h2>
-                    <p>Choose us for your literary journey because we believe in the power of stories to inspire, to transform, and to connect. Our curated collection offers a diverse tapestry of narratives, inviting you to explore new worlds, encounter fascinating characters, and experience the thrill of discovery with every turn of the page. With our passion for books and commitment to quality, we strive to enrich your reading experience and accompany you on your literary adventures.</p>
+                    <h2 class="section-title">{{ $data['wcu_title'] }}</h2>
+                    <p>{{ $data['wcu_description'] }}</p>
 
                     <div class="row my-5">
                         <div class="col-6 col-md-6">
@@ -89,8 +89,8 @@
                                 <div class="icon">
                                     <img src="{{asset('clientside/images/truck.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
-                                <h3>Fast &amp; Free Shipping</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                <h3>{{ $data['wcu_feature_1_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_1_description'] }}</p>
                             </div>
                         </div>
 
@@ -99,8 +99,8 @@
                                 <div class="icon">
                                     <img src="{{asset('clientside/images/bag.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
-                                <h3>Easy to Shop</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                <h3>{{ $data['wcu_feature_2_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_2_description'] }}</p>
                             </div>
                         </div>
 
@@ -109,8 +109,8 @@
                                 <div class="icon">
                                     <img src="{{asset('clientside/images/support.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
-                                <h3>24/7 Support</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                <h3>{{ $data['wcu_feature_3_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_3_description'] }}</p>
                             </div>
                         </div>
 
@@ -119,8 +119,8 @@
                                 <div class="icon">
                                     <img src="{{asset('clientside/images/return.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
-                                <h3>Hassle Free Returns</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+                                <h3>{{ $data['wcu_feature_4_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_4_description'] }}</p>
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@
 
                 <div class="col-lg-5">
                     <div class="img-wrap">
-                        <img src="{{asset('clientside/images/down1.png')}}" alt="Image" class="img-fluid">
+                        <img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
                     </div>
                 </div>
 
@@ -150,14 +150,14 @@
                     </div>
                 </div>
                 <div class="col-lg-5 ps-lg-5">
-                    <h2 class="section-title mb-4">Echoes of Enchantment: Journeys Await</h2>
-                    <p>Welcome to BookWeb, where every page holds a new adventure and every story whispers secrets waiting to be discovered. Immerse yourself in a world of literary wonders, where the written word becomes a gateway to endless possibilities. From classics to contemporary masterpieces, our curated collection invites you to explore, escape, and embrace storytelling's magic. Let our books be your companions on the journey of imagination, enlightenment, and discovery. Embark on a reading experience like no other. Welcome to a world where stories come alive. Welcome to BookWeb.</p>
+                    <h2 class="section-title mb-4">{{ $data['wh_title'] }}</h2>
+                    <p>{{ $data['wh_description'] }}</p>
                 
                     <ul class="list-unstyled custom-list my-4">
-                        <li>Discover masterpieces old and new</li>
-                        <li>Escape to new worlds with us</li>
-                        <li>Immerse in storytelling's magic</li>
-                        <li>Experience discovery with every page</li>
+                        <li>{{ $data['wh_feature_1'] }}</li>
+                        <li>{{ $data['wh_feature_2'] }}</li>
+                        <li>{{ $data['wh_feature_3'] }}</li>
+                        <li>{{ $data['wh_feature_4'] }}</li>
                     </ul>
                     <p><a href="#" class="btn">Explore</a></p>
                 </div>
@@ -165,7 +165,7 @@
                 
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- End We Help Section -->
 
     {{-- <!-- Start Popular Product -->
@@ -273,4 +273,6 @@
         </div>
     </div>
     <!-- End Blog Section -->	 --}}
+
+    
     @stop
