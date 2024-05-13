@@ -100,7 +100,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::post('/storeitem', [PagesSettingController::class, 'storeitem'])->name('storeitem');
         Route::delete('/deleteitem/{id}', [PagesSettingController::class, 'deleteitem'])->name('deleteitem');
 
-        // uploads routes
+        // uploads routes updatePage
         Route::get('/uploadsindex', [PagesSettingController::class, 'uploadsindex'])->name('uploads.index');
         Route::post('/saveuploads', [PagesSettingController::class, 'saveuploads'])->name('save.uploads');
         Route::get('/deleteuploads', [PagesSettingController::class, 'deleteuploads'])->name('delete.uploads');

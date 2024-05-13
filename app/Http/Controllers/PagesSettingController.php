@@ -10,6 +10,7 @@ use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Home;
+use App\Models\Footer;
 use App\Models\Contact;
 use App\Models\About;
 use App\Models\Purchase;
@@ -55,25 +56,28 @@ class PagesSettingController extends Controller
             ->sum(DB::raw('items.price'));
 
         $totalSaleAmount = Purchase::join('items', 'purchases.item_id', '=', 'items.id')
-            ->sum('items.price');
+        ->sum('items.price');
 
-
+      
         $totalItemCount = Purchase::count('item_id');
 
         $last7days_item_count = DB::table('purchases')
-            ->join('items', 'purchases.item_id', '=', 'items.id')
-            ->whereBetween('purchases.created_at', [$last7DaysStartDate, $last7DaysEndDate])
-            ->count(); // Count the number of records returned by the query
+        ->join('items', 'purchases.item_id', '=', 'items.id')
+        ->whereBetween('purchases.created_at', [$last7DaysStartDate, $last7DaysEndDate])
+        ->count(); // Count the number of records returned by the query
 
-
+               
         $last30DaysSaleCount = DB::table('purchases')
-            ->join('items', 'purchases.item_id', '=', 'items.id')
-            ->whereBetween('purchases.created_at', [$last30DaysStartDate, $last30DaysEndDate])
-            ->count();
+        ->join('items', 'purchases.item_id', '=', 'items.id')
+        ->whereBetween('purchases.created_at', [$last30DaysStartDate, $last30DaysEndDate])
+        ->count();
 
         $users = DB::table('users')
-            ->where('role', 0)
-            ->get();
+        ->where('role', 0)
+        ->get();
+
+
+
 
         return view('adminpages.dashboard', [
             // sales
@@ -83,12 +87,13 @@ class PagesSettingController extends Controller
 
             // items sold
             'total_item_sold' => $totalItemCount,
-            'last7days_items_sold' => $last7days_item_count,
-            'last30days_items_sold' => $last30DaysSaleCount,
+            'last7days_items_sold'=>$last7days_item_count, 
+            'last30days_items_sold'=>$last30DaysSaleCount,
 
             // registered users
-            'users' => $users
+            'users'=>$users
         ]);
+
     }
 
 
@@ -137,7 +142,8 @@ class PagesSettingController extends Controller
             $counter++;
         }
 
-
+    
+        // Process the validated data and store it in the database
         $item = new Item();
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
@@ -266,12 +272,12 @@ class PagesSettingController extends Controller
             'html' => $r->html
         ]);
 
-        if ($status == 1) {
-            return redirect()->back()->with('status', 'Component updated successfully!');
-        } else {
-            return redirect()->back()->with('error', 'Component could not be updated!');
-        }
+    if ($status == 1) {
+        return redirect()->back()->with('status', 'Component updated successfully!');
+    } else {
+        return redirect()->back()->with('error', 'Component could not be updated!');
     }
+}
 
 
     public function indexcategories(Request $request)
@@ -584,7 +590,7 @@ class PagesSettingController extends Controller
     {
         // get user id from auth
         $userid = Auth()->id();
-
+        
         // fetch from item table 
         $itemIds = [];
         $purchases = Purchase::where('user_id', $userid)->get();
