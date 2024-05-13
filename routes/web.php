@@ -58,32 +58,27 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
 
 
-    // adminside controller
+    // Adminside Routes
     Route::middleware('auth', 'checkUserRole')->group(function () {
         
-        // dashboard
+        // Dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-        //pages setting route
-        Route::get('/home', [PagesSettingController::class, 'indexhome'])->name('indexhome');
-        Route::get('/About', [PagesSettingController::class, 'about_edit'])->name('about.edit');
-        Route::get('/Contact', [PagesSettingController::class, 'contact_edit'])->name('contact.edit');
-        Route::put('/updatepagesettings', [PagesSettingController::class, 'updatehome'])->name('updatehome');
-        Route::get('/homeedit', [PagesSettingController::class, 'homeedit'])->name('homeedit');
-        Route::get('/footer', [PagesSettingController::class, 'footer'])->name('footer');
-        Route::post('/footer', [PagesSettingController::class, 'update_footer'])->name('update.footer');
+        //Pages setting route
+        Route::get('/home-settings', function(){ return view('adminpages.pages-settings.home-settings');})->name('edit.home');
+        Route::get('/about-settings', function(){ return view('adminpages.pages-settings.about-settings');})->name('edit.about');
+        Route::get('/item-design-settings', function(){ return view('adminpages.pages-settings.item-design-settings');})->name('edit.item.design');
+        Route::get('/contact-settings', function(){ return view('adminpages.pages-settings.contact-settings');})->name('edit.contact');
+        Route::get('/footer-settings', function(){ return view('adminpages.pages-settings.footer-settings');})->name('edit.footer');
+        Route::get('/navbar-settings', function(){ return view('adminpages.pages-settings.navbar-settings');})->name('edit.navbar');
+        Route::get('/shop-settings', function(){ return view('adminpages.pages-settings.shop-settings');})->name('edit.shop');
+        Route::get('/theme-settings', function(){ return view('adminpages.pages-settings.theme-settings');})->name('edit.theme');
+        Route::post('/theme-update',[PagesSettingController::class, 'themeUpdate'])->name('theme.update');
 
-        Route::get('/products', [PagesSettingController::class, 'product'])->name('product.index');
-        Route::get('/shopadmin', [PagesSettingController::class, 'shop'])->name('shop.index');
+
         Route::post('/updatepage', [PagesSettingController::class, 'updatePage'])->name('update.page');
+        Route::post('/store-site-settings', [PagesSettingController::class, 'storeSiteSettings'])->name('store-site.settings');
 
-
-        // edit manu
-        Route::get('/navbar', [NavbarController::class, 'index'])->name('edit.manu');
-        Route::put('/navbar/update/{id}', [NavbarController::class, 'update'])->name('navitems.update');
-        // delete manu
-        // Route::delete('/deletemanu', [PagesSettingController::class, 'deleteManu'])->name('delete.manu');
-        
 
         //category routes
         Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');

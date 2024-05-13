@@ -7,51 +7,70 @@ use App\Models\Settings;
 use App\Models\Navbar;
 use App\Models\Footer;
 use App\Models\Item;
+use HTML5;
 
 class SiteviewHelper
 {
 
 
-  public static function item($limit = '')
+  public static function item($limit = '', $page = '')
   {
-    $items = ($limit) ? Item::take($limit)->get() : Item::get();
-
-    $itemDesign = Component::where('name', 'home')->first();
-
-    $part = explode('<!-- Column 1 -->', $itemDesign->html);
-    
-    $image = explode('<!-- img -->', $itemDesign->html)[1];
-    $itemdata = '';
-
-    foreach ($items as $item) {
-      $currentPart = $part[1]; 
-      
-      $currentPart = str_replace('Book title', $item->name, $currentPart);
-      $currentPart = str_replace('00.00', $item->price, $currentPart);
-      $currentPart = preg_replace('/href="(.*?)"/', 'href="example.com"', $currentPart);
-      $imageChanged = preg_replace('/src="(.*?)"/', 'src="' . asset('book_images/' . $item->image) . '"', $image);
-
-      $itemdata .= str_replace($image, $imageChanged, $currentPart);
+    if ($page === 'shop') {
+      if ($limit && $limit > 0) {
+        $items = Item::paginate($limit);
+      } else {
+        $items = Item::paginate(10);
+      }
+    } else {
+      $items = Item::paginate(10);
     }
 
-    return $itemdata;
+    $itemDesign = Component::where('name', 'item_box')->first();
+
+    $part = explode('<!-- Column 1 -->', $itemDesign->html);
+
+    $dom = new \DOMDocument();
+    $dom->loadHTML($part[1], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $xpath = new \DOMXPath($dom);
+    $dynamicItem = '';
+    foreach ($items as $item) {
+      $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-title')]";
+      $xpath->query($title)->item(0)->nodeValue = $item->name;
+
+      $price = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-price')]";
+      $xpath->query($price)->item(0)->nodeValue = '$' . $item->price;
+
+      $dom->getElementById("poster")->setAttribute('src', asset('book_images/' . $item->image));
+
+      $anchorElements = $dom->getElementsByTagName('a');
+      foreach ($anchorElements as $anchorElement) {
+        $anchorElement->setAttribute('href', $item->slug);
+      }
+
+      $dynamicItem .= $dom->saveHTML();
+    }
+
+    return $dynamicItem;
   }
 
   public static function page($page)
   {
 
-      return Component::where('name', $page)->first();
-
+    return Component::where('name', $page)->first();
   }
 
-  public static function homepage()
+  public static function clientSidePage($limit = '', $page = '')
   {
-
-      $home = Component::where('name', 'home')->first();
-      $itemDesign = explode('<!-- Column 1 -->', $home->html);
-      return $itemDesign[0].self::item(3).$itemDesign[2];
-
+    if ($page == 'home') {
+      $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('home')->html);
+      return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
+    } else {
+      $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('shop')->html);
+      return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
+    }
   }
+
+
 
   public static function getsettings($key)
   {
@@ -59,43 +78,24 @@ class SiteviewHelper
     return $settings->value;
   }
 
-
-  public static function navbar()
-  {
-    $nav_elements = Navbar::orderBy('position')->get()->toArray();
-    $navHtml = '';
-    foreach ($nav_elements as $value) {
-      $url = request()->url();
-      $urlComponents = parse_url($url);
-      $path = isset($urlComponents['path']) ? ltrim($urlComponents['path'], '/') : '';
-
-      if ($path === '') {
-        $path = '/';
-      }
-      if ($value['route'] === 'index') {
-        $route = '/';
-        $navHtml .= '<li class="nav-item ' . (($route == $path) ? 'active' : '') . '">';
-        $navHtml .= '<a class="nav-link" href="' . $route . '">' . $value['name'] . '</a>';
-        $navHtml .= '</li>';
-      } else {
-        $navHtml .= '<li class="nav-item ' . (($value['route'] == $path) ? 'active' : '') . '">';
-        $navHtml .= '<a class="nav-link" href="' . $value['route'] . '">' . $value['name'] . '</a>';
-        $navHtml .= '</li>';
-      }
-    }
-    return $navHtml;
-  }
-
   public static function getFooterColor()
   {
-$footerHtml = Component::where('name', 'footer')->value('html');
+    $footerHtml = Component::where('name', 'footer')->value('html');
 
-$matches = [];
-preg_match('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', $footerHtml, $matches);
+    $matches = [];
+    preg_match('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', $footerHtml, $matches);
 
-return $matches[1];
+    return $matches[1];
+  }
 
+  public static function test()
+  {
+    $htmlCode = "<h1>Hello, <?php echo 'World'; ?></h1>";
 
-     
+    ob_start();
+    eval("?>" . $htmlCode);
+    $output = ob_get_clean();
+
+    return $output;
   }
 }

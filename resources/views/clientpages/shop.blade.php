@@ -1,17 +1,48 @@
 @extends('layouts.clientside-layout.app')
 @section('content')
-    <!-- Start Hero Section -->
-    {!! App\Helpers\SiteviewHelper::page('shop')->html !!}
-    <!-- End Hero Section -->
 
 
-    <div class="untree_co-section product-section before-footer-section mt-5">
-        <div class="container">
-            <div class="row">
-                {!! App\Helpers\SiteviewHelper::item() !!}
-            </div>
-        </div>
-    </div> 
+                @foreach($items as $item)
+                {{$item}}
+                @endforeach
+                <nav>
+                    <ul class="pagination">
+                        <!-- Previous Page Link -->
+                        @if ($items->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo;</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a href="{{ $items->previousPageUrl() }}" class="page-link" rel="prev">&laquo;</a>
+                            </li>
+                        @endif
+                
+                        <!-- Pagination Elements -->
+                        @foreach ($items as $page => $url)
+                            @if ($page == $items->currentPage())
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ $page }}</span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a href="{{ $url }}" class="page-link">{{ $page }}</a>
+                                </li>
+                            @endif
+                        @endforeach
+                
+                        <!-- Next Page Link -->
+                        @if ($items->hasMorePages())
+                            <li class="page-item">
+                                <a href="{{ $items->nextPageUrl() }}" class="page-link" rel="next">&raquo;</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <span class="page-link">&raquo;</span>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
 
    {{-- <!-- Start Hero Section -->
     <div class="hero">
@@ -72,27 +103,7 @@
                 <!-- End Column 1 --> --}}
 
 
-{{-- <!-- Pagination Links -->
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item  {{ $allitems->previousPageUrl() ? '' : 'disabled' }}">
-                                <a class="page-link previous-page" href="" tabindex="-1" aria-disabled="true">Previous</a>
-                            </li>
-                            @foreach ($allitems->getUrlRange(1, $allitems->lastPage()) as $page => $url)
-                                <li class="page-item {{ $page == $allitems->currentPage() ? 'active' : '' }}">
-                                    <a class="page-link page-numbers" href="">{{ $page }}</a>
-                                </li>
-                            @endforeach
-                            <li class="page-item {{ $allitems->nextPageUrl() ? '' : 'disabled' }}">
-                                <a class="page-link next-page" href="">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-            <!-- End Pagination Links --> --}}
+
 
 <!-- JavaScript -->
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

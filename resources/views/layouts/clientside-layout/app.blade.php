@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="en">
 @include('include.clientside.head')
-<body style="background-color: {{ App\Helpers\SiteviewHelper::page('site_bg')->css }}">
-
+<body>
 		<!-- Start Header/Navigation -->
 		@include('include.clientside.navbar')
 		<!-- End Header/Navigation -->
