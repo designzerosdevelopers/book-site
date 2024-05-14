@@ -4,10 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Component;
 use App\Models\Settings;
-use App\Models\Navbar;
-use App\Models\Footer;
 use App\Models\Item;
-use HTML5;
 
 
 class SiteviewHelper
