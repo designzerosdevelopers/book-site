@@ -335,7 +335,7 @@ class PagesSettingController extends Controller
         } else {
             return redirect()->back()->with('error', 'Component could not be updated!');
         }
-    }
+    
         if ($status == 1) {
             return redirect()->back()->with('status', 'Component updated successfully!');
         } else {
