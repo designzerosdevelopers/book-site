@@ -10,16 +10,10 @@ use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Home;
-use App\Models\Footer;
-use App\Models\Contact;
-use App\Models\About;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
@@ -29,7 +23,43 @@ class PagesSettingController extends Controller
     public function themeUpdate(Request $r)
     {
 
-        dd(\App\Helpers\SiteviewHelper::page('site_css')->css);
+        $css = \App\Helpers\SiteviewHelper::page('site_css')->css;
+
+        $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
+        $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
+        $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2'. $r->bg_color . '$4', $css);
+        $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
+        $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
+
+        Component::where('name','site_css')->update([
+            'css' => $css
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function editTheme()
+    {
+
+        $css = \App\Helpers\SiteviewHelper::page('site_css')->css;
+
+        $color=[];
+        // Retrieve the selected value after replacement
+        preg_match('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+        $color['hero'] = $matches[2];
+        preg_match('/(body\s*{\s*.*?background-color:\s*)([^;]+)(.*?})/s', $css, $matches);
+        $color['bg'] = isset($matches[2]) ? $matches[2] : null;
+        
+        preg_match('/(a\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
+        $color['url'] = isset($matches[2]) ? $matches[2] : null;
+        
+        preg_match('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+        $color['navbar'] = trim(str_replace('!important', '', $matches[2]));
+        preg_match('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+        $color['footer'] = $matches[2];
+
+        return view('adminpages.pages-settings.theme-settings', ['color'=>$color]);
+
     }
 
     public function dashboard()
@@ -56,25 +86,25 @@ class PagesSettingController extends Controller
             ->sum(DB::raw('items.price'));
 
         $totalSaleAmount = Purchase::join('items', 'purchases.item_id', '=', 'items.id')
-        ->sum('items.price');
+            ->sum('items.price');
 
-      
+
         $totalItemCount = Purchase::count('item_id');
 
         $last7days_item_count = DB::table('purchases')
-        ->join('items', 'purchases.item_id', '=', 'items.id')
-        ->whereBetween('purchases.created_at', [$last7DaysStartDate, $last7DaysEndDate])
-        ->count(); // Count the number of records returned by the query
+            ->join('items', 'purchases.item_id', '=', 'items.id')
+            ->whereBetween('purchases.created_at', [$last7DaysStartDate, $last7DaysEndDate])
+            ->count(); // Count the number of records returned by the query
 
-               
+
         $last30DaysSaleCount = DB::table('purchases')
-        ->join('items', 'purchases.item_id', '=', 'items.id')
-        ->whereBetween('purchases.created_at', [$last30DaysStartDate, $last30DaysEndDate])
-        ->count();
+            ->join('items', 'purchases.item_id', '=', 'items.id')
+            ->whereBetween('purchases.created_at', [$last30DaysStartDate, $last30DaysEndDate])
+            ->count();
 
         $users = DB::table('users')
-        ->where('role', 0)
-        ->get();
+            ->where('role', 0)
+            ->get();
 
 
 
@@ -87,13 +117,12 @@ class PagesSettingController extends Controller
 
             // items sold
             'total_item_sold' => $totalItemCount,
-            'last7days_items_sold'=>$last7days_item_count, 
-            'last30days_items_sold'=>$last30DaysSaleCount,
+            'last7days_items_sold' => $last7days_item_count,
+            'last30days_items_sold' => $last30DaysSaleCount,
 
             // registered users
-            'users'=>$users
+            'users' => $users
         ]);
-
     }
 
 
@@ -142,7 +171,7 @@ class PagesSettingController extends Controller
             $counter++;
         }
 
-    
+
         // Process the validated data and store it in the database
         $item = new Item();
         $item->name = $validatedData['name'];
@@ -272,12 +301,12 @@ class PagesSettingController extends Controller
             'html' => $r->html
         ]);
 
-    if ($status == 1) {
-        return redirect()->back()->with('status', 'Component updated successfully!');
-    } else {
-        return redirect()->back()->with('error', 'Component could not be updated!');
+        if ($status == 1) {
+            return redirect()->back()->with('status', 'Component updated successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Component could not be updated!');
+        }
     }
-}
 
 
     public function indexcategories(Request $request)
@@ -590,7 +619,7 @@ class PagesSettingController extends Controller
     {
         // get user id from auth
         $userid = Auth()->id();
-        
+
         // fetch from item table 
         $itemIds = [];
         $purchases = Purchase::where('user_id', $userid)->get();
