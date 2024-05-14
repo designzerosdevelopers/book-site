@@ -72,7 +72,8 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/footer-settings', function(){ return view('adminpages.pages-settings.footer-settings');})->name('edit.footer');
         Route::get('/navbar-settings', function(){ return view('adminpages.pages-settings.navbar-settings');})->name('edit.navbar');
         Route::get('/shop-settings', function(){ return view('adminpages.pages-settings.shop-settings');})->name('edit.shop');
-        Route::get('/theme-settings', function(){ return view('adminpages.pages-settings.theme-settings');})->name('edit.theme');
+        
+        Route::get('/theme-settings', [PagesSettingController::class, 'editTheme'])->name('edit.theme');
         Route::post('/theme-update',[PagesSettingController::class, 'themeUpdate'])->name('theme.update');
 
 
