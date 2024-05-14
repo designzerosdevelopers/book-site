@@ -24,8 +24,8 @@
         <script>
             tinymce.init({
                 selector: '#editor1',
-                width: '100%',
-                height: 400,
+                width: '100%', // Use percentage for responsiveness
+                height: 400, // Adjust height as needed
                 plugins: [
                     'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
                     'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
@@ -34,6 +34,12 @@
                 toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify |' +
                     'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
                     'forecolor backcolor emoticons',
+                // enable title field in the Image dialog
+                image_title: true,
+                // enable automatic uploads of images represented by blob or data URIs
+                automatic_uploads: true,
+                // add custom filepicker only to Image dialog
+                file_picker_types: 'image',
                 menu: {
                     favs: {
                         title: 'Menu',
@@ -44,8 +50,44 @@
                 content_css: [
                     'clientside/css/style.css',
                     "https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-                ]
+                ],
+                file_picker_callback: function(cb, value, meta) {
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/*');
+    
+                    input.onchange = function() {
+                        var file = this.files[0];
+    
+                        var formData = new FormData();
+                        formData.append('image', file);
+                      
+    
+                        $.ajax({
+                            url: '/updatepage', // Corrected endpoint URL
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                var imageUrl = response.url;
+                                cb(imageUrl, {
+                                    src: imageUrl, 
+                                    title: file.name
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('image could not be uploaded.')
+                            }
+                        });
+    
+                    };
+    
+                    input.click();
+                }
             });
         </script>
-
-    @stop
+        @stop
