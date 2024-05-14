@@ -1,48 +1,7 @@
 @extends('layouts.clientside-layout.app')
 @section('content')
 
-
-                @foreach($items as $item)
-                {{$item}}
-                @endforeach
-                <nav>
-                    <ul class="pagination">
-                        <!-- Previous Page Link -->
-                        @if ($items->onFirstPage())
-                            <li class="page-item disabled">
-                                <span class="page-link">&laquo;</span>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a href="{{ $items->previousPageUrl() }}" class="page-link" rel="prev">&laquo;</a>
-                            </li>
-                        @endif
-                
-                        <!-- Pagination Elements -->
-                        @foreach ($items as $page => $url)
-                            @if ($page == $items->currentPage())
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">{{ $page }}</span>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a href="{{ $url }}" class="page-link">{{ $page }}</a>
-                                </li>
-                            @endif
-                        @endforeach
-                
-                        <!-- Next Page Link -->
-                        @if ($items->hasMorePages())
-                            <li class="page-item">
-                                <a href="{{ $items->nextPageUrl() }}" class="page-link" rel="next">&raquo;</a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <span class="page-link">&raquo;</span>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
+{!!App\Helpers\SiteViewHelper::ClientSidePage('10','shop')!!}
 
    {{-- <!-- Start Hero Section -->
     <div class="hero">
