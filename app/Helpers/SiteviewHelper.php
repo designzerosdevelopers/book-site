@@ -12,8 +12,6 @@ use HTML5;
 
 class SiteviewHelper
 {
-
-
   public static function item($limit = '', $page = '')
   {
     if ($page === 'shop') {
@@ -70,8 +68,6 @@ class SiteviewHelper
       return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
     }
   }
-
-
 
   public static function getsettings($key)
   {
