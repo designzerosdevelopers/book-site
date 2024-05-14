@@ -60,21 +60,6 @@
                 'clientside/css/style.css',
                 "https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
             ],
-            setup: function(editor) {
-                editor.on('init', function() {
-                    // Get the image elements in the editor content
-                    var images = editor.dom.select('img');
-
-                    // Add event listeners to each image
-                    images.forEach(function(image) {
-                        // Add a 'change' event listener to the title attribute
-                        editor.dom.bind(image, 'change', function() {
-                            // Log the changes to the image title
-                            console.log('Image title changed to:', image.getAttribute('title'));
-                        });
-                    });
-                });
-            },
             file_picker_callback: function(cb, value, meta) {
                 var input = document.createElement('input');
                 input.setAttribute('type', 'file');
@@ -82,11 +67,10 @@
 
                 input.onchange = function() {
                     var file = this.files[0];
-                    console.log('Selected file:', file.name); // Log the selected file name
 
                     var formData = new FormData();
                     formData.append('image', file);
-                    console.log(formData.get('image'));
+                  
 
                     $.ajax({
                         url: '/updatepage', // Corrected endpoint URL
@@ -100,12 +84,12 @@
                         success: function(response) {
                             var imageUrl = response.url;
                             cb(imageUrl, {
-                                src: imageUrl, // Use the image URL as the source
-                                title: file.name // Use the filename as the title
+                                src: imageUrl, 
+                                title: file.name
                             });
                         },
                         error: function(xhr, status, error) {
-                            // Handle error
+                            console.log('image could not be uploaded.')
                         }
                     });
 
