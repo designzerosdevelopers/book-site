@@ -38,14 +38,12 @@ Route::middleware('check.database')->group(function () {
     require __DIR__ . '/auth.php';
 
 // clientside controller
-Route::get('/', [SiteViewController::class, 'index'])->name('index');
-Route::get('/product-details', [SiteViewController::class, 'productdetails'])->name('product.details');
-Route::get('/about', [SiteViewController::class, 'about'])->name('about');
-Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
-Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
+Route::get('/', function(){ return view('clientpages.index');})->name('index');
+Route::get('/about', function(){ return view('clientpages.about');})->name('about');
+Route::get('/contact', function(){ return view('clientpages.contact');})->name('contact');
+Route::get('/shop', function(){ return view('clientpages.shop');})->name('shop');
 Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
-Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
-Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
+Route::get('/cart/{id}', [SiteViewController::class, 'cart'])->name('cart');
 Route::get('/remove-from-cart/{itemId}', [SiteViewController::class, 'removeFromCart'])->name('remove_from_cart');
 Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
@@ -115,7 +113,8 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/purchases', [PagesSettingController::class, 'purchases'])->name('purchases.index');
     });
 
-    // Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
+     
 });
 
+Route::get('/{product}', [SiteViewController::class, 'productDetail'])->name('product.detail');
 
