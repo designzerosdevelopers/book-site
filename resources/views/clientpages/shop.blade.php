@@ -3,6 +3,8 @@
 
 {!!App\Helpers\SiteViewHelper::ClientSidePage('10','shop')!!}
 
+@stop
+
    {{-- <!-- Start Hero Section -->
     <div class="hero">
         <div class="container">
@@ -38,9 +40,7 @@
             </div>
         </div>
     </div> --}}
-
-@stop
-
+    
 {{-- @foreach ($allitems as $item)
                     <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                         <div class="product-item">

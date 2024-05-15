@@ -60,9 +60,12 @@ class SiteviewHelper
     if ($page == 'home') {
       $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('home')->html);
       return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
-    } else {
+    } elseif ($page == 'shop') {
       $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('shop')->html);
       return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
+    } elseif ($page == 'productdetail') {
+
+      
     }
   }
 
@@ -72,15 +75,6 @@ class SiteviewHelper
     return $settings->value;
   }
 
-  public static function getFooterColor()
-  {
-    $footerHtml = Component::where('name', 'footer')->value('html');
-
-    $matches = [];
-    preg_match('/<footer[^>]*style="[^"]*background-color\s*:\s*([^;"]+)/i', $footerHtml, $matches);
-
-    return $matches[1];
-  }
 
   public static function test()
   {
