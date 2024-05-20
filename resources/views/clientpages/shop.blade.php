@@ -1,7 +1,7 @@
 @extends('layouts.clientside-layout.app')
 @section('content')
 
-{!!App\Helpers\SiteViewHelper::ClientSidePage('10','shop')!!}
+{!!App\Helpers\SiteViewHelper::ClientSidePage('shop', 10)!!}
 
 @stop
 
