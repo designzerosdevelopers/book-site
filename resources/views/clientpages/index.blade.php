@@ -2,7 +2,7 @@
 
 @section('content')
 
-{!! App\Helpers\SiteviewHelper::ClientSidePage(3,'home') !!}
+{!! App\Helpers\SiteviewHelper::ClientSidePage('home', 3) !!}
 
 
    

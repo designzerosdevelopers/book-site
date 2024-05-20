@@ -9,23 +9,16 @@ use App\Models\Contact;
 use App\Models\Settings;
 use App\Models\Item;
 use App\Models\User;
-use App\Models\Categories;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use App\Models\Purchase;
-use App\Models\Component;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ExampleMail;
 use App\Mail\PostPurchaseMail;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
-use Sabberworm\CSS\CSSList\Document;
-use Sabberworm\CSS\Parser;
 use Illuminate\Support\Facades\Crypt;
 
 
@@ -51,7 +44,7 @@ class SiteViewController extends Controller
 
         $dom->getElementById("poster")->setAttribute('src', asset('book_images/' . $item->image));
 
-        $dom->getElementById("cart")->setAttribute('href', route('cart', ['id' => encrypt($item->id)]));
+        $dom->getElementById("cart")->setAttribute('href', route('add.cart', ['id' => encrypt($item->id)]));
 
         return view('clientpages.productdetail', ['product' => $dom->saveHTML()]);
     }
@@ -71,24 +64,12 @@ class SiteViewController extends Controller
     }
 
 
-    public function cart(Request $r, $encryptedId)
+    public function addCart($encryptedId)
     {
         $id = Crypt::decrypt($encryptedId);
-        // Check if the 'id' parameter is present in the request
-        if (!$id) {
-            // Retrieve existing cart data from the cookie
-            $cart = json_decode($r->cookie('cart'), true) ?? [];
 
-            // Return the view with cart data
-            return view('clientpages.cart', [
-                'cartItems' => $cart,
-            ]);
-        }
+        $cart = json_decode(request()->cookie('cart'), true) ?? [];
 
-        // Retrieve existing cart data from the cookie
-        $cart = json_decode($r->cookie('cart'), true) ?? [];
-
-        // Find the item
         $item = Item::find($id);
 
         if (!isset($cart[$item->id])) {
@@ -97,60 +78,52 @@ class SiteViewController extends Controller
                 'item_image' => $item->image,
                 'item_file' => $item->file,
                 'item_name' => $item->name,
-                'item_price' => $item->price
+                'item_price' => (float)$item->price
             ];
         }
 
-        // Update the cart data in the cookie
-        $response = response()->view('clientpages.cart', [
-            'cartItems' => $cart,
-        ])->cookie('cart', json_encode($cart), 60);
+        $response = Redirect::route('cart')
+        ->withCookie(cookie('cart', json_encode($cart), 60));
 
-        return $response;
+         return $response;
     }
 
 
     public function removeFromCart($itemId)
     {
-        // Retrieve the current cart items from the cookie
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
 
-        // Remove the item with the given itemId from the cart
         unset($cartItems[$itemId]);
 
-        // Encode the modified cart items and update the cookie
         $cookie = cookie('cart', json_encode($cartItems), 60 * 24 * 30);
 
-        // Redirect back to the cart page
         return redirect()->route('cart')->withCookie($cookie);
     }
 
 
     public function checkout(request $request)
     {
-        // // Retrieve the subtotal from the form data
-        // $subtotal = $request->input('subtotal');
+        // $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
+        // foreach ($cartItems as $value) {
+        //     $subtotal = $value['item_price'];
+        // }
 
-        // Retrieve the current cart items from the cookie
-        $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
-        foreach ($cartItems as $value) {
-            $subtotal = $value['item_price'];
-        }
+        // $stripeIds = [1, 2];
+        // $stripeSettings = Settings::find($stripeIds)->pluck('value');
+        // $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
 
-        $stripeIds = [1, 2];
-        $stripeSettings = Settings::find($stripeIds)->pluck('value');
-        $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
+        // $paypalIds = [3, 4];
+        // $paypalSettings = Settings::find($paypalIds)->pluck('value');
+        // $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
 
-        $paypalIds = [3, 4];
-        $paypalSettings = Settings::find($paypalIds)->pluck('value');
-        $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
+        // return view('clientpages.checkout', [
+        //     'cartItems' => $cartItems,
+        //     'subtotal' => $subtotal,
+        //     'paypal' => $paypal,
+        //     'stripe' => $stripe
+        // ]);
 
-        return view('clientpages.checkout', [
-            'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'paypal' => $paypal,
-            'stripe' => $stripe
-        ]);
+        return view('clientpages.checkout');
     }
 
 

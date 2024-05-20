@@ -9,7 +9,7 @@ use App\Models\Item;
 
 class SiteviewHelper
 {
-  public static function item($limit = '', $page = '')
+  public static function item($page = '', $limit = '')
   {
     if ($page === 'shop') {
       if ($limit && $limit > 0) {
@@ -55,17 +55,73 @@ class SiteviewHelper
     return Component::where('name', $page)->first();
   }
 
-  public static function clientSidePage($limit = '', $page = '')
+  public static function clientSidePage($page = '', $limit = '')
   {
     if ($page == 'home') {
       $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('home')->html);
-      return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
+      return $itemDesign[0] . self::item($page, $limit) . $itemDesign[2];
     } elseif ($page == 'shop') {
       $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('shop')->html);
-      return $itemDesign[0] . self::item($limit, $page) . $itemDesign[2];
-    } elseif ($page == 'productdetail') {
+      return $itemDesign[0] . self::item($page, $limit) . $itemDesign[2];
+    } elseif ($page == 'cart') {
+      return self::getCartList();
+    }else{
+     return  \App\Helpers\SiteviewHelper::page($page)->html;
+    }
+  }
 
-      
+
+  public static function getCartList()
+  {
+    $items = json_decode(request()->cookie('cart'), true) ?? [];
+
+
+    if (!empty($items)) {
+      $dom = new \DOMDocument();
+      $dom->loadHTML(\App\Helpers\SiteviewHelper::page('cart')->html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+      $totalprice = (float)00.00;
+      foreach ($items as $item) {
+        $totalprice += (float)$item['item_price'];
+      }
+
+      $dom->getElementById("subtotal")->nodeValue = "$$totalprice";
+      $dom->getElementById("totalprice")->nodeValue = "$$totalprice";
+      $carttotal = $dom->saveHTML();
+
+      $cart = explode('<!-- cartempty -->', $carttotal);
+      $cart = explode('<!-- cartlist -->', $cart[0] . $cart[2]);
+
+      $dom = new \DOMDocument();
+      $dom->loadHTML($cart[1], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+      $xpath = new \DOMXPath($dom);
+      $dynamicItem = '';
+      foreach ($items as $item) {
+
+        $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-name')]";
+        $xpath->query($title)->item(0)->nodeValue = $item['item_name'];
+
+        $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-name')]";
+        $xpath->query($title)->item(0)->nodeValue = $item['item_name'];
+
+        $dom->getElementById("price")->nodeValue = '$' . $item['item_price'];
+
+        $dom->getElementById("thumbnail")->setAttribute('src', asset('book_images/' . $item['item_image']));
+
+        $anchorElements = $dom->getElementsByTagName('a');
+        foreach ($anchorElements as $anchorElement) {
+          $anchorElement->setAttribute('href', route('remove.from.cart', ['id' => $item['item_id']]));
+        }
+
+        $dynamicItem .= $dom->saveHTML();
+      }
+
+      return $cart[0] . $dynamicItem . $cart[2];
+
+    } else {
+
+      $cartempty = explode('<!-- cartlist -->', \App\Helpers\SiteviewHelper::page('cart')->html);
+      return $cartempty[0] . $cartempty[2];
+
     }
   }
 
