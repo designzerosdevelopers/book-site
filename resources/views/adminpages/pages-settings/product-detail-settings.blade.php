@@ -7,10 +7,10 @@
         <div class="card-body">
             <form action="{{ route('update.page') }}" method="post">
                 @csrf
-                <input type="hidden" name="comp_name" value="product">
+                <input type="hidden" name="comp_name" value="productdetail">
                 <textarea name="html" rows="10" cols="50" id="editor1">
-                    @if (!empty(App\Helpers\SiteviewHelper::page('product')))
-                        {!! App\Helpers\SiteviewHelper::page('product')->html !!}
+                    @if (!empty(App\Helpers\SiteviewHelper::page('productdetail')))
+                        {!! App\Helpers\SiteviewHelper::page('productdetail')->html !!}
                     @else
                         No Data
                     @endif

@@ -16,7 +16,7 @@
     
     <title>Digital store</title>
     <style>
-      {!! App\Helpers\SiteviewHelper::page('site_css')->css !!}
+      {!! App\Helpers\SiteviewHelper::page('site')->css !!}
 .cart-item {
   position: relative;
 }

@@ -22,17 +22,31 @@ class PagesSettingController extends Controller
 {
     public function themeUpdate(Request $r)
     {
+        
+        $css = \App\Helpers\SiteviewHelper::page('site')->css;
+        
+        if ($r->page == 'home') {
 
-        $css = \App\Helpers\SiteviewHelper::page('site_css')->css;
+           $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->title_color . '$3', $css);
+           $css = preg_replace('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->title_size . '$3', $css);
+           $css = preg_replace('/(\.product-price\s*{[^}]*?color:\s*)[^;]+(;[^}]*})/si', '$1' . $r->price_color . '$2', $css);
+           $css = preg_replace('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->price_size . '$3', $css);
+           $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->image_height . '$3', $css);
+           $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->image_width . '$3', $css);
+           Component::where('name', 'home')->update([
+            'data' => ['display_product'=>$r->display_product]
+        ]);
+        } else {
+            $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
+            $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
+            $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
+            $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
+            $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
+        }
 
-        $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
-        $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
-        $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2'. $r->bg_color . '$4', $css);
-        $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
-        $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
-
-        Component::where('name','site_css')->update([
-            'css' => $css
+       
+        Component::where('name', 'site')->update([
+            'css' => $css,
         ]);
 
         return redirect()->back();
@@ -41,25 +55,23 @@ class PagesSettingController extends Controller
     public function editTheme()
     {
 
-        $css = \App\Helpers\SiteviewHelper::page('site_css')->css;
+        $css = \App\Helpers\SiteviewHelper::page('site')->css;
 
-        $color=[];
-        // Retrieve the selected value after replacement
+        $color = [];
         preg_match('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
         $color['hero'] = $matches[2];
         preg_match('/(body\s*{\s*.*?background-color:\s*)([^;]+)(.*?})/s', $css, $matches);
         $color['bg'] = isset($matches[2]) ? $matches[2] : null;
-        
+
         preg_match('/(a\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
         $color['url'] = isset($matches[2]) ? $matches[2] : null;
-        
+
         preg_match('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
         $color['navbar'] = trim(str_replace('!important', '', $matches[2]));
         preg_match('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
         $color['footer'] = $matches[2];
 
-        return view('adminpages.pages-settings.theme-settings', ['color'=>$color]);
-
+        return view('adminpages.pages-settings.theme-settings', ['color' => $color]);
     }
 
     public function dashboard()
@@ -302,30 +314,33 @@ class PagesSettingController extends Controller
     {
         if ($r->isXmlHttpRequest()) {
             // Handle AJAX request
-        
+
             // Retrieve the uploaded image
             $image = $r->file('image');
-        
+
             // Get the original name of the uploaded image
             $imageName = $image->getClientOriginalName();
-        
+
             // Construct the path for the uploaded image
             $imagePath = public_path('images/' . $imageName);
-        
+
             // Check if the same image already exists
             if (file_exists($imagePath)) {
                 // If the image exists, delete it
                 unlink($imagePath);
             }
 
+
             $image->move(public_path('images'), $imageName);
-        
+
             $imageUrl = asset('images/' . $imageName);
 
             return response()->json(['url' => $imageUrl]);
         }
-        
-        
+
+
+
+
         $component = Component::where('name', $r->comp_name);
         $status = $component->update([
             'html' => $r->html
@@ -336,7 +351,7 @@ class PagesSettingController extends Controller
         } else {
             return redirect()->back()->with('error', 'Component could not be updated!');
         }
-    
+
         if ($status == 1) {
             return redirect()->back()->with('status', 'Component updated successfully!');
         } else {
@@ -621,7 +636,7 @@ class PagesSettingController extends Controller
             return 'No file uploaded.';
         }
     }
-   
+
 
 
     public function deleteUploads(Request $request)

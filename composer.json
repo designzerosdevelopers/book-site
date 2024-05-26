@@ -27,7 +27,8 @@
     },
     "autoload": {
         "files": [
-            "app/Helpers/SiteviewHelper.php"
+            "app/Helpers/SiteviewHelper.php",
+            "app/Helpers/DomHelper.php"
         ],
         "psr-4": {
             "App\\": "app/",

@@ -1,11 +1,9 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
-	@if (!empty(App\Helpers\SiteviewHelper::page('about')))
-	{!! App\Helpers\SiteviewHelper::page('about')->html !!}
-	@else
-		No  Data
-	@endif
+	{!! App\Helpers\SiteviewHelper::page('about')->allhtml !!}
+
+	{!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 @stop
 {{-- @extends('layouts.clientside-layout.app')
 @section('content')

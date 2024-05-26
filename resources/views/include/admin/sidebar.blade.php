@@ -34,6 +34,9 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.about') }}">About Us</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.contact') }}">Contact</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.shop') }}">Shop</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.product.detail') }}">Product detail</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.cart') }}">Cart</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.checkout') }}">Checkout</a></li>
           </ul>
         </div>
       </li>
