@@ -30,17 +30,17 @@
                     <div class="form-group row">
                         <label for="title_color" class="col-sm-2 col-form-label">Title Color</label>
                         <div class="col-sm-2">
-                            <input type="color" id="title_color" class="form-control" name="title_color" value="">
+                            <input type="color" id="title_color" class="form" name="title_color" value="">
                         </div>
         
                         <label for="price_color" class="col-sm-2 col-form-label">Price Color</label>
                         <div class="col-sm-2">
-                            <input type="color" id="price_color" class="form-control" name="price_color" value="">
+                            <input type="color" id="price_color" class="form" name="price_color" value="">
                         </div>
 
                         <label for="price_color" class="col-sm-2 col-form-label">background Color:</label>
                         <div class="col-sm-2">
-                            <input type="color" id="price_color" class="form-control" name="price_color" value="">
+                            <input type="color" id="price_color" class="form" name="price_color" value="">
                         </div>
                     </div>
 
