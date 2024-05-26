@@ -38,12 +38,13 @@ Route::middleware('check.database')->group(function () {
 Route::get('/', function(){ return view('clientpages.index');})->name('index');
 Route::get('/about', function(){ return view('clientpages.about');})->name('about');
 Route::get('/contact', function(){ return view('clientpages.contact');})->name('contact');
-Route::get('/shop', function(){ return view('clientpages.shop');})->name('shop');
+Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
 Route::get('/cart', function(){ return view('clientpages.cart');})->name('cart');
 Route::get('/add-product/{id}', [SiteViewController::class, 'addCart'])->name('add.cart');
 Route::get('/remove-product/{id}', [SiteViewController::class, 'removeFromCart'])->name('remove.from.cart');
 Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
+Route::get('/books', [SiteViewController::class, 'books'])->name('books');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
 
