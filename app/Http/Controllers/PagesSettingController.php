@@ -294,6 +294,10 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
+    public function upload_image(Request $request){
+
+    }
+
     public function updatePage(Request $r)
     {
         if ($r->isXmlHttpRequest()) {
@@ -313,7 +317,6 @@ class PagesSettingController extends Controller
                 // If the image exists, delete it
                 unlink($imagePath);
             }
-        
 
             $image->move(public_path('images'), $imageName);
         
@@ -323,19 +326,17 @@ class PagesSettingController extends Controller
         }
         
         
-        
-        
-            $component = Component::where('name', $r->comp_name);
-            $status = $component->update([
-                'html' => $r->html
-            ]);
+        $component = Component::where('name', $r->comp_name);
+        $status = $component->update([
+            'html' => $r->html
+        ]);
 
         if ($status == 1) {
             return redirect()->back()->with('status', 'Component updated successfully!');
         } else {
             return redirect()->back()->with('error', 'Component could not be updated!');
         }
-    }
+    
         if ($status == 1) {
             return redirect()->back()->with('status', 'Component updated successfully!');
         } else {
