@@ -2,8 +2,8 @@
 @extends('layouts.admin-layout.app')
 @section('content')
     <div class="content-wrapper">
-        <div class="card">
-            <div class="card-body">
+        <div class="card p-1">
+            <div class="">
                 <form action="{{ route('update.page') }}" method="post">
                     @csrf
                     <input type="hidden" name="comp_name" value="checkout">
@@ -26,8 +26,9 @@
     <script>
         tinymce.init({
             selector: '#editor1',
-            width: '100%', // Use percentage for responsiveness
-            height: 400, // Adjust height as needed
+            branding: false,
+            width: '100%',
+            height: 400,
             plugins: [
                 'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
                 'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',

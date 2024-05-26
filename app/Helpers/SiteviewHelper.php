@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Item;
-
+use App\Helpers\HtmlEasyDom;
 
 class SiteviewHelper
 {
@@ -25,9 +25,20 @@ class SiteviewHelper
 
     $part = explode('<!-- Column 1 -->', $itemDesign->html);
 
+//   // Example usage
+//   $html = '<h2 id="product-title" style="text-align: center;"> heko <span style="color: rgb(22, 145, 121);">Book title</span></h2>
+//   <h2 class="product-description" style="text-align: center;">heko <span style="color: rgb(22, 145, 121);">the nice Book</span></h2>';
+
+//         $dom = HtmlEasyDom::loadHTML($html);
+//         $result = $dom->getElementById('product-title');
+//         $result = $dom->replaceElementContentByClass('product-description','after the class');
+
+// dd($result);
+
     $dom = new \DOMDocument();
     $dom->loadHTML($part[1], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     $xpath = new \DOMXPath($dom);
+ 
     $dynamicItem = '';
     foreach ($items as $item) {
       $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-title')]";
@@ -53,21 +64,6 @@ class SiteviewHelper
   {
 
     return Component::where('name', $page)->first();
-  }
-
-  public static function clientSidePage($page = '', $limit = '')
-  {
-    if ($page == 'home') {
-      $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('home')->html);
-      return $itemDesign[0] . self::item($page, $limit) . $itemDesign[2];
-    } elseif ($page == 'shop') {
-      $itemDesign = explode('<!-- Column 1 -->', \App\Helpers\SiteviewHelper::page('shop')->html);
-      return $itemDesign[0] . self::item($page, $limit) . $itemDesign[2];
-    } elseif ($page == 'cart') {
-      return self::getCartList();
-    }else{
-     return  \App\Helpers\SiteviewHelper::page($page)->html;
-    }
   }
 
 

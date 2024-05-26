@@ -2,10 +2,30 @@
 
 @section('content')
 
-{!! App\Helpers\SiteviewHelper::ClientSidePage('home', 3) !!}
+{!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
 
 
-   
+<!-- Start Product Section -->
+<div class="product-section">
+<div class="container">
+<div class="row"><!-- Start Column 1 -->
+<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
+<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+<p><a class="btn" href="shop.html">Explore</a></p>
+</div>
+<!-- End Column 1 --> <!-- Column 1 -->
+<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"><a class="product-item" href="cart.html"> <!-- img --><img class="img-fluid product-thumbnail" src="book_images/alchemist.jpg" width="210" height="317"><!-- img --></a>
+<h3 class="product-title" style="text-align: center;">Book title</h3>
+<a class="product-item" href="cart.html"><strong class="product-price">$00.00</strong> <span class="icon-cross"> <img class="img-fluid" src="images/cross.svg"> </span> </a></div>
+<!-- Column 1 --></div>
+</div>
+</div>
+<!-- End Product Section -->
+
+
+{!! App\Helpers\SiteviewHelper::page('home')->lowerhtml !!}
+{!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 @stop
 
 

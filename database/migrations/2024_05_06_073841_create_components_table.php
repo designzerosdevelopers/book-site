@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('components', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->TEXT('html');
+            $table->TEXT('allhtml');
+            $table->TEXT('herohtml');
+            $table->TEXT('middlehtml');
+            $table->TEXT('lowerhtml');
             $table->TEXT('css');
-            $table->TEXT('javascript');
+            $table->TEXT('data');
             $table->timestamps();
         });
     }

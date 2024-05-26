@@ -14,8 +14,7 @@
         "masterminds/html5": "^2.9",
         "sabberworm/php-css-parser": "^8.5",
         "srmklive/paypal": "^3.0",
-        "stripe/stripe-php": "^13.11",
-        "sunra/php-simple-html-dom-parser": "^1.5"
+        "stripe/stripe-php": "^13.11"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -28,7 +27,8 @@
     },
     "autoload": {
         "files": [
-            "app/Helpers/SiteviewHelper.php"
+            "app/Helpers/SiteviewHelper.php",
+            "app/Helpers/DomHelper.php"
         ],
         "psr-4": {
             "App\\": "app/",

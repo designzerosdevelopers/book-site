@@ -11,6 +11,6 @@ class Settings extends Model
     protected $fillable = [
         'key',
         'value',
-        'display_name'
+        'display_name',
     ];
 }
