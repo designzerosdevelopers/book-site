@@ -7,6 +7,7 @@ use App\Models\Home;
 use App\Models\About;
 use App\Models\Contact;
 use App\Models\Settings;
+use App\Models\Categories;
 use App\Models\Item;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
@@ -34,13 +35,13 @@ class SiteViewController extends Controller
         $xpath = new \DOMXPath($dom);
 
         $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-title')]";
-        $xpath->query($title)->item(0)->nodeValue =  $item->name;
+        $xpath->query($title)->item(0)->nodeValue = $item->name;
 
         $price = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-price')]";
         $xpath->query($price)->item(0)->nodeValue = '$' . $item->price;
 
         $price = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-description')]";
-        $xpath->query($price)->item(0)->nodeValue =  $item->description;
+        $xpath->query($price)->item(0)->nodeValue = $item->description;
 
         $dom->getElementById("poster")->setAttribute('src', asset('book_images/' . $item->image));
 
@@ -78,14 +79,14 @@ class SiteViewController extends Controller
                 'item_image' => $item->image,
                 'item_file' => $item->file,
                 'item_name' => $item->name,
-                'item_price' => (float)$item->price
+                'item_price' => (float) $item->price
             ];
         }
 
         $response = Redirect::route('cart')
-        ->withCookie(cookie('cart', json_encode($cart), 60));
+            ->withCookie(cookie('cart', json_encode($cart), 60));
 
-         return $response;
+        return $response;
     }
 
 
@@ -180,7 +181,7 @@ class SiteViewController extends Controller
 
 
             if ($user) {
-                $customer_name =  ucwords($user->name . ' ' . $user->last_name);
+                $customer_name = ucwords($user->name . ' ' . $user->last_name);
                 // if user exists get its id
                 $userid = $user->id;
 
@@ -240,13 +241,13 @@ class SiteViewController extends Controller
                 }
 
                 $user = User::where('email', $email)->first();
-                $customer_name =  ucwords($user->name . ' ' . $user->last_name);
+                $customer_name = ucwords($user->name . ' ' . $user->last_name);
 
                 // Remove all data from the session
                 Session::flush();
 
                 try {
-                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email,));
+                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, ));
 
                     Session::flash('email_sent');
                 } catch (\Exception $e) {
@@ -263,4 +264,203 @@ class SiteViewController extends Controller
             return redirect()->route('purchases.index');
         }
     }
+
+    public function shop(Request $request)
+    {
+        $categories = Categories::whereHas('items')->pluck('category_name')->toArray();
+        array_unshift($categories, 'All');
+
+        return view('clientpages.shop', ['categories' => $categories]);
+
+    }
+
+
+    public function books(Request $request)
+    {
+        if ($request->ajax()) {
+            if ($request->has('category')) {
+                $category = $request->input('category');
+                if ($category == 'All') {
+                    $allItems = Item::paginate(1);
+                } else {
+                    $categoryId = Categories::where('category_name', $category)->pluck('id')->first();
+                    $allItems = Item::where('category', $categoryId)->paginate(1);
+                }
+
+
+                $response = '';
+                foreach ($allItems as $item) {
+                    $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
+                    $response .= '<div class="product-item">';
+                    $response .= '<a style="text-decoration: none;" href="#">';
+                    $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+                    $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
+                    $response .= '<div>';
+                    $response .= '<strong class="product-price">$' . number_format($item->price, 2) . '</strong>';
+                    $response .= '</div>';
+                    $response .= '</a>';
+                    $response .= '<a href="' . route('cart', ['id' => $item->id]) . '">';
+                    $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
+                    $response .= '<p style="margin: 0;">Add to Cart</p>';
+                    $response .= '</button>';
+                    $response .= '</a>';
+                    $response .= '</div>';
+                    $response .= '</div>';
+                }
+
+                $response .= '<div class="row">';
+                $response .= '<div class="col-md-12 text-center">';
+                $response .= '<nav aria-label="Page navigation example">';
+                $response .= '<ul class="pagination justify-content-center">';
+
+                if ($allItems->onFirstPage()) {
+                    $response .= '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>';
+                } else {
+                    $previousUrl = $allItems->previousPageUrl() . '&category=' . urlencode($category);
+                    $response .= '<li class="page-item"><a class="page-link" href="' . $previousUrl . '" tabindex="-1" aria-disabled="true">Previous</a></li>';
+                }
+
+                foreach ($allItems->getUrlRange(1, $allItems->lastPage()) as $pageNumber => $url) {
+                    $url = $url . '&category=' . urlencode($category);
+                    $response .= '<li class="page-item ' . ($pageNumber == $allItems->currentPage() ? 'active' : '') . '">';
+                    $response .= '<a class="page-link" href="' . $url . '">' . $pageNumber . '</a>';
+                    $response .= '</li>';
+                }
+
+                if ($allItems->hasMorePages()) {
+                    $nextUrl = $allItems->nextPageUrl() . '&category=' . urlencode($category);
+                    $response .= '<li class="page-item"><a class="page-link" href="' . $nextUrl . '">Next</a></li>';
+                } else {
+                    $response .= '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+                }
+
+                $response .= '</ul>';
+                $response .= '</nav>';
+                $response .= '</div>';
+                $response .= '</div>';
+
+                return $response;
+
+            }
+        }
+
+
+
+
+        // if ($request->ajax()) {
+        //     if ($request->ajax()) {
+        //         if ($request->has('page')) {
+        //             return 'reached';
+        //             $page = $request->query('page'); // Extract the page number
+        //             $category = $request->query('category'); // Extract the category
+        //             return $category;
+
+        //             $allItems = Item::paginate(1, ['*'], 'page', $page);
+        //             $response = '';
+
+        //             foreach ($allItems as $item) {
+        //                 $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
+        //                 $response .= '<div class="product-item">';
+        //                 $response .= '<a style="text-decoration: none;" href="#">';
+        //                 $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+        //                 $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
+        //                 $response .= '<div>';
+        //                 $response .= '<strong class="product-price">$' . number_format($item->price, 2) . '</strong>';
+        //                 $response .= '</div>';
+        //                 $response .= '</a>';
+        //                 $response .= '<a href="' . route('cart', ['id' => $item->id]) . '">';
+        //                 $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
+        //                 $response .= '<p style="margin: 0;">Add to Cart</p>';
+        //                 $response .= '</button>';
+        //                 $response .= '</a>';
+        //                 $response .= '</div>';
+        //                 $response .= '</div>';
+        //             }
+
+        //             $response .= '<div class="row">';
+        //             $response .= '<div class="col-md-12 text-center">';
+        //             $response .= '<nav aria-label="Page navigation example">';
+        //             $response .= '<ul class="pagination justify-content-center">';
+
+        //             if ($allItems->onFirstPage()) {
+        //                 $response .= '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>';
+        //             } else {
+        //                 $response .= '<li class="page-item"><a class="page-link" href="' . $allItems->previousPageUrl() . '" tabindex="-1" aria-disabled="true">Previous</a></li>';
+        //             }
+
+        //             foreach ($allItems->getUrlRange(1, $allItems->lastPage()) as $pageNumber => $url) {
+        //                 $response .= '<li class="page-item ' . ($pageNumber == $allItems->currentPage() ? 'active' : '') . '">';
+        //                 $response .= '<a class="page-link" href="' . $url . '">' . $pageNumber . '</a>';
+        //                 $response .= '</li>';
+        //             }
+
+        //             if ($allItems->hasMorePages()) {
+        //                 $response .= '<li class="page-item"><a class="page-link" href="' . $allItems->nextPageUrl() . '">Next</a></li>';
+        //             } else {
+        //                 $response .= '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+        //             }
+
+        //             $response .= '</ul>';
+        //             $response .= '</nav>';
+        //             $response .= '</div>';
+        //             $response .= '</div>';
+
+        //             return $response;
+        //         }
+        //     }
+
+
+        //     if ($request->has('all')) {
+        //         return 'all';
+        //         $allItems = Item::paginate(1);
+        //         $response = '';
+
+        //         foreach ($allItems as $item) {
+        //             $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
+        //             $response .= '<div class="product-item">';
+        //             $response .= '<a style="text-decoration: none;" href="">';
+        //             $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+        //             $response .= '<h3 class="product-title">' . $item->name . '</h3>';
+        //             $response .= '<div>';
+        //             $response .= '<strong class="product-price">$' . $item->price . '</strong>';
+        //             $response .= '</div>';
+        //             $response .= '</a>';
+        //             $response .= '<a href="' . route('cart', ['id' => $item->id]) . '">';
+        //             $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
+        //             $response .= '<p style="margin: 0;">Add to Cart</p>';
+        //             $response .= '</button>';
+        //             $response .= '</a>';
+        //             $response .= '</div>';
+        //             $response .= '</div>';
+        //         }
+
+        //         $response .= '<div class="row">';
+        //         $response .= '<div class="col-md-12 text-center">';
+        //         $response .= '<nav aria-label="Page navigation example">';
+        //         $response .= '<ul class="pagination justify-content-center">';
+        //         $response .= '<li class="page-item ' . ($allItems->previousPageUrl() ? '' : 'disabled') . '">';
+        //         $response .= '<a class="page-link" href="' . $allItems->previousPageUrl() . '" tabindex="-1" aria-disabled="true">Previous</a>';
+        //         $response .= '</li>';
+
+        //         foreach ($allItems->getUrlRange(1, $allItems->lastPage()) as $page => $url) {
+        //             $response .= '<li class="page-item ' . ($page == $allItems->currentPage() ? 'active' : '') . '">';
+        //             $response .= '<a class="page-link" href="' . $url . '">' . $page . '</a>';
+        //             $response .= '</li>';
+        //         }
+
+        //         $response .= '<li class="page-item ' . ($allItems->nextPageUrl() ? '' : 'disabled') . '">';
+        //         $response .= '<a class="page-link" href="' . $allItems->nextPageUrl() . '">Next</a>';
+        //         $response .= '</li>';
+        //         $response .= '</ul>';
+        //         $response .= '</nav>';
+        //         $response .= '</div>';
+        //         $response .= '</div>';
+
+        //         return $response;
+        //     }
+        // }
+
+
+    }
+
 }

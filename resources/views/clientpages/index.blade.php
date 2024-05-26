@@ -2,30 +2,41 @@
 
 @section('content')
 
-{!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
+    {!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
 
 
-<!-- Start Product Section -->
-<div class="product-section">
-<div class="container">
-<div class="row"><!-- Start Column 1 -->
-<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-<p><a class="btn" href="shop.html">Explore</a></p>
-</div>
-<!-- End Column 1 --> <!-- Column 1 -->
-<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"><a class="product-item" href="cart.html"> <!-- img --><img class="img-fluid product-thumbnail" src="book_images/alchemist.jpg" width="210" height="317"><!-- img --></a>
-<h3 class="product-title" style="text-align: center;">Book title</h3>
-<a class="product-item" href="cart.html"><strong class="product-price">$00.00</strong> <span class="icon-cross"> <img class="img-fluid" src="images/cross.svg"> </span> </a></div>
-<!-- Column 1 --></div>
-</div>
-</div>
-<!-- End Product Section -->
+    <!-- Start Product Section -->
+    <div class="product-section">
+        <div class="container">
+            <div class="row"><!-- Start Column 1 -->
+                <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                    <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
+                    <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
+                        vulputate velit imperdiet dolor tempor tristique.</p>
+                    <p><a class="btn" href="shop.html">Explore</a></p>
+                </div>
+                <!-- End Column 1 -->
+                @foreach (App\Helpers\SiteviewHelper::item() as $item)
+             
+                    <!-- Column 1 -->
+                    <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"><a class="product-item" href="cart.html">
+                            <!-- img --><img class="img-fluid product-thumbnail" src="book_images/{{ $item->image }}"
+                                width="210" height="317"><!-- img --></a>
+                        <h3 class="product-title" style="text-align: center;">{{ $item->name }}</h3>
+                        <a class="product-item" href="cart.html"><strong class="product-price">{{ $item->price }}</strong> <span
+                                class="icon-cross"> <img class="img-fluid" src="images/cross.svg"> </span> </a>
+                    </div>
+                @endforeach
+                <!-- Column 1 -->
+            </div>
+        </div>
+    </div>
+    <!-- End Product Section -->
 
 
-{!! App\Helpers\SiteviewHelper::page('home')->lowerhtml !!}
-{!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
+
+    {!! App\Helpers\SiteviewHelper::page('home')->lowerhtml !!}
+    {!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 @stop
 
 
@@ -60,7 +71,7 @@
 
 
 
-  <!-- Start Hero Section -->
+<!-- Start Hero Section -->
 {{-- <div class="hero">
     <div class="container">
         <div class="row justify-content-between">
@@ -77,7 +88,7 @@
             </div>
             <div class="col-lg-5">
                 <div class="hero-img-wrap">
-                    @if (!empty(App\Helpers\SiteviewHelper::homepage() ))
+                    @if (!empty(App\Helpers\SiteviewHelper::homepage()))
                     <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="70%">
                     @else
                         No  Image
@@ -105,7 +116,7 @@
                 <!-- End Column 1 -->
 
                 <!-- Start Column 2 -->
-                @foreach($items as $item)
+                @foreach ($items as $item)
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <div class="product-item">
                         <a  style="text-decoration: none;" href="{{ route('product.details', ['id' => $item->id]) }}">
@@ -220,9 +231,9 @@
             </div>
         </div>
     </div> --}}
-    <!-- End We Help Section -->
+<!-- End We Help Section -->
 
-    {{-- <!-- Start Popular Product -->
+{{-- <!-- Start Popular Product -->
     <div class="popular-product">
         <div class="container">
             <div class="row">
@@ -271,9 +282,9 @@
     </div>
     <!-- End Popular Product --> --}}
 
-   
 
-    {{-- <!-- Start Blog Section -->
+
+{{-- <!-- Start Blog Section -->
     <div class="blog-section">
         <div class="container">
             <div class="row mb-5">
@@ -327,5 +338,3 @@
         </div>
     </div>
     <!-- End Blog Section -->	 --}}
-
- 
