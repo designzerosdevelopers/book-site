@@ -11,53 +11,8 @@ class SiteviewHelper
 {
   public static function item($page = '', $limit = '')
   {
-    if ($page === 'shop') {
-      if ($limit && $limit > 0) {
-        $items = Item::paginate($limit);
-      } else {
-        $items = Item::paginate(10);
-      }
-    } else {
-      $items = Item::paginate(10);
-    }
-
-    $itemDesign = Component::where('name', 'item_box')->first();
-
-    $part = explode('<!-- Column 1 -->', $itemDesign->html);
-
-//   // Example usage
-//   $html = '<h2 id="product-title" style="text-align: center;"> heko <span style="color: rgb(22, 145, 121);">Book title</span></h2>
-//   <h2 class="product-description" style="text-align: center;">heko <span style="color: rgb(22, 145, 121);">the nice Book</span></h2>';
-
-//         $dom = HtmlEasyDom::loadHTML($html);
-//         $result = $dom->getElementById('product-title');
-//         $result = $dom->replaceElementContentByClass('product-description','after the class');
-
-// dd($result);
-
-    $dom = new \DOMDocument();
-    $dom->loadHTML($part[1], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-    $xpath = new \DOMXPath($dom);
- 
-    $dynamicItem = '';
-    foreach ($items as $item) {
-      $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-title')]";
-      $xpath->query($title)->item(0)->nodeValue = $item->name;
-
-      $price = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-price')]";
-      $xpath->query($price)->item(0)->nodeValue = '$' . $item->price;
-
-      $dom->getElementById("poster")->setAttribute('src', asset('book_images/' . $item->image));
-
-      $anchorElements = $dom->getElementsByTagName('a');
-      foreach ($anchorElements as $anchorElement) {
-        $anchorElement->setAttribute('href', $item->slug);
-      }
-
-      $dynamicItem .= $dom->saveHTML();
-    }
-
-    return $dynamicItem;
+      return Item::get();
+    
   }
 
   public static function page($page)
