@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesSettingController;
 use App\Http\Controllers\SiteViewController;
 use App\Http\Controllers\StripeController;
-use App\Mail\ExampleMail;
-use Illuminate\Support\Facades\Mail;
-use App\Http\Controllers\NavbarController;
 
 
 Route::get('setup', [App\Http\Controllers\SetupController::class, 'create'])->name('setup.create');
@@ -38,15 +35,14 @@ Route::middleware('check.database')->group(function () {
     require __DIR__ . '/auth.php';
 
 // clientside controller
-Route::get('/', [SiteViewController::class, 'index'])->name('index');
-Route::get('/product-details', [SiteViewController::class, 'productdetails'])->name('product.details');
-Route::get('/about', [SiteViewController::class, 'about'])->name('about');
-Route::get('/contact', [SiteViewController::class, 'contact'])->name('contact');
-Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
+Route::get('/', function(){ return view('clientpages.index');})->name('index');
+Route::get('/about', function(){ return view('clientpages.about');})->name('about');
+Route::get('/contact', function(){ return view('clientpages.contact');})->name('contact');
+Route::get('/shop', function(){ return view('clientpages.shop');})->name('shop');
 Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
-Route::get('/blog', [SiteViewController::class, 'blog'])->name('blog');
-Route::get('/cart', [SiteViewController::class, 'cart'])->name('cart');
-Route::get('/remove-from-cart/{itemId}', [SiteViewController::class, 'removeFromCart'])->name('remove_from_cart');
+Route::get('/cart', function(){ return view('clientpages.cart');})->name('cart');
+Route::get('/add-product/{id}', [SiteViewController::class, 'addCart'])->name('add.cart');
+Route::get('/remove-product/{id}', [SiteViewController::class, 'removeFromCart'])->name('remove.from.cart');
 Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
 Route::get('/thankyou', [SiteViewController::class, 'thankyou'])->name('thankyou');
 Route::get('/cartItemCount', [SiteViewController::class, 'getCartItemCount'])->name('cartcount');
@@ -56,11 +52,8 @@ Route::get('/user', [SiteViewController::class, 'user'])->name('user');
 Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
 
-
-
     // Adminside Routes
     Route::middleware('auth', 'checkUserRole')->group(function () {
-        
         // Dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -72,14 +65,15 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/footer-settings', function(){ return view('adminpages.pages-settings.footer-settings');})->name('edit.footer');
         Route::get('/navbar-settings', function(){ return view('adminpages.pages-settings.navbar-settings');})->name('edit.navbar');
         Route::get('/shop-settings', function(){ return view('adminpages.pages-settings.shop-settings');})->name('edit.shop');
-        
+        Route::get('/cart-settings', function(){ return view('adminpages.pages-settings.cart-settings');})->name('edit.cart');
+        Route::get('/product-detail-settings', function(){ return view('adminpages.pages-settings.product-detail-settings');})->name('edit.product.detail');
+        Route::get('/checkout-settings', function(){ return view('adminpages.pages-settings.checkout-settings');})->name('edit.checkout');
+
         Route::get('/theme-settings', [PagesSettingController::class, 'editTheme'])->name('edit.theme');
         Route::post('/theme-update',[PagesSettingController::class, 'themeUpdate'])->name('theme.update');
 
 
         Route::post('/updatepage', [PagesSettingController::class, 'updatePage'])->name('update.page');
-        Route::post('/store-site-settings', [PagesSettingController::class, 'storeSiteSettings'])->name('store-site.settings');
-
 
         //category routes
         Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
@@ -115,7 +109,8 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/purchases', [PagesSettingController::class, 'purchases'])->name('purchases.index');
     });
 
-    // Route::get('/{navrout}', [SiteViewController::class, 'dynamic'])->name('dynamic.route');
+     
 });
 
+Route::get('/{product}', [SiteViewController::class, 'productDetail'])->name('product.detail');
 

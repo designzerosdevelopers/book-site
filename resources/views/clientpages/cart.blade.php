@@ -1,5 +1,16 @@
-
 @extends('layouts.clientside-layout.app')
+@section('content')
+{!! App\Helpers\SiteViewHelper::clientSidePage('cart') !!}
+
+@stop
+
+
+
+
+
+
+
+{{-- @extends('layouts.clientside-layout.app')
 
 @section('content')
 
@@ -25,7 +36,7 @@
             <div class="row mb-5">
                 <form class="col-md-12" method="post">
                     <div class="site-blocks-table">
-                        @if(count($cartItems) > 0)
+                        @if (count($cartItems) > 0)
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -40,7 +51,7 @@
                                         $totalprice = 0;
                                     @endphp
                                 
-                                    @foreach($cartItems as $item)
+                                    @foreach ($cartItems as $item)
                                     @php
                                         $totalprice += $item['item_price'];
                                     @endphp
@@ -88,45 +99,44 @@
                             </div>
                         </div>
                     </div>
-                    @if(count($cartItems) > 0)
-                    {{--start payment procedure and detail --}}
-                    <div class="col-md-6 pl-5">
-                        <div class="row justify-content-end">
-                            <div class="col-md-7">
-                                <div class="row">
-                                    <div class="col-md-12 text-right border-bottom mb-5">
-                                        <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <span class="text-black">Subtotal</span>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <strong class="text-black" id="subtotal">${{$totalprice}}.00</strong>
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-md-6">
-                                        <span class="text-black">Total</span>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <strong class="text-black" id="totalprice">${{$totalprice}}.00</strong>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <form id="checkoutForm" method="get" action="{{ route('checkout') }}">
-                                            <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- end payment procedure and detail --}}
+                    @if (count($cartItems) > 0) 
+
+<div class="col-md-6 pl-5">
+    <div class="row justify-content-end">
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-12 text-right border-bottom mb-5">
+                    <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
                 </div>
-            @endif
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <span class="text-black">Subtotal</span>
+                </div>
+                <div class="col-md-6 text-right">
+                    <strong class="text-black" id="subtotal">${{ $totalprice }}.00</strong>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <span class="text-black">Total</span>
+                </div>
+                <div class="col-md-6 text-right">
+                    <strong class="text-black" id="totalprice">${{ $totalprice }}.00</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form id="checkoutForm" method="get" action="{{ route('checkout') }}">
+                        <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-@stop
+</div>
+</div>
+@endif
+</div>
+</div> --}}
+ 

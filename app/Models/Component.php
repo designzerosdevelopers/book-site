@@ -10,8 +10,11 @@ class Component extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'html',
+        'fullhtml',
+        'herohtml',
+        'middlehtml',
+        'lowerhtml',
         'css',
-        'javascript',
+        'data',
     ];
 }
