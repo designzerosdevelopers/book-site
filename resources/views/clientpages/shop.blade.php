@@ -1,8 +1,10 @@
 @extends('layouts.clientside-layout.app')
 @section('content')
 
-{!!App\Helpers\SiteViewHelper::ClientSidePage('shop', 10)!!}
+{!! App\Helpers\SiteviewHelper::page('shop')->herohtml !!}
 
+
+{!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 @stop
 
    {{-- <!-- Start Hero Section -->

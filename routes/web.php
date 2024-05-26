@@ -75,7 +75,6 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
 
         Route::post('/updatepage', [PagesSettingController::class, 'updatePage'])->name('update.page');
 
-
         //category routes
         Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
         Route::put('/updatecategory/{id}', [PagesSettingController::class, 'updatecategory'])->name('updatecategory');

@@ -1,4 +1,4 @@
-{!! App\Helpers\SiteviewHelper::page('navbar')->html !!}
+{!! App\Helpers\SiteviewHelper::page('navbar')->allhtml !!}
 
 {{-- <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
     <div class="container">
