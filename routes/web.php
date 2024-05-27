@@ -72,7 +72,7 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/product-detail-settings', function(){ return view('adminpages.pages-settings.product-detail-settings');})->name('edit.product.detail');
         Route::get('/checkout-settings', function(){ return view('adminpages.pages-settings.checkout-settings');})->name('edit.checkout');
 
-        Route::get('/theme-settings', [PagesSettingController::class, 'editTheme'])->name('edit.theme');
+        Route::get('/theme-settings', function(){ return view('adminpages.pages-settings.theme-settings');})->name('edit.theme');
         Route::post('/theme-update',[PagesSettingController::class, 'themeUpdate'])->name('theme.update');
 
 
