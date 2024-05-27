@@ -312,6 +312,10 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
+    public function upload_image(Request $request){
+
+    }
+
     public function updatePage(Request $r)
     {
         if ($r->isXmlHttpRequest()) {
