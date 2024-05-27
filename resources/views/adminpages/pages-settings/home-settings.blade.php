@@ -17,11 +17,12 @@
                             @endif
                     </textarea>
                     <br>
-                    <button type="submit" class="btn btn-gradient-success me-2">Save</button>
+                    <button type="submit" name="part" value="herohtml" class="btn btn-gradient-success me-2">Save</button>
                 </form>
             </div>
         </div>
         <br>
+        @php $style = App\Helpers\SiteviewHelper::style('homesetting'); @endphp
 
         <div class="card">
             <div class="card-body">
@@ -29,49 +30,49 @@
                     @csrf
                     <div class="form-group row">
                         <label for="title_color" class="col-sm-2 col-form-label">Title Color</label>
-                        <div class="col-sm-2">
-                            <input type="color" id="title_color" class="form" name="title_color" value="">
+                        <div class="col-sm-4">
+                            <input type="color" id="title_color" class="form" name="title_color" value="{{$style['titleColor']}}" required>
                         </div>
         
                         <label for="price_color" class="col-sm-2 col-form-label">Price Color</label>
-                        <div class="col-sm-2">
-                            <input type="color" id="price_color" class="form" name="price_color" value="">
+                        <div class="col-sm-4">
+                            <input type="color" id="price_color" class="form" name="price_color" value="{{$style['priceColor']}}" required>
                         </div>
 
-                        <label for="price_color" class="col-sm-2 col-form-label">background Color:</label>
+                        {{-- <label for="background_color" class="col-sm-2 col-form-label">background Color:</label>
                         <div class="col-sm-2">
-                            <input type="color" id="price_color" class="form" name="price_color" value="">
-                        </div>
+                            <input type="color" id="background_color" class="form" name="background_color" value="" required>
+                        </div> --}}
                     </div>
 
                     <div class="form-group row">
                         <label for="image_width" class="col-sm-2 col-form-label">Image Width</label>
                         <div class="col-sm-4">
-                            <input type="text" id="image_width" class="form-control" name="image_width" value="">
+                            <input type="text" id="image_width" class="form-control" name="image_width" value="{{$style['productWidth']}}" required>
                         </div>
         
                         <label for="image_height" class="col-sm-2 col-form-label">Image Height</label>
                         <div class="col-sm-4">
-                            <input type="text" id="image_height" class="form-control" name="image_height" value="">
+                            <input type="text" id="image_height" class="form-control" name="image_height" value="{{$style['productHeight']}}" required>
                         </div>
                     </div>
         
                     <div class="form-group row">
                         <label for="title_size" class="col-sm-2 col-form-label">Title Size</label>
                         <div class="col-sm-4">
-                            <input type="text" id="title_size" class="form-control" name="title_size" value="">
+                            <input type="text" id="title_size" class="form-control" name="title_size" value="{{$style['titleSize']}}" required>
                         </div>
         
                         <label for="price_size" class="col-sm-2 col-form-label">Price Size</label>
                         <div class="col-sm-4">
-                            <input type="text" id="price_size" class="form-control" name="price_size" value="">
+                            <input type="text" id="price_size" class="form-control" name="price_size" value="{{$style['priceSize']}}" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="display_product" class="col-sm-2 col-form-label">Display products</label>
                         <div class="col-sm-4">
-                            <input type="number" id="display_product" class="form-control" name="display_product" value="">
+                            <input type="number" id="display_product" class="form-control" name="display_product" value="{{$style['displayProduct']}}" required>
                         </div>
         
 
@@ -102,7 +103,7 @@
                         @endif
                     </textarea>
                     <br>
-                    <button type="submit" class="btn btn-gradient-success me-2">Save</button>
+                    <button type="submit" name="part" value="lowerhtml" class="btn btn-gradient-success me-2">Save</button>
                 </form>
             </div>
         </div>
