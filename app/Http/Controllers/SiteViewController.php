@@ -260,6 +260,67 @@ class SiteViewController extends Controller
 
     public function books(Request $request)
     {
+        $category = '';
+        if ($request->input('all')) {
+            $category == 'All';
+            $allItems = Item::paginate(1);
+
+            $response = '';
+            foreach ($allItems as $item) {
+                $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
+                $response .= '<div class="product-item">';
+                $response .= '<a style="text-decoration: none;" href="'.$item->slug.'">';
+                $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+                $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
+                $response .= '<div>';
+                $response .= '<strong class="product-price">$' . number_format($item->price, 2) . '</strong>';
+                $response .= '</div>';
+                $response .= '</a>';
+                $response .= '<a href="' . route('add.product', ['id' => encrypt($item->id)]) . '">';
+                $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
+                $response .= '<p style="margin: 0;">Add to Cart</p>';
+                $response .= '</button>';
+                $response .= '</a>';
+                $response .= '</div>';
+                $response .= '</div>';
+            }
+
+            $response .= '<div class="row">';
+            $response .= '<div class="col-md-12 text-center">';
+            $response .= '<nav aria-label="Page navigation example">';
+            $response .= '<ul class="pagination justify-content-center">';
+             
+            $category = 'All';
+            if ($allItems->onFirstPage()) {
+                $response .= '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>';
+            } else {
+                $previousUrl = $allItems->previousPageUrl() . '&category=' . urlencode($category);
+                $response .= '<li class="page-item"><a class="page-link" href="' . $previousUrl . '" tabindex="-1" aria-disabled="true">Previous</a></li>';
+            }
+
+            foreach ($allItems->getUrlRange(1, $allItems->lastPage()) as $pageNumber => $url) {
+                $url = $url . '&category=' . urlencode($category);
+                $response .= '<li class="page-item ' . ($pageNumber == $allItems->currentPage() ? 'active' : '') . '">';
+                $response .= '<a class="page-link" href="' . $url . '">' . $pageNumber . '</a>';
+                $response .= '</li>';
+            }
+
+            if ($allItems->hasMorePages()) {
+                $nextUrl = $allItems->nextPageUrl() . '&category=' . urlencode($category);
+                $response .= '<li class="page-item"><a class="page-link" href="' . $nextUrl . '">Next</a></li>';
+            } else {
+                $response .= '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+            }
+
+            $response .= '</ul>';
+            $response .= '</nav>';
+            $response .= '</div>';
+            $response .= '</div>';
+
+            return $response;
+        }
+
+
         if ($request->ajax()) {
             if ($request->has('category')) {
                 $category = $request->input('category');
@@ -275,14 +336,14 @@ class SiteViewController extends Controller
                 foreach ($allItems as $item) {
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                     $response .= '<div class="product-item">';
-                    $response .= '<a style="text-decoration: none;" href="#">';
+                    $response .= '<a style="text-decoration: none;" href="'.$item->slug.'">';
                     $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
                     $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
                     $response .= '<div>';
                     $response .= '<strong class="product-price">$' . number_format($item->price, 2) . '</strong>';
                     $response .= '</div>';
                     $response .= '</a>';
-                    $response .= '<a href="' . route('cart', ['id' => $item->id]) . '">';
+                    $response .= '<a href="' . route('add.product', ['id' => encrypt($item->id)]) . '">';
                     $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
                     $response .= '<p style="margin: 0;">Add to Cart</p>';
                     $response .= '</button>';
