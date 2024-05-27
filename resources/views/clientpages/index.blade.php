@@ -30,7 +30,7 @@
                                 <strong class="product-price">${{$item->price}}</strong>
                             </div> --}}
                         </a>
-                                <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong class="item-price">{{ $item->price }}</strong> <span
+                                <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong class="item-price">${{ $item->price }}</strong> <span
                                 class="icon-cross"> <img class="img-fluid" src="{{ asset('clientside/images/cross.svg')}}"> </span> </a>
                     </div>
                 </div>
