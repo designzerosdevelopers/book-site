@@ -108,11 +108,12 @@ class SiteviewHelper
       $style['priceColor'] = isset($matches[2]) ? $matches[2] : null;
       preg_match('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['priceSize'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.product-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['productHeight'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.product-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['productWidth'] = isset($matches[2]) ? $matches[2] : null;
-      $style['displayProduct'] = json_decode(Component::where('name', 'home')->first()->data, true)['display_product'];
+      $style['data'] = json_decode(Component::where('name', 'home')->first()->data, true);
+
     } elseif ($page == 'shopsetting') {
       $style['displayProduct'] = json_decode(Component::where('name', 'shop')->first()->data, true)['display_product'];
     } elseif ($page == 'contactsetting') {
