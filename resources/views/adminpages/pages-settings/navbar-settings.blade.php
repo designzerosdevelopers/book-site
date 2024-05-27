@@ -9,13 +9,13 @@
                     <input type="hidden" name="comp_name" value="navbar">
                     <textarea name="html" rows="10" cols="50" id="editor1">
                     @if (!empty(App\Helpers\SiteviewHelper::page('navbar')))
-                            {!! App\Helpers\SiteviewHelper::page('navbar')->html !!}
+                            {!! App\Helpers\SiteviewHelper::page('navbar')->allhtml !!}
                             @else
                             No Data
                             @endif
                 </textarea>
                     <br>
-                    <button type="submit" class="btn btn-gradient-success me-2">Save</button>
+                    <button type="submit" name="part" value="allhtml" class="btn btn-gradient-success me-2">Save</button>
                 </form>
             </div>
         </div>

@@ -11,8 +11,7 @@ class SiteviewHelper
 {
   public static function item($page = '', $limit = '')
   {
-      return Item::get();
-    
+    return Item::get();
   }
 
   public static function page($page)
@@ -67,12 +66,10 @@ class SiteviewHelper
       }
 
       return $cart[0] . $dynamicItem . $cart[2];
-
     } else {
 
       $cartempty = explode('<!-- cartlist -->', \App\Helpers\SiteviewHelper::page('cart')->html);
       return $cartempty[0] . $cartempty[2];
-
     }
   }
 
@@ -83,14 +80,49 @@ class SiteviewHelper
   }
 
 
-  public static function test()
+  public static function style($page)
   {
-    $htmlCode = "<h1>Hello, <?php echo 'World'; ?></h1>";
+    $css = Component::where('name', 'site')->first()->css;
 
-    ob_start();
-    eval("?>" . $htmlCode);
-    $output = ob_get_clean();
+    if ($page == 'themesetting') {
+      $style = [];
+      preg_match('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['hero'] = $matches[2];
+      preg_match('/(body\s*{\s*.*?background-color:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['bg'] = isset($matches[2]) ? $matches[2] : null;
 
-    return $output;
+      preg_match('/(a\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['url'] = isset($matches[2]) ? $matches[2] : null;
+
+      preg_match('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['navbar'] = trim(str_replace('!important', '', $matches[2]));
+      preg_match('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['footer'] = $matches[2];
+    } elseif ($page == 'homesetting') {
+
+      preg_match('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['titleColor'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['titleSize'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-price\s*{\s*.*?color:\s*)([^ !important;]+)(.*?})/s', $css, $matches);
+      $style['priceColor'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['priceSize'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['productHeight'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['productWidth'] = isset($matches[2]) ? $matches[2] : null;
+      $style['displayProduct'] = json_decode(Component::where('name', 'home')->first()->data, true)['display_product'];
+    } elseif ($page == 'shopsetting') {
+      $style['displayProduct'] = json_decode(Component::where('name', 'shop')->first()->data, true)['display_product'];
+    } elseif ($page == 'contactsetting') {
+      preg_match('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['contactTextColor'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['contactIconBG'] = isset($matches[2]) ? $matches[2] : null;
+      $style['contactInfo'] = json_decode(Component::where('name', 'contact')->first()->data, true);
+    }
+
+    return $style;
   }
 }
