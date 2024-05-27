@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pages;
 use App\Models\Upload;
 use App\Models\Component;
 use App\Models\Settings;
@@ -31,10 +30,16 @@ class PagesSettingController extends Controller
             $css = preg_replace('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->title_size . '$3', $css);
             $css = preg_replace('/(\.product-price\s*{[^}]*?color:\s*)[^ !important;]+( !important;[^}]*})/si', '$1' . $r->price_color . '$2', $css);
             $css = preg_replace('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->price_size . '$3', $css);
-            $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
-            $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
+            $css = preg_replace('/(\.product-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
+            $css = preg_replace('/(\.product-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
             Component::where('name', 'home')->update([
-                'data' => ['display_product' => $r->display_product]
+                'data' => [
+                    'display_product' => $r->display_product,
+                    'product_section_title' => $r->section_title,
+                    'product_section_description' => $r->section_description,
+                    'product_section_button'=> $r->section_button_name,
+                    'product_section_button_url'=> $r->section_button_url,
+                    ]
             ]);
 
             Component::where('name', 'site')->update([
