@@ -30,24 +30,7 @@ class SiteViewController extends Controller
     {
         $item = Item::where('slug', $product)->first();
 
-        $dom = new \DOMDocument();
-        $dom->loadHTML(\App\Helpers\SiteViewHelper::page('productdetail')->html);
-        $xpath = new \DOMXPath($dom);
-
-        $title = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-title')]";
-        $xpath->query($title)->item(0)->nodeValue = $item->name;
-
-        $price = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-price')]";
-        $xpath->query($price)->item(0)->nodeValue = '$' . $item->price;
-
-        $price = "//*[contains(concat(' ', normalize-space(@class), ' '), 'product-description')]";
-        $xpath->query($price)->item(0)->nodeValue = $item->description;
-
-        $dom->getElementById("poster")->setAttribute('src', asset('book_images/' . $item->image));
-
-        $dom->getElementById("cart")->setAttribute('href', route('add.cart', ['id' => encrypt($item->id)]));
-
-        return view('clientpages.productdetail', ['product' => $dom->saveHTML()]);
+        return view('clientpages.productdetail', ['item' => $item]);
     }
 
 
@@ -79,7 +62,7 @@ class SiteViewController extends Controller
                 'item_image' => $item->image,
                 'item_file' => $item->file,
                 'item_name' => $item->name,
-                'item_price' => (float) $item->price
+                'item_price' => $item->price
             ];
         }
 
@@ -104,27 +87,27 @@ class SiteViewController extends Controller
 
     public function checkout(request $request)
     {
-        // $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
-        // foreach ($cartItems as $value) {
-        //     $subtotal = $value['item_price'];
-        // }
+        $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
+        foreach ($cartItems as $value) {
+            $subtotal = $value['item_price'];
+        }
 
-        // $stripeIds = [1, 2];
-        // $stripeSettings = Settings::find($stripeIds)->pluck('value');
-        // $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
+        $stripeIds = [1, 2];
+        $stripeSettings = Settings::find($stripeIds)->pluck('value');
+        $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
 
-        // $paypalIds = [3, 4];
-        // $paypalSettings = Settings::find($paypalIds)->pluck('value');
-        // $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
+        $paypalIds = [3, 4];
+        $paypalSettings = Settings::find($paypalIds)->pluck('value');
+        $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
 
-        // return view('clientpages.checkout', [
-        //     'cartItems' => $cartItems,
-        //     'subtotal' => $subtotal,
-        //     'paypal' => $paypal,
-        //     'stripe' => $stripe
-        // ]);
+        return view('clientpages.checkout', [
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'paypal' => $paypal,
+            'stripe' => $stripe
+        ]);
 
-        return view('clientpages.checkout');
+        // return view('clientpages.checkout');
     }
 
 
@@ -217,8 +200,8 @@ class SiteViewController extends Controller
                     'name' => $data['f_name'],
                     'last_name' => $data['l_name'],
                     'address' => $data['address1'],
-                    'state/country' => $data['state_country'],
-                    'postal/zip' => $data['postal_zip'],
+                    'country' => $data['state_country'],
+                    'zip' => $data['postal_zip'],
                     'email' => $data['email_address'],
                     'phone' => $data['phone'],
                     'password' => $hashedPassword
@@ -459,6 +442,7 @@ class SiteViewController extends Controller
         //         return $response;
         //     }
         // }
+
 
 
     }

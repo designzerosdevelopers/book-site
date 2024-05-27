@@ -76,6 +76,7 @@
         // request to load all items
         $(document).ready(function() {
             if (!window.location.search) {
+                console.log();
                 $.ajax({
                     url: "{{ route('books') }}",
                     type: "GET",
@@ -256,12 +257,12 @@
                 history.pushState({}, '', currentUrl);
             });
 
-            // Check if category parameter is not present in the URL
-            if (!window.location.search.includes('category')) {
-                // If not present, set it to "All"
-                var currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.set('category', 'All');
-                history.pushState({}, '', currentUrl);
-            }
+            // // Check if category parameter is not present in the URL
+            // if (!window.location.search.includes('category')) {
+            //     // If not present, set it to "All"
+            //     var currentUrl = new URL(window.location.href);
+            //     currentUrl.searchParams.set('category', 'All');
+            //     history.pushState({}, '', currentUrl);
+            // }
         });
     </script>
