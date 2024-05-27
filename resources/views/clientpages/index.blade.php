@@ -5,6 +5,10 @@
     {!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
     @php $style = App\Helpers\SiteviewHelper::style('homesetting'); @endphp
 
+
+ 
+
+
     <!-- Start Product Section -->
     <div class="product-section">
         <div class="container">
@@ -33,12 +37,12 @@
                     <div class="product-item">
                         <a style="text-decoration: none;" href="{{ $item->slug }}">
                             <img src="{{ asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
-                            <h3 class="product-title item-title">{{$item->name}}</h3>
+                            <h3 class="product-title">{{$item->name}}</h3>
                             {{-- <div>
                                 <strong class="product-price">${{$item->price}}</strong>
                             </div> --}}
                         </a>
-                                <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong class="item-price ">${{ $item->price }}</strong> <span
+                                <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong class="product-price">{{ $item->price }}</strong> <span
                                 class="icon-cross"> <img class="img-fluid" src="{{ asset('clientside/images/cross.svg')}}"> </span> </a>
                     </div>
                 </div>
