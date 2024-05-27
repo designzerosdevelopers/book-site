@@ -11,24 +11,17 @@
                     <input type="hidden" name="comp_name" value="footer">
                     <textarea name="html" rows="10" cols="50" id="editor1">
                         @if (!empty(App\Helpers\SiteviewHelper::page('footer')))
-                            {!! App\Helpers\SiteviewHelper::page('footer')->html !!}
+                            {!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
                         @else
                             No Data
                         @endif
                     </textarea>
-                    {{-- <br>//s
-
-                    <div class="form-group">
-                        <label for="colorPicker">Choose footer color:</label>
-                        <input type="color" id="colorPicker" name="footer_bg" value="{{ App\Helpers\SiteviewHelper::getFooterColor()}}">
-                    </div> --}}
-                    <button type="submit" class="btn btn-gradient-success my-2">Save</button>
+                    <button type="submit" name="part" value="allhtml" class="btn btn-gradient-success my-2">Save</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
     <script>
         tinymce.init({
