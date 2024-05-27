@@ -54,7 +54,7 @@
                                     <strong class="product-price">${{$item->price}}</strong>
                                 </div>
                             </a>
-                            <a href="{{ route('cart', ['id' => $item->id]) }}">
+                            <a href="{{ route('add.product', ['id' => encrypt($item->id)]) }}">
                                 <button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">
                                     <p style="margin: 0;">Add to Cart</p>
                                 </button>
@@ -63,6 +63,43 @@
                     </div>
                 @endforeach
                 <!-- End Column 1 --> --}}
+                {{-- <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <div class="product-item">
+                        <a style="text-decoration: none;" href="#">
+                            <img src="path_to_asset/book_images/image_name.jpg" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Product Name</h3>
+                            <div>
+                                <strong class="product-price">$Price</strong>
+                            </div>
+                        </a>
+                        <a href="route_to_cart?id=item_id">
+                            <button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">
+                                <p style="margin: 0;">Add to Cart</p>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="previous_page_url" tabindex="-1" aria-disabled="true">Previous</a></li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="page_url">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="page_url">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="next_page_url">Next</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div> --}}
+
+                
 
         {!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 
@@ -76,7 +113,6 @@
         // request to load all items
         $(document).ready(function() {
             if (!window.location.search) {
-                console.log();
                 $.ajax({
                     url: "{{ route('books') }}",
                     type: "GET",
@@ -85,6 +121,7 @@
                     },
                     success: function(response) {
                         $('#items-container').html(response);
+                      
 
                     },
                     error: function(xhr) {
