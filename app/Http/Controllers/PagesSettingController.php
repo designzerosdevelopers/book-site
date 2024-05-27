@@ -23,15 +23,16 @@ class PagesSettingController extends Controller
     {
 
         $css = \App\Helpers\SiteviewHelper::page('site')->css;
-
+        
         if ($r->page == 'home') {
 
-            $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->title_color . '$3', $css);
-            $css = preg_replace('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->title_size . '$3', $css);
-            $css = preg_replace('/(\.product-price\s*{[^}]*?color:\s*)[^ !important;]+( !important;[^}]*})/si', '$1' . $r->price_color . '$2', $css);
-            $css = preg_replace('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->price_size . '$3', $css);
-            $css = preg_replace('/(\.product-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
-            $css = preg_replace('/(\.product-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
+             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
+             $css = preg_replace('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->title_size . '$3', $css);
+             $css = preg_replace('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->price_color . '$3', $css);
+             $css = preg_replace('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->price_size . '$3', $css);
+             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
+             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
+
             Component::where('name', 'home')->update([
                 'data' => [
                     'display_product' => $r->display_product,
@@ -66,7 +67,25 @@ class PagesSettingController extends Controller
                 ]
             ]);
 
-        } else {
+        } elseif ($r->page == 'productdetailsetting') {
+
+            $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->product_title_color . '$3', $css);
+            $css = preg_replace('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_title_size . '$3', $css);
+            $css = preg_replace('/(\.product-price\s*{[^}]*?color:\s*)[^;]+(;[^}]*})/si', '$1' . $r->product_price_color . '$2', $css);
+            $css = preg_replace('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_price_size . '$3', $css);
+            $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_image_height . '$3', $css);
+            $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_image_width . '$3', $css);
+
+            Component::where('name', 'productdetail')->update([
+                'data' => [
+                    'product_button_name'=> $r->product_button_name,
+                    ]
+            ]);
+            Component::where('name', 'site')->update([
+                'css' => $css,
+            ]);
+
+        }else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
