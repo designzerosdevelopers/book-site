@@ -1,3 +1,9 @@
+/*
+* Template Name: UntreeStore
+* Template Author: Untree.co
+* Author URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 body {
@@ -320,7 +326,7 @@ a.more {
 
 .product-section .product-item strong {
   font-weight: 800 !important;
-  font-size: 18px !important;
+  font-size: 18px;
 }
 
 .product-section .product-item h3,
@@ -1027,6 +1033,20 @@ textarea {
   background: rgba(59, 93, 80, 0.2);
 }
 
+.item-thumbnail-size {
+  height: 317px;
+  width: 210px;
+}
+
+.item-title {
+  font-size: 54px !important;
+  color: #000000 !important;
+}
+
+.item-price {
+  font-size: 58px !important;
+  color: #000000 !important;
+}
 
 .product-details {
   padding: 50px 0;
@@ -1042,7 +1062,7 @@ textarea {
 .product-title {
   font-size: 24px;
   font-weight: bold;
-  color: #ff6347;
+  color: #ff3838;
   margin-bottom: 20px;
 }
 
@@ -1051,9 +1071,9 @@ textarea {
 }
 
 .product-price {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  color: #ff6347;
+  color: #4d82ff;
   /* Adjust color as needed */
   margin-bottom: 20px;
 }

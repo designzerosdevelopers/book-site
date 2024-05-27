@@ -3,29 +3,7 @@
 @section('content')
 
 
-
-    <!-- Start Hero Section -->
-    <div class="hero">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-lg-7">
-                    <div class="intro-excerpt">
-                        <h1>Product</h1>
-                        <p class="mb-4">This is the peragraph</p>
-
-
-                        <p><a href="" class="btn btn-secondary me-2">Shop now</a><a href=""
-                                class="btn btn-white-outline">Explore</a></p>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="hero-img-wrap">
-                        <img src="" class="img-fluid" width="90%">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{!! App\Helpers\SiteviewHelper::page('productdetail')->herohtml !!}
    
 
        
@@ -43,10 +21,10 @@
                         {{ $item->description }}
                     </p>
 
-                    <p class="product-price">{{ $item->price }}</p>
+                    <p class="product-price">${{ $item->price }}</p>
                     <a href="{{ route('add.product', ['id' => encrypt($item->id)]) }}">
                         <button class="add-to-cart-btn">
-                            Add to Cart
+                            {{App\Helpers\SiteviewHelper::style('productdetailsettings')['data']['product_button_name']}}
                         </button>
                     </a>
                     
