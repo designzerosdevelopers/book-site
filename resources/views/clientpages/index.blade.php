@@ -16,7 +16,7 @@
                     <p><a class="btn" href="shop.html">Explore</a></p>
                 </div>
                 <!-- End Column 1 -->
-                @foreach (App\Helpers\SiteviewHelper::item() as $item)
+                {{-- @foreach (App\Helpers\SiteviewHelper::item() as $item)
              
                     <!-- Column 1 -->
                     <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"><a class="product-item" href="cart.html">
@@ -26,8 +26,26 @@
                         <a class="product-item" href="cart.html"><strong class="product-price">{{ $item->price }}</strong> <span
                                 class="icon-cross"> <img class="img-fluid" src="images/cross.svg"> </span> </a>
                     </div>
-                @endforeach
+                @endforeach --}}
+
+
+                @foreach (App\Helpers\SiteviewHelper::item() as $item)
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <div class="product-item">
+                        <a style="text-decoration: none;" href="{{ $item->slug }}">
+                            <img src="{{ asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">{{$item->name}}</h3>
+                            {{-- <div>
+                                <strong class="product-price">${{$item->price}}</strong>
+                            </div> --}}
+                        </a>
+                                <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong class="product-price">{{ $item->price }}</strong> <span
+                                class="icon-cross"> <img class="img-fluid" src="{{ asset('clientside/images/cross.svg')}}"> </span> </a>
+                    </div>
+                </div>
+            @endforeach
                 <!-- Column 1 -->
+
             </div>
         </div>
     </div>

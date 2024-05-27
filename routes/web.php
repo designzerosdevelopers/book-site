@@ -41,7 +41,9 @@ Route::get('/contact', function(){ return view('clientpages.contact');})->name('
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
 Route::get('/products/{category}', [SiteViewController::class, 'getProductsByCategory'])->name('products.by.category');
 Route::get('/cart', function(){ return view('clientpages.cart');})->name('cart');
-Route::get('/add-product/{id}', [SiteViewController::class, 'addCart'])->name('add.cart');
+
+Route::get('/add-product/{id}', [SiteViewController::class, 'addCart'])->name('add.product');
+
 Route::get('/remove-product/{id}', [SiteViewController::class, 'removeFromCart'])->name('remove.from.cart');
 Route::get('/checkout', [SiteViewController::class, 'checkout'])->name('checkout');
 Route::get('/books', [SiteViewController::class, 'books'])->name('books');
