@@ -100,20 +100,19 @@ class SiteviewHelper
       $style['footer'] = $matches[2];
     } elseif ($page == 'homesetting') {
 
-      preg_match('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', $css, $matches);
       $style['titleColor'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', $css, $matches);
       $style['titleSize'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-price\s*{\s*.*?color:\s*)([^ !important;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', $css, $matches);
       $style['priceColor'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', $css, $matches);
       $style['priceSize'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['productHeight'] = isset($matches[2]) ? $matches[2] : null;
-      preg_match('/(\.product-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
+      preg_match('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['productWidth'] = isset($matches[2]) ? $matches[2] : null;
       $style['data'] = json_decode(Component::where('name', 'home')->first()->data, true);
-
     } elseif ($page == 'shopsetting') {
       $style['displayProduct'] = json_decode(Component::where('name', 'shop')->first()->data, true)['display_product'];
     } elseif ($page == 'contactsetting') {
@@ -122,6 +121,21 @@ class SiteviewHelper
       preg_match('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['contactIconBG'] = isset($matches[2]) ? $matches[2] : null;
       $style['contactInfo'] = json_decode(Component::where('name', 'contact')->first()->data, true);
+    } elseif ($page == 'productdetailsettings') {
+      preg_match('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['titleColor'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['titleSize'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-price\s*{\s*.*?color:\s*)([^ !important;]+)(.*?})/s', $css, $matches);
+      $style['priceColor'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['priceSize'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['productHeight'] = isset($matches[2]) ? $matches[2] : null;
+      preg_match('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
+      $style['productWidth'] = isset($matches[2]) ? $matches[2] : null;
+      $style['data'] = json_decode(Component::where('name', 'productdetail')->first()->data, true);
+
     }
 
     return $style;
