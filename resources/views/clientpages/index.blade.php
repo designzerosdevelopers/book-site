@@ -3,7 +3,7 @@
 @section('content')
 
     {!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
-
+    @php $style = App\Helpers\SiteviewHelper::style('homesetting'); @endphp
 
 
  
@@ -14,18 +14,17 @@
         <div class="container">
             <div class="row"><!-- Start Column 1 -->
                 <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-                    <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-                    <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                        vulputate velit imperdiet dolor tempor tristique.</p>
-                    <p><a class="btn" href="shop.html">Explore</a></p>
+                    <h2 class="mb-4 section-title">{{ $style['data']['product_section_title'] }}</h2>
+                    <p class="mb-4 ">{{ $style['data']['product_section_description'] }}</p>
+                    <p><a class="btn" href="{{ $style['data']['product_section_button_url'] }}">{{ $style['data']['product_section_button'] }}</a></p>
                 </div>
                 <!-- End Column 1 -->
                 {{-- @foreach (App\Helpers\SiteviewHelper::item() as $item)
              
                     <!-- Column 1 -->
                     <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"><a class="product-item" href="cart.html">
-                            <!-- img --><img class="img-fluid product-thumbnail" src="book_images/{{ $item->image }}"
-                                width="210" height="317"><!-- img --></a>
+                            <!-- img --><img class="img-fluid product-thumbnail product-thumbnail-size" src="book_images/{{ $item->image }}"
+                                ><!-- img --></a>
                         <h3 class="product-title" style="text-align: center;">{{ $item->name }}</h3>
                         <a class="product-item" href="cart.html"><strong class="product-price">{{ $item->price }}</strong> <span
                                 class="icon-cross"> <img class="img-fluid" src="images/cross.svg"> </span> </a>

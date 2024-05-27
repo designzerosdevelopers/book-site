@@ -11,13 +11,14 @@
                     <input type="hidden" name="comp_name" value="home">
                     <textarea name="html" rows="10" cols="50" id="editor1">
                         @if (!empty(App\Helpers\SiteviewHelper::page('home')))
-                            {!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
-                            @else
-                            No Data
-                            @endif
+{!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
+@else
+No Data
+@endif
                     </textarea>
                     <br>
-                    <button type="submit" name="part" value="herohtml" class="btn btn-gradient-success me-2">Save</button>
+                    <button type="submit" name="part" value="herohtml"
+                        class="btn btn-gradient-success me-2">Save</button>
                 </form>
             </div>
         </div>
@@ -29,64 +30,92 @@
                 <form action="{{ route('theme.update') }}" method="post">
                     @csrf
                     <div class="form-group row">
-                        <label for="title_color" class="col-sm-2 col-form-label">Title Color</label>
-                        <div class="col-sm-4">
-                            <input type="color" id="title_color" class="form" name="title_color" value="{{$style['titleColor']}}" required>
-                        </div>
-        
-                        <label for="price_color" class="col-sm-2 col-form-label">Price Color</label>
-                        <div class="col-sm-4">
-                            <input type="color" id="price_color" class="form" name="price_color" value="{{$style['priceColor']}}" required>
+                        <label for="title" class="col-sm-2 col-form-label">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="title" class="form-control" name="section_title"
+                                value="{{ $style['data']['product_section_title'] }}" required>
                         </div>
 
-                        {{-- <label for="background_color" class="col-sm-2 col-form-label">background Color:</label>
-                        <div class="col-sm-2">
-                            <input type="color" id="background_color" class="form" name="background_color" value="" required>
-                        </div> --}}
+                        <label for="description" class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="description" class="form-control" name="section_description"
+                                value="{{ $style['data']['product_section_description'] }}" required>
+                        </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="image_width" class="col-sm-2 col-form-label">Image Width</label>
+                        <label for="button_name" class="col-sm-2 col-form-label">Button name</label>
                         <div class="col-sm-4">
-                            <input type="text" id="image_width" class="form-control" name="image_width" value="{{$style['productWidth']}}" required>
+                            <input type="text" id="button_name" class="form-control" name="section_button_name"
+                                value="{{ $style['data']['product_section_button'] }}" required>
                         </div>
-        
-                        <label for="image_height" class="col-sm-2 col-form-label">Image Height</label>
+                        <label for="button_url" class="col-sm-2 col-form-label">Button URL</label>
                         <div class="col-sm-4">
-                            <input type="text" id="image_height" class="form-control" name="image_height" value="{{$style['productHeight']}}" required>
+                            <input type="text" id="button_url" class="form-control" name="section_button_url"
+                                value="{{ $style['data']['product_section_button_url'] }}" required>
                         </div>
                     </div>
-        
+
                     <div class="form-group row">
-                        <label for="title_size" class="col-sm-2 col-form-label">Title Size</label>
+                        <label for="title_color" class="col-sm-2 col-form-label">Product title color</label>
                         <div class="col-sm-4">
-                            <input type="text" id="title_size" class="form-control" name="title_size" value="{{$style['titleSize']}}" required>
+                            <input type="color" id="title_color" class="form" name="title_color"
+                                value="{{ $style['titleColor'] }}" required>
                         </div>
-        
-                        <label for="price_size" class="col-sm-2 col-form-label">Price Size</label>
+
+                        <label for="price_color" class="col-sm-2 col-form-label">Product price color</label>
                         <div class="col-sm-4">
-                            <input type="text" id="price_size" class="form-control" name="price_size" value="{{$style['priceSize']}}" required>
+                            <input type="color" id="price_color" class="form" name="price_color"
+                                value="{{ $style['priceColor'] }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="title_size" class="col-sm-2 col-form-label">Title size</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="title_size" class="form-control" name="title_size"
+                                value="{{ $style['titleSize'] }}" required>
+                        </div>
+
+                        <label for="price_size" class="col-sm-2 col-form-label">Price size</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="price_size" class="form-control" name="price_size"
+                                value="{{ $style['priceSize'] }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="image_width" class="col-sm-2 col-form-label">Image width</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="image_width" class="form-control" name="image_width"
+                                value="{{ $style['productWidth'] }}" required>
+                        </div>
+
+                        <label for="image_height" class="col-sm-2 col-form-label">Image height</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="image_height" class="form-control" name="image_height"
+                                value="{{ $style['productHeight'] }}" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="display_product" class="col-sm-2 col-form-label">Display products</label>
                         <div class="col-sm-4">
-                            <input type="number" id="display_product" class="form-control" name="display_product" value="{{$style['displayProduct']}}" required>
+                            <input type="number" id="display_product" class="form-control" name="display_product"
+                                value="{{ $style['data']['display_product'] }}" required>
                         </div>
-        
-
                     </div>
-        
+
                     <div class="form-group row">
                         <div class="col-sm-10">
-                            <button type="submit" name="page" value="home" class="btn btn-gradient-success me-2">Save</button>
+                            <button type="submit" name="page" value="home"
+                                class="btn btn-gradient-success me-2">Save</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        
+
 
         <br>
 
@@ -97,13 +126,14 @@
                     <input type="hidden" name="comp_name" value="home">
                     <textarea name="html" rows="10" cols="50" id="editor2">
                         @if (!empty(App\Helpers\SiteviewHelper::page('home')))
-                        {!! App\Helpers\SiteviewHelper::page('home')->lowerhtml !!}
-                        @else
-                        No Data
-                        @endif
+{!! App\Helpers\SiteviewHelper::page('home')->lowerhtml !!}
+@else
+No Data
+@endif
                     </textarea>
                     <br>
-                    <button type="submit" name="part" value="lowerhtml" class="btn btn-gradient-success me-2">Save</button>
+                    <button type="submit" name="part" value="lowerhtml"
+                        class="btn btn-gradient-success me-2">Save</button>
                 </form>
             </div>
         </div>
