@@ -8,6 +8,7 @@ use App\Models\About;
 use App\Models\Contact;
 use App\Models\Settings;
 use App\Models\Categories;
+use App\Models\Component;
 use App\Models\Item;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
@@ -260,16 +261,21 @@ class SiteViewController extends Controller
 
     public function books(Request $request)
     {
+        $component = Component::find(4);
+        $data = $component->data;
+        $dataArray = json_decode($data, true); 
+        $perpage = $dataArray['display_product'];
+       
+
         $category = '';
         if ($request->input('all')) {
             $category == 'All';
-            $allItems = Item::paginate(1);
-
+            $allItems = Item::paginate($perpage);
             $response = '';
             foreach ($allItems as $item) {
                 $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                 $response .= '<div class="product-item">';
-                $response .= '<a style="text-decoration: none;" href="'.$item->slug.'">';
+                $response .= '<a style="text-decoration: none;" href="' . $item->slug . '">';
                 $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
                 $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
                 $response .= '<div>';
@@ -289,7 +295,7 @@ class SiteViewController extends Controller
             $response .= '<div class="col-md-12 text-center">';
             $response .= '<nav aria-label="Page navigation example">';
             $response .= '<ul class="pagination justify-content-center">';
-             
+
             $category = 'All';
             if ($allItems->onFirstPage()) {
                 $response .= '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>';
@@ -325,10 +331,10 @@ class SiteViewController extends Controller
             if ($request->has('category')) {
                 $category = $request->input('category');
                 if ($category == 'All') {
-                    $allItems = Item::paginate(1);
+                    $allItems = Item::paginate($perpage);
                 } else {
                     $categoryId = Categories::where('category_name', $category)->pluck('id')->first();
-                    $allItems = Item::where('category', $categoryId)->paginate(1);
+                    $allItems = Item::where('category', $categoryId)->paginate($perpage);
                 }
 
 
@@ -336,7 +342,7 @@ class SiteViewController extends Controller
                 foreach ($allItems as $item) {
                     $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                     $response .= '<div class="product-item">';
-                    $response .= '<a style="text-decoration: none;" href="'.$item->slug.'">';
+                    $response .= '<a style="text-decoration: none;" href="' . $item->slug . '">';
                     $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
                     $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
                     $response .= '<div>';
