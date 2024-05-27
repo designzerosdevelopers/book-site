@@ -7,7 +7,7 @@
    
 
        
-    <!-- Start Product Details Section -->
+    <!-- Start Product Details Sectio -->
     <section class="product-details">
         <div class="container">
             <div class="row">
