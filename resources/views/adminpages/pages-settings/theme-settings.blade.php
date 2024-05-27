@@ -4,6 +4,7 @@
 @php $style = App\Helpers\SiteviewHelper::style('themesetting'); @endphp
     <div class="content-wrapper">
         <div class="card p-2">
+            
             <div class="">
                 <form action="{{route('theme.update')}}" method="post">
                     @csrf
