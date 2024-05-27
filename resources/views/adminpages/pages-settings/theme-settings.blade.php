@@ -3,8 +3,8 @@
 @section('content')
 @php $style = App\Helpers\SiteviewHelper::style('themesetting'); @endphp
     <div class="content-wrapper">
-        <div class="card">
-            <div class="card-body">
+        <div class="card p-2">
+            <div class="">
                 <form action="{{route('theme.update')}}" method="post">
                     @csrf
                     <div class="form-group row">

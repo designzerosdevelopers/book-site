@@ -76,5 +76,7 @@
     <script src="{{asset('admin/js/uploads.js')}}"></script>
     <!-- End custom js for this page -->
 
+    <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('admin/js/tinymce-config.js') }}"></script>
   </body>
 </html>
