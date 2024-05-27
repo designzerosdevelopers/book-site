@@ -18,18 +18,6 @@
                     <p class="mb-4 ">{{ $style['data']['product_section_description'] }}</p>
                     <p><a class="btn" href="{{ $style['data']['product_section_button_url'] }}">{{ $style['data']['product_section_button'] }}</a></p>
                 </div>
-                <!-- End Column 1 -->
-                {{-- @foreach (App\Helpers\SiteviewHelper::item() as $item)
-             
-                    <!-- Column 1 -->
-                    <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0"><a class="product-item" href="cart.html">
-                            <!-- img --><img class="img-fluid product-thumbnail product-thumbnail-size" src="book_images/{{ $item->image }}"
-                                ><!-- img --></a>
-                        <h3 class="product-title" style="text-align: center;">{{ $item->name }}</h3>
-                        <a class="product-item" href="cart.html"><strong class="product-price">{{ $item->price }}</strong> <span
-                                class="icon-cross"> <img class="img-fluid" src="images/cross.svg"> </span> </a>
-                    </div>
-                @endforeach --}}
 
 
                 @foreach (App\Helpers\SiteviewHelper::item() as $item)
@@ -47,6 +35,7 @@
                     </div>
                 </div>
             @endforeach
+            
                 <!-- Column 1 -->
 
             </div>
