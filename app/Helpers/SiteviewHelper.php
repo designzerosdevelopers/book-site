@@ -126,4 +126,10 @@ class SiteviewHelper
 
     return $style;
   }
+
+  public static function getCart()
+  {
+    $items = json_decode(request()->cookie('cart'), true) ?? [];
+    return $items;
+  }
 }
