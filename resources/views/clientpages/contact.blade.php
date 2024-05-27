@@ -1,9 +1,9 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
-
     {!! App\Helpers\SiteviewHelper::page('contact')->herohtml !!}
     <!-- Start Contact Form -->
+    @php $style = App\Helpers\SiteviewHelper::style('contactsetting'); @endphp
     <div class="untree_co-section">
         <div class="container">
             <div class="block">
@@ -21,7 +21,7 @@
                                         </svg>
                                     </div> <!-- /.icon -->
                                     <div class="service-contents">
-                                        <p>43 Raymouth Rd. Baltemoer, London 3910</p>
+                                        <p>{{ $style['contactInfo']['address'] }}</p>
                                     </div> <!-- /.service-contents-->
                                 </div> <!-- /.service -->
                             </div>
@@ -37,7 +37,7 @@
                                         </svg>
                                     </div> <!-- /.icon -->
                                     <div class="service-contents">
-                                        <p>info@yourdomain.com</p>
+                                        <p>{{ $style['contactInfo']['email'] }}</p>
                                     </div> <!-- /.service-contents-->
                                 </div> <!-- /.service -->
                             </div>
@@ -53,7 +53,7 @@
                                         </svg>
                                     </div> <!-- /.icon -->
                                     <div class="service-contents">
-                                        <p>+1 294 3925 3939</p>
+                                        <p>{{ $style['contactInfo']['phone'] }}</p>
                                     </div> <!-- /.service-contents-->
                                 </div> <!-- /.service -->
                             </div>

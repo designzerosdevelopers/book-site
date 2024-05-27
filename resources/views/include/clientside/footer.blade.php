@@ -1,4 +1,4 @@
-{!! App\Helpers\SiteviewHelper::page('footer')->html !!}
+{!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 
 
 {{-- <footer class="footer-section ">
