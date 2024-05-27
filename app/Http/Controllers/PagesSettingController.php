@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pages;
 use App\Models\Upload;
 use App\Models\Component;
 use App\Models\Settings;
@@ -22,57 +21,88 @@ class PagesSettingController extends Controller
 {
     public function themeUpdate(Request $r)
     {
-        
+
         $css = \App\Helpers\SiteviewHelper::page('site')->css;
         
         if ($r->page == 'home') {
 
-           $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->title_color . '$3', $css);
-           $css = preg_replace('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->title_size . '$3', $css);
-           $css = preg_replace('/(\.product-price\s*{[^}]*?color:\s*)[^;]+(;[^}]*})/si', '$1' . $r->price_color . '$2', $css);
-           $css = preg_replace('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->price_size . '$3', $css);
-           $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->image_height . '$3', $css);
-           $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' .'0'. $r->image_width . '$3', $css);
-           Component::where('name', 'home')->update([
-            'data' => ['display_product'=>$r->display_product]
-        ]);
-        } else {
+             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
+             $css = preg_replace('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->title_size . '$3', $css);
+             $css = preg_replace('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->price_color . '$3', $css);
+             $css = preg_replace('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->price_size . '$3', $css);
+             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
+             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
+
+            Component::where('name', 'home')->update([
+                'data' => [
+                    'display_product' => $r->display_product,
+                    'product_section_title' => $r->section_title,
+                    'product_section_description' => $r->section_description,
+                    'product_section_button'=> $r->section_button_name,
+                    'product_section_button_url'=> $r->section_button_url,
+                    ]
+            ]);
+
+            Component::where('name', 'site')->update([
+                'css' => $css,
+            ]);
+        } elseif ($r->page == 'shop') {
+
+            Component::where('name', 'shop')->update([
+                'data' => ['display_product' => $r->display_product]
+            ]);
+        } elseif ($r->page == 'contact') {
+
+            $css = preg_replace('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->iconBG . '$3', $css);
+            $css = preg_replace('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->textColor . '$3', $css);
+            Component::where('name', 'site')->update([
+                'css' => $css,
+            ]);
+
+            Component::where('name', 'contact')->update([
+                'data' => [
+                    'address' => $r->address,
+                    'phone' => $r->phone,
+                    'email' => $r->email,
+                ]
+            ]);
+
+        } elseif ($r->page == 'productdetailsetting') {
+
+            $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->product_title_color . '$3', $css);
+            $css = preg_replace('/(\.product-title\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_title_size . '$3', $css);
+            $css = preg_replace('/(\.product-price\s*{[^}]*?color:\s*)[^;]+(;[^}]*})/si', '$1' . $r->product_price_color . '$2', $css);
+            $css = preg_replace('/(\.product-price\s*{\s*.*?font-size:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_price_size . '$3', $css);
+            $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_image_height . '$3', $css);
+            $css = preg_replace('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->product_image_width . '$3', $css);
+
+            Component::where('name', 'productdetail')->update([
+                'data' => [
+                    'product_button_name'=> $r->product_button_name,
+                    ]
+            ]);
+            Component::where('name', 'site')->update([
+                'css' => $css,
+            ]);
+
+        }else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
+
+            Component::where('name', 'site')->update([
+                'css' => $css,
+            ]);
         }
 
-       
-        Component::where('name', 'site')->update([
-            'css' => $css,
-        ]);
+
+
 
         return redirect()->back();
     }
 
-    public function editTheme()
-    {
-
-        $css = \App\Helpers\SiteviewHelper::page('site')->css;
-
-        $color = [];
-        preg_match('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
-        $color['hero'] = $matches[2];
-        preg_match('/(body\s*{\s*.*?background-color:\s*)([^;]+)(.*?})/s', $css, $matches);
-        $color['bg'] = isset($matches[2]) ? $matches[2] : null;
-
-        preg_match('/(a\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', $css, $matches);
-        $color['url'] = isset($matches[2]) ? $matches[2] : null;
-
-        preg_match('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
-        $color['navbar'] = trim(str_replace('!important', '', $matches[2]));
-        preg_match('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', $css, $matches);
-        $color['footer'] = $matches[2];
-
-        return view('adminpages.pages-settings.theme-settings', ['color' => $color]);
-    }
 
     public function dashboard()
     {
@@ -306,6 +336,10 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
+    public function upload_image(Request $request){
+
+    }
+
     public function updatePage(Request $r)
     {
         if ($r->isXmlHttpRequest()) {
@@ -338,8 +372,9 @@ class PagesSettingController extends Controller
 
 
         $component = Component::where('name', $r->comp_name);
+
         $status = $component->update([
-            'html' => $r->html
+            $r->part => $r->html
         ]);
 
         if ($status == 1) {

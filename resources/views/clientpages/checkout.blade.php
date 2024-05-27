@@ -2,10 +2,10 @@
 
 @section('content')
 
-    {!! App\Helpers\SiteViewHelper::clientSidePage('checkout') !!}
+    {{-- {!! App\Helpers\SiteViewHelper::clientSidePage('checkout') !!} --}}
 
 
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 
 <script>
@@ -63,9 +63,9 @@
 @endif
 
 
-</script> --}}
-@stop
-{{-- <!-- bStart Hero Section  -->
+</script>
+
+<!-- bStart Hero Section  -->
 		<div class="hero">
 			<div class="container">
 				<div class="row justify-content-between">
@@ -253,4 +253,6 @@
 		</form>
 		  <!-- </form> -->
 		</div>
-	  </div> --}}
+	  </div>
+
+	  @stop

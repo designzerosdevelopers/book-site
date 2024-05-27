@@ -1,6 +1,7 @@
 @extends('layouts.admin-layout.app')
 
 @section('content')
+@php $style = App\Helpers\SiteviewHelper::style('themesetting'); @endphp
     <div class="content-wrapper">
         <div class="card">
             <div class="card-body">
@@ -9,31 +10,31 @@
                     <div class="form-group row">
                         <label for="bg_color" class="col-sm-2 col-form-label">Background Color:</label>
                         <div class="col-sm-4">
-                            <input type="color" id="bg_color" name="bg_color" value="{{$color['bg']}}">
+                            <input type="color" id="bg_color" name="bg_color" value="{{$style['bg']}}">
                         </div>
 
                         <label for="url_color" class="col-sm-2 col-form-label">URL Color:</label>
                         <div class="col-sm-4">
-                            <input type="color" id="url_color" name="url_color" value="{{$color['url']}}">
+                            <input type="color" id="url_color" name="url_color" value="{{$style['url']}}">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="navbar_color" class="col-sm-2 col-form-label">Navbar Color:</label>
                         <div class="col-sm-4">
-                            <input type="color" id="navbar_color" name="navbar_color" value="{{$color['navbar']}}">
+                            <input type="color" id="navbar_color" name="navbar_color" value="{{$style['navbar']}}">
                         </div>
 
                         <label for="hero_color" class="col-sm-2 col-form-label">Hero Section Color:</label>
                         <div class="col-sm-4">
-                            <input type="color" id="hero_color" name="hero_color" value="{{$color['hero']}}">
+                            <input type="color" id="hero_color" name="hero_color" value="{{$style['hero']}}">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="footer_color" class="col-sm-2 col-form-label">Footer Color:</label>
                         <div class="col-sm-4">
-                            <input type="color" id="footer_color" name="footer_color" value="{{$color['footer']}}">
+                            <input type="color" id="footer_color" name="footer_color" value="{{$style['footer']}}">
                         </div>
                     </div>
 
