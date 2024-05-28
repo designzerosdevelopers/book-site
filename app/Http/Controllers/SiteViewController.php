@@ -31,8 +31,13 @@ class SiteViewController extends Controller
     {
         $item = Item::where('slug', $product)->first();
 
+        if (!$item) {
+            abort(404); // Send a 404 response if no item is found
+        }
+
         return view('clientpages.productdetail', ['item' => $item]);
     }
+
 
 
     public function getProductsByCategory($category)
@@ -231,7 +236,7 @@ class SiteViewController extends Controller
                 Session::flush();
 
                 try {
-                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, ));
+                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email,));
 
                     Session::flash('email_sent');
                 } catch (\Exception $e) {
@@ -255,7 +260,6 @@ class SiteViewController extends Controller
         array_unshift($categories, 'All');
 
         return view('clientpages.shop', ['categories' => $categories]);
-
     }
 
 
@@ -263,9 +267,9 @@ class SiteViewController extends Controller
     {
         $component = Component::find(4);
         $data = $component->data;
-        $dataArray = json_decode($data, true); 
+        $dataArray = json_decode($data, true);
         $perpage = $dataArray['display_product'];
-       
+
 
         $category = '';
         if ($request->input('all')) {
@@ -390,7 +394,6 @@ class SiteViewController extends Controller
                 $response .= '</div>';
 
                 return $response;
-
             }
         }
 
@@ -513,5 +516,4 @@ class SiteViewController extends Controller
 
 
     }
-
 }
