@@ -36,6 +36,8 @@ Route::middleware('check.database')->group(function () {
 
 // clientside controller
 Route::get('/', function(){ return view('clientpages.index');})->name('index');
+Route::get('/index', function(){ return redirect()->route('index');});
+Route::get('/home', function(){ return redirect()->route('index');});
 Route::get('/about', function(){ return view('clientpages.about');})->name('about');
 Route::get('/contact', function(){ return view('clientpages.contact');})->name('contact');
 Route::get('/shop', [SiteViewController::class, 'shop'])->name('shop');
