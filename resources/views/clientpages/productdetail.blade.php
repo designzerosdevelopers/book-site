@@ -8,7 +8,7 @@
 
        
     <!-- Start Product Details Section -->
-    <section class="product-details">
+    <section class="product-details ">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 product-detail-main-img img-wrap">

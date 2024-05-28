@@ -101,16 +101,5 @@
 
     <!-- End Contact Form -->
 
-    {!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
-
 @stop
 
-
-
-
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/tiny-slider.js"></script>
-<script src="js/custom.js"></script>
-</body>
-
-</html>

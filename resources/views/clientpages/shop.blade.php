@@ -3,43 +3,8 @@
 
     {!! App\Helpers\SiteviewHelper::page('shop')->herohtml !!}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    {{-- <!-- Start Hero Section -->
-    <div class="hero">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-lg-5">
-                    <div class="intro-excerpt">
-                        <h1>Shop</h1>
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Hero Section --> --}}
-
     <div class="untree_co-section product-section before-footer-section">
-        <div class="container">
+        <div class="container ">
             <div class="row">
                 <div class="col-md-12 mb-3 my-5">
                     <ul class="nav justify-content-center">
@@ -57,7 +22,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
 
         {{-- @foreach (App\Helpers\SiteviewHelper::item() as $item)
              
@@ -114,11 +79,6 @@
                         </nav>
                     </div>
                 </div> --}}
-
-                
-
-        {!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
-
 
     @stop
 

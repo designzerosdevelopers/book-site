@@ -274,7 +274,7 @@ class SiteViewController extends Controller
             $response = '';
             foreach ($allItems as $item) {
                 $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
-                $response .= '<div class="product-item">';
+                $response .= '<div class="product-item mt-5  pt-5">';
                 $response .= '<a style="text-decoration: none;" href="' . $item->slug . '">';
                 $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
                 $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
@@ -294,7 +294,7 @@ class SiteViewController extends Controller
             $response .= '<div class="row">';
             $response .= '<div class="col-md-12 text-center">';
             $response .= '<nav aria-label="Page navigation example">';
-            $response .= '<ul class="pagination justify-content-center">';
+            $response .= '<ul class="pagination justify-content-center mt-5 pt-5">';
 
             $category = 'All';
             if ($allItems->onFirstPage()) {

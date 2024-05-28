@@ -5,12 +5,6 @@
 
 @stop --}}
 
-
-
-
-
-
-
 @extends('layouts.clientside-layout.app')
 
 @section('content')
@@ -76,7 +70,7 @@
                                 </tbody>
                             </table>
                         @else
-                            <div class="empty-cart-message text-center mt-2">
+                            <div class="empty-cart-message text-center mt-5 pt-5">
                                 <p class="empty-cart-text display-6">Your cart is empty.</p>
                             </div>
                         @endif
