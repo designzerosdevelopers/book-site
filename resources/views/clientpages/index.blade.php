@@ -1,52 +1,42 @@
 @extends('layouts.clientside-layout.app')
-
 @section('content')
-
     {!! App\Helpers\SiteviewHelper::page('home')->herohtml !!}
     @php $style = App\Helpers\SiteviewHelper::style('homesetting'); @endphp
-
-
- 
-
-
     <!-- Start Product Section -->
     <div class="product-section">
         <div class="container">
-            <div class="row"><!-- Start Column 1 -->
+            <div class="row">
+                <!-- Start Column 1 -->
                 <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
                     <h2 class="mb-4 section-title">{{ $style['data']['product_section_title'] }}</h2>
                     <p class="mb-4 ">{{ $style['data']['product_section_description'] }}</p>
-                    <p><a class="btn" href="{{ $style['data']['product_section_button_url'] }}">{{ $style['data']['product_section_button'] }}</a></p>
+                    <p><a class="btn"
+                            href="{{ $style['data']['product_section_button_url'] }}">{{ $style['data']['product_section_button'] }}</a>
+                    </p>
                 </div>
-
-
                 @foreach (App\Helpers\SiteviewHelper::item() as $item)
-                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <div class="product-item">
-                        <a style="text-decoration: none;" href="{{ $item->slug }}">
-                            <img src="{{ asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
-                            <h3 class="product-title item-title">{{$item->name}}</h3>
-                            {{-- <div>
+                    <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                        <div class="product-item">
+                            <a style="text-decoration: none;" href="{{ $item->slug }}">
+                                <img src="{{ asset('book_images/' . $item->image) }}" class="img-fluid product-thumbnail">
+                                <h3 class="product-title item-title">{{ $item->name }}</h3>
+                                {{-- <div>
                                 <strong class="product-price">${{$item->price}}</strong>
                             </div> --}}
-                        </a>
-                                <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong class="item-price">${{ $item->price }}</strong> <span
-                                class="icon-cross"> <img class="img-fluid" src="{{ asset('clientside/images/cross.svg')}}"> </span> </a>
+                            </a>
+                            <a class="product-item" href="{{ route('add.product', ['id' => encrypt($item->id)]) }}"><strong
+                                    class="item-price">${{ $item->price }}</strong> <span class="icon-cross"> <img
+                                        class="img-fluid" src="{{ asset('clientside/images/cross.svg') }}"> </span>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @endforeach
-            
+                @endforeach
                 <!-- Column 1 -->
-
             </div>
         </div>
     </div>
     <!-- End Product Section -->
-
-
-
     {!! App\Helpers\SiteviewHelper::page('home')->lowerhtml !!}
-    {!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 @stop
 
 

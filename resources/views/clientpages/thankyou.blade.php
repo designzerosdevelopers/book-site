@@ -3,8 +3,6 @@
 @extends('layouts.clientside-layout.app')
 
 @section('content')
-
-<!-- Start Hero Section -->
 <!-- Add the 'text-center' class to the parent div of the content you want to center -->
 <div class="untree_co-section text-center">
     <div class="container">
