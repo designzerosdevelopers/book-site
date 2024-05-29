@@ -19,3 +19,6 @@
 <script src="{{asset('admin/js/dashboard.js')}}"></script>
 <script src="{{asset('admin/js/todolist.js')}}"></script>
 
+@foreach(\App\Helpers\SiteviewHelper::customCode('for footer section') as $link)
+{!! $link->link !!}
+@endforeach

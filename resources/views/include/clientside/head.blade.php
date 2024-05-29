@@ -6,9 +6,10 @@
     <meta name="description" content="" />
     <meta name="keywords" content="bootstrap, bootstrap4" />
 
+
     <!-- Bootstrap CSS -->
    
-    {{-- <link href="{{asset('clientside/css/product-detail.css')}}" rel="stylesheet"> --}}
+    <link href="{{asset('clientside/css/product-detail.css')}}" rel="stylesheet">
     <link href="{{asset('clientside/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="{{ asset('clientside/css/tiny-slider.css') }}" rel="stylesheet">
