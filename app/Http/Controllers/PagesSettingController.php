@@ -9,6 +9,7 @@ use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Home;
+use App\Models\CustomCode;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -23,24 +24,24 @@ class PagesSettingController extends Controller
     {
 
         $css = \App\Helpers\SiteviewHelper::page('site')->css;
-        
+
         if ($r->page == 'home') {
 
-             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
-             $css = preg_replace('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->title_size . '$3', $css);
-             $css = preg_replace('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->price_color . '$3', $css);
-             $css = preg_replace('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->price_size . '$3', $css);
-             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
-             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
+            $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
+            $css = preg_replace('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->title_size . '$3', $css);
+            $css = preg_replace('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->price_color . '$3', $css);
+            $css = preg_replace('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->price_size . '$3', $css);
+            $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
+            $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
 
             Component::where('name', 'home')->update([
                 'data' => [
                     'display_product' => $r->display_product,
                     'product_section_title' => $r->section_title,
                     'product_section_description' => $r->section_description,
-                    'product_section_button'=> $r->section_button_name,
-                    'product_section_button_url'=> $r->section_button_url,
-                    ]
+                    'product_section_button' => $r->section_button_name,
+                    'product_section_button_url' => $r->section_button_url,
+                ]
             ]);
 
             Component::where('name', 'site')->update([
@@ -66,7 +67,6 @@ class PagesSettingController extends Controller
                     'email' => $r->email,
                 ]
             ]);
-
         } elseif ($r->page == 'productdetailsetting') {
 
             $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->product_title_color . '$3', $css);
@@ -78,14 +78,13 @@ class PagesSettingController extends Controller
 
             Component::where('name', 'productdetail')->update([
                 'data' => [
-                    'product_button_name'=> $r->product_button_name,
-                    ]
+                    'product_button_name' => $r->product_button_name,
+                ]
             ]);
             Component::where('name', 'site')->update([
                 'css' => $css,
             ]);
-
-        }else {
+        } else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
@@ -97,12 +96,57 @@ class PagesSettingController extends Controller
             ]);
         }
 
-
-
-
         return redirect()->back();
     }
 
+    public function customCode(Request $r)
+    {
+        // Validate input
+        $r->validate([
+            'type' => 'required|string',
+            'for' => 'required|string',
+            'link' => 'nullable|string',
+            'code_file' => 'nullable|file',
+        ]);
+
+        if ($r->hasFile('code_file') && $r->link) {
+            return redirect()->back()->with('error', 'Please provide either a link or a file, not both.');
+        }
+
+        if (!$r->hasFile('code_file') && !$r->link) {
+            return redirect()->back()->with('error', 'Please provide either a link or a file.');
+        }
+
+        $link = $r->link;
+
+        if ($r->hasFile('code_file')) {
+            $file = $r->file('code_file');
+            $destinationPath = public_path('clientside/js-css-other/'); // Define the path where you want to save the file
+            $fileName = $file->getClientOriginalName(); // Create a unique file name
+
+            // Move the file to the public/custom_codes directory
+            $file->move($destinationPath, $fileName);
+
+            // Store the file path relative to the public directory
+            $link = $destinationPath .'/'. $fileName;
+            
+        }
+
+        CustomCode::create([
+            'for' => $r->for,
+            'type' => $r->type,
+            'link' => $link
+        ]);
+
+        return redirect()->back()->with('success', 'Custom code saved successfully.');
+    }
+
+
+    public function customCodeDelete($id)
+    {
+        CustomCode::find($id)->delete;
+        return redirect()->back();
+    }
 
     public function dashboard()
     {
@@ -336,8 +380,8 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
-    public function upload_image(Request $request){
-
+    public function upload_image(Request $request)
+    {
     }
 
     public function updatePage(Request $r)

@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Item;
-use App\Helpers\HtmlEasyDom;
+use App\Models\CustomCode;
 
 class SiteviewHelper
 {
@@ -135,7 +135,6 @@ class SiteviewHelper
       preg_match('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['productWidth'] = isset($matches[2]) ? $matches[2] : null;
       $style['data'] = json_decode(Component::where('name', 'productdetail')->first()->data, true);
-
     }
 
     return $style;
@@ -145,5 +144,14 @@ class SiteviewHelper
   {
     $items = json_decode(request()->cookie('cart'), true) ?? [];
     return $items;
+  }
+
+  public static function customCode($type = '', $for = '')
+  {
+    if ($for == '') {
+      return CustomCode::get();
+    } else {
+      return CustomCode::where('for', $for)->where('type', $type)->get();
+    }
   }
 }

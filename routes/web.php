@@ -73,12 +73,13 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::get('/cart-settings', function(){ return view('adminpages.pages-settings.cart-settings');})->name('edit.cart');
         Route::get('/product-detail-settings', function(){ return view('adminpages.pages-settings.product-detail-settings');})->name('edit.product.detail');
         Route::get('/checkout-settings', function(){ return view('adminpages.pages-settings.checkout-settings');})->name('edit.checkout');
-
         Route::get('/theme-settings', function(){ return view('adminpages.pages-settings.theme-settings');})->name('edit.theme');
+        Route::get('/custom-code', function(){ return view('adminpages.custom-code');})->name('edit.codelinks');
+
         Route::post('/theme-update',[PagesSettingController::class, 'themeUpdate'])->name('theme.update');
-
-
         Route::post('/updatepage', [PagesSettingController::class, 'updatePage'])->name('update.page');
+        Route::post('/custom-code-store',[PagesSettingController::class, 'customCode'])->name('custom.code.store');
+        Route::delete('/custom-code-delete',[PagesSettingController::class, 'customCodeDelete'])->name('custom.code.delete');
 
         //category routes
         Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
