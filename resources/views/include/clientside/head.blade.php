@@ -6,6 +6,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="bootstrap, bootstrap4" />
 
+    <!-- Bootstrap CSS -->
    
     {{-- <link href="{{asset('clientside/css/product-detail.css')}}" rel="stylesheet"> --}}
     <link href="{{asset('clientside/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -15,7 +16,8 @@
 
     <title>Digital store</title>
     <style>
-        {!! App\Helpers\SiteviewHelper::page('site')->css !!} .cart-item {
+        {!! App\Helpers\SiteviewHelper::page('site')->css !!} 
+        .cart-item {
             position: relative;
         }
 
