@@ -28,8 +28,8 @@ function initializeTinyMCE(selector, fileUploadEndpoint) {
         },
         menubar: 'favs file edit view insert format tools table',
         content_css: [
-            'clientside/js-css-other/style.cs',
-            "https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"
+            'clientside/js-css-other/style.css',
+            "https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
         ],
         file_picker_callback: function(cb, value, meta) {
             var input = document.createElement('input');
