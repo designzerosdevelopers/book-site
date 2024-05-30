@@ -9,7 +9,7 @@ use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Home;
-use App\Models\Customcode;
+use App\Models\CustomCode;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -67,7 +67,6 @@ class PagesSettingController extends Controller
                     'email' => $r->email,
                 ]
             ]);
-
         } elseif ($r->page == 'productdetailsetting') {
 
             $css = preg_replace('/(\.product-title\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->product_title_color . '$3', $css);
@@ -85,7 +84,6 @@ class PagesSettingController extends Controller
             Component::where('name', 'site')->update([
                 'css' => $css,
             ]);
-
         } else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
@@ -98,12 +96,58 @@ class PagesSettingController extends Controller
             ]);
         }
 
-
-
-
         return redirect()->back();
     }
 
+    public function customCode(Request $r)
+    {
+        // Validate input
+        $r->validate([
+            'type' => 'required|string',
+            'for' => 'required|string',
+            'link' => 'nullable|string',
+            'code_file' => 'nullable|file',
+        ]);
+
+        if ($r->hasFile('code_file') && $r->link) {
+            return redirect()->back()->with('error', 'Please provide either a link or a file, not both.');
+        }
+
+        if (!$r->hasFile('code_file') && !$r->link) {
+            return redirect()->back()->with('error', 'Please provide either a link or a file.');
+        }
+
+        $link = $r->link;
+        $file = 0;
+        if ($r->hasFile('code_file')) {
+            $file = $r->file('code_file');
+            $destinationPath = 'clientside/js-css-other/'; // Define the path where you want to save the file
+            $fileName = $file->getClientOriginalName(); // Create a unique file name
+
+            // Move the file to the public/custom_codes directory
+            $file->move($destinationPath, $fileName);
+
+            // Store the file path relative to the public directory
+            $link = $destinationPath .'/'. $fileName;
+            $file = 1;
+        }
+
+        CustomCode::create([
+            'for' => $r->for,
+            'file' => $file,
+            'type' => $r->type,
+            'link' => $link
+        ]);
+
+        return redirect()->back()->with('success', 'Custom code saved successfully.');
+    }
+
+
+    public function customCodeDelete(Request $r)
+    {
+        CustomCode::find($r->id)->delete();
+        return redirect()->back();
+    }
 
     public function dashboard()
     {
@@ -339,7 +383,6 @@ class PagesSettingController extends Controller
 
     public function upload_image(Request $request)
     {
-
     }
 
     public function updatePage(Request $r)

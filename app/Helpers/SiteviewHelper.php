@@ -5,9 +5,7 @@ namespace App\Helpers;
 use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Item;
-use App\Models\Customcode;
-use App\Helpers\HtmlEasyDom;
-use Illuminate\Support\Facades\DB;
+use App\Models\CustomCode;
 
 class SiteviewHelper
 {
@@ -137,7 +135,6 @@ class SiteviewHelper
       preg_match('/(\.product-detail-main-img img\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', $css, $matches);
       $style['productWidth'] = isset($matches[2]) ? $matches[2] : null;
       $style['data'] = json_decode(Component::where('name', 'productdetail')->first()->data, true);
-
     }
 
     return $style;
@@ -149,14 +146,12 @@ class SiteviewHelper
     return $items;
   }
 
-
-
-  public static function customcode($column)
+  public static function customCode($type = '', $for = '')
   {
-    if ($column == 'css') {
-      return asset('clientside/css/bootstrap.min.css');
+    if ($for == '') {
+      return CustomCode::get();
+    } else {
+      return CustomCode::where('for', $for)->where('type', $type)->get();
+    }
   }
-    // return DB::table('customcode')->first()->{$column};
-  }
-
 }
