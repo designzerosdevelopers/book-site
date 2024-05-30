@@ -5,12 +5,6 @@
 
 @stop --}}
 
-
-
-
-
-
-
 @extends('layouts.clientside-layout.app')
 
 @section('content')
@@ -31,14 +25,13 @@
         </div>
     </div>
     <!-- End Hero Section -->
-
     <div class="untree_co-section before-footer-section">
         <div class="container">
             <div class="row mb-5">
                 <form class="col-md-12" method="post">
                     <div class="site-blocks-table">
                         @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
-                            <table class="table">
+                            <table class="table mt-4">
                                 <thead>
                                     <tr>
                                         <th class="product-thumbnail">Image</th>
@@ -76,8 +69,10 @@
                                 </tbody>
                             </table>
                         @else
-                            <div class="empty-cart-message text-center mt-2">
+                            <div class="empty-cart-message text-center mt-5 pt-5">
                                 <p class="empty-cart-text display-6">Your cart is empty.</p>
+                                <a href="{{ route('shop') }}" class="btn btn-green">Continue
+                                    Shopping</a>
                             </div>
                         @endif
                     </div>
@@ -85,6 +80,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
+                @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
                     <div class="row mb-5">
                         <div class="col-md-6">
                             <a href="{{ route('shop') }}" class="btn btn-outline-black btn-sm btn-block">Continue
@@ -103,6 +99,7 @@
                             <button class="btn btn-black">Apply Coupon</button>
                         </div>
                     </div>
+                    @endif
                 </div>
                 @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
                     <div class="col-md-6 pl-5">

@@ -2,69 +2,6 @@
 
 @section('content')
 
-    {{-- {!! App\Helpers\SiteViewHelper::clientSidePage('checkout') !!} --}}
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-
-<script>
-  $(document).ready(function() {
-    $('#stripeButton').click(function() {
-      if ($('#paymentForm')[0].checkValidity()) { // Check form validity before submission
-        $('#paymentForm').attr('action', '{{ route("stripecharge", ["cartItems" => $cartItems ]) }}');
-        $('#paymentForm').submit();
-      } else {
-        // Let HTML5 form validation handle the error message
-        $('#paymentForm')[0].reportValidity();
-      }
-    });
-
-    $('#paypalButton').click(function() {
-      if ($('#paymentForm')[0].checkValidity()) { // Check form validity before submission
-        $('#paymentForm').attr('action', '{{ route("paypalcharge", ["cartItems" => $cartItems ]) }}');
-        $('#paymentForm').submit();
-      } else {
-        // Let HTML5 form validation handle the error message
-        $('#paymentForm')[0].reportValidity();
-      }
-    });
-  });
-
-  @if (session()->has('errorpaypal'))
-
-        $(document).ready(function() {
-			var existingItemIds = {!! json_encode(session('errorpaypal')) !!};
-
-			if (existingItemIds.length > 0) {
-				var message = "You have previously purchased the following book";
-				if (existingItemIds.length > 1) {
-					message += "s";
-				}
-				message += ":\n\n";
-				
-				if (existingItemIds.length === 1) {
-					message += existingItemIds[0] + "\n\n";
-					message += "You can download it by logging in with the same email address.\n\n";
-				} else {
-					existingItemIds.forEach(function(item, index) {
-						message += (index + 1) + ". " + item + "\n";
-					});
-					message += "\nYou can download them by logging in with the same email address.\n\n";
-				}
-				message += "Please remove this book" + (existingItemIds.length > 1 ? "s" : "") + " from your cart to proceed with your current purchase.";
-				
-				alert(message);
-			}
-
-
-        });
-   
-@endif
-
-
-</script>
-
 <!-- bStart Hero Section  -->
 		<div class="hero">
 			<div class="container">
@@ -255,4 +192,63 @@
 		</div>
 	  </div>
 
+		  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		  
+		  <script>
+			$(document).ready(function() {
+			  $('#stripeButton').click(function() {
+				if ($('#paymentForm')[0].checkValidity()) { // Check form validity before submission
+				  $('#paymentForm').attr('action', '{{ route("stripecharge", ["cartItems" => $cartItems ]) }}');
+				  $('#paymentForm').submit();
+				} else {
+				  // Let HTML5 form validation handle the error message
+				  $('#paymentForm')[0].reportValidity();
+				}
+			  });
+		  
+			  $('#paypalButton').click(function() {
+				if ($('#paymentForm')[0].checkValidity()) { // Check form validity before submission
+				  $('#paymentForm').attr('action', '{{ route("paypalcharge", ["cartItems" => $cartItems ]) }}');
+				  $('#paymentForm').submit();
+				} else {
+				  // Let HTML5 form validation handle the error message
+				  $('#paymentForm')[0].reportValidity();
+				}
+			  });
+			});
+		  
+			@if (session()->has('errorpaypal'))
+		  
+				  $(document).ready(function() {
+					  var existingItemIds = {!! json_encode(session('errorpaypal')) !!};
+		  
+					  if (existingItemIds.length > 0) {
+						  var message = "You have previously purchased the following book";
+						  if (existingItemIds.length > 1) {
+							  message += "s";
+						  }
+						  message += ":\n\n";
+						  
+						  if (existingItemIds.length === 1) {
+							  message += existingItemIds[0] + "\n\n";
+							  message += "You can download it by logging in with the same email address.\n\n";
+						  } else {
+							  existingItemIds.forEach(function(item, index) {
+								  message += (index + 1) + ". " + item + "\n";
+							  });
+							  message += "\nYou can download them by logging in with the same email address.\n\n";
+						  }
+						  message += "Please remove this book" + (existingItemIds.length > 1 ? "s" : "") + " from your cart to proceed with your current purchase.";
+						  
+						  alert(message);
+					  }
+		  
+		  
+				  });
+			 
+		  @endif
+		  
+		  
+		  </script>
 	  @stop

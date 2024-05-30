@@ -2,8 +2,6 @@
 
 @section('content')
 	{!! App\Helpers\SiteviewHelper::page('about')->allhtml !!}
-
-	{!! App\Helpers\SiteviewHelper::page('footer')->allhtml !!}
 @stop
 {{-- @extends('layouts.clientside-layout.app')
 @section('content')
@@ -162,8 +160,3 @@
 		
 	
 
-	<script src="js/bootstrap.bundle.min.js"></script>
-	<script src="js/tiny-slider.js"></script>
-	<script src="js/custom.js"></script>
-</body>
-</html>
