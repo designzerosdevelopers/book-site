@@ -451,7 +451,7 @@ class PagesSettingController extends Controller
     {
 
         $data = Categories::all();
-        $categories =  $data->toArray();
+        $categories = $data->toArray();
         return view('adminpages.categories', compact('categories'));
     }
 
@@ -566,7 +566,7 @@ class PagesSettingController extends Controller
 
         // Check for empty cells
         foreach ($csvData as $idx => $row) {
-            foreach ($row as  $value) {
+            foreach ($row as $value) {
                 if ($value === "") {
                     return redirect()->back()->with('error', 'Empty cell found at (Row ' . ($idx + 2) . '). Please fill in the missing data.');
                 }
@@ -856,5 +856,12 @@ class PagesSettingController extends Controller
 
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
+    }
+
+    public function custom_code()
+    {
+        $links = Customcode::get();
+        return view('adminpages.custom_code', compact('links'));
+
     }
 }

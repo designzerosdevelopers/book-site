@@ -25,7 +25,10 @@
     @endforeach
 
     <title>Digital store</title>
+
     <style>
+
+
         {!! App\Helpers\SiteviewHelper::page('site')->css !!} .cart-item {
             position: relative;
         }
