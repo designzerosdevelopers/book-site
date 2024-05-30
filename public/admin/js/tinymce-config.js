@@ -28,7 +28,7 @@ function initializeTinyMCE(selector, fileUploadEndpoint) {
         },
         menubar: 'favs file edit view insert format tools table',
         content_css: [
-            'clientside/css/style.css',
+            'clientside/js-css-other/style.css',
             "https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
         ],
         file_picker_callback: function(cb, value, meta) {
@@ -73,3 +73,95 @@ function initializeTinyMCE(selector, fileUploadEndpoint) {
 
 initializeTinyMCE('#editor1', '/updatepage');
 initializeTinyMCE('#editor2', '/updatepage');
+
+
+
+
+
+// function initializeTinyMCE(selector, fileUploadEndpoint) {
+//     // Load Bootstrap CSS directly
+//     var contentCss = ["https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"];
+
+//     // Load style.css dynamically using AJAX request
+//     $.ajax({
+//         url: '/get-css', // Change this URL to your Laravel route
+//         method: 'GET',
+//         success: function(response) {
+//             contentCss.push(response); // Assuming the response contains the URL to style.css
+//             initializeEditor(selector, fileUploadEndpoint, contentCss);
+//             console.log(response)
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Failed to load style.css:', error);
+//         }
+//     });
+// }
+
+// function initializeEditor(selector, fileUploadEndpoint, contentCss) {
+//     tinymce.init({
+//         selector: selector,
+//         width: '100%',
+//         height: 400,
+//         plugins: [
+//             'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor',
+//             'pagebreak',
+//             'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime',
+//             'media',
+//             'table', 'emoticons', 'template', 'codesample'
+//         ],
+//         toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify |' +
+//             'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+//             'forecolor backcolor emoticons',
+//         image_title: true,
+//         branding: false,
+//         automatic_uploads: true,
+//         file_picker_types: 'image',
+//         menu: {
+//             favs: {
+//                 title: 'Menu',
+//                 items: 'code visualaid | searchreplace | emoticons'
+//             }
+//         },
+//         menubar: 'favs file edit view insert format tools table',
+//         content_css: contentCss,
+//         file_picker_callback: function(cb, value, meta) {
+//             var input = document.createElement('input');
+//             input.setAttribute('type', 'file');
+//             input.setAttribute('accept', 'image/*');
+
+//             input.onchange = function() {
+//                 var file = this.files[0];
+
+//                 var formData = new FormData();
+//                 formData.append('image', file);
+
+//                 $.ajax({
+//                     url: fileUploadEndpoint,
+//                     method: 'POST',
+//                     headers: {
+//                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//                     },
+//                     data: formData,
+//                     processData: false,
+//                     contentType: false,
+//                     success: function(response) {
+//                         var imageUrl = response.url;
+//                         cb(imageUrl, {
+//                             src: imageUrl,
+//                             title: file.name
+//                         });
+//                     },
+//                     error: function(xhr, status, error) {
+//                         console.error('Image could not be uploaded:', error);
+//                     }
+//                 });
+
+//             };
+
+//             input.click();
+//         }
+//     });
+// }
+
+// initializeTinyMCE('#editor1', '/updatepage');
+// initializeTinyMCE('#editor2', '/updatepage');

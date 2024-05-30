@@ -236,7 +236,7 @@ class SiteViewController extends Controller
                 Session::flush();
 
                 try {
-                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email,));
+                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, ));
 
                     Session::flash('email_sent');
                 } catch (\Exception $e) {
@@ -265,11 +265,11 @@ class SiteViewController extends Controller
 
     public function books(Request $request)
     {
+
         $component = Component::find(4);
         $data = $component->data;
         $dataArray = json_decode($data, true);
         $perpage = $dataArray['display_product'];
-
 
         $category = '';
         if ($request->input('all')) {
