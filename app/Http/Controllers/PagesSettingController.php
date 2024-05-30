@@ -270,10 +270,9 @@ class PagesSettingController extends Controller
         ]);
 
 
-        // Generate slug from the name
+        
         $slug = Str::slug($validatedData['name']);
-
-        // Ensure slug uniqueness
+        
         $uniqueSlug = $slug;
         $counter = 1;
         while (Item::where('slug', $uniqueSlug)->exists()) {
