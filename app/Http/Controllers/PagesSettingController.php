@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 class PagesSettingController extends Controller
 {
@@ -24,7 +25,7 @@ class PagesSettingController extends Controller
     {
 
         $css = \App\Helpers\SiteviewHelper::page('site')->css;
-
+          
         if ($r->page == 'home') {
 
             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
@@ -95,8 +96,19 @@ class PagesSettingController extends Controller
                 'css' => $css,
             ]);
         }
+        $css; // Ensure $css contains the CSS data
 
-        return redirect()->back();
+        try {
+            // Specify the file path where you want to write the CSS data
+            $filePath = 'clientside/js-css-other/style.css'; // Update the path as needed
+            file_put_contents($filePath, $css, LOCK_EX);
+        
+            // Redirect back to the previous page
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // Log or handle the error appropriately
+            return $e->getMessage(); // For debugging purposes, you can return the error message
+        }
     }
 
     public function customCode(Request $r)
@@ -145,7 +157,7 @@ class PagesSettingController extends Controller
 
     public function customCodeDelete(Request $r)
     {
-        $link =  CustomCode::find($r->id)->first();
+        $link = CustomCode::find($r->id)->first();
 
         if ($link) {
             // Check if the file exists and delete it using unlink
@@ -864,4 +876,12 @@ class PagesSettingController extends Controller
         return view('adminpages.custom_code', compact('links'));
 
     }
+
+    public function get_css()
+    {
+        $css = Component::where('name', 'site')->first()->css;
+        return $css;
+    }
+
+
 }

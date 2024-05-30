@@ -62,6 +62,11 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         // Dashboard
         Route::get('/dashboard', [PagesSettingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
+
+        Route::get('/get-css', [PagesSettingController::class, 'get_css'])->name('get.css');
+
+       
+
         //Pages setting route
         Route::get('/home-settings', function(){ return view('adminpages.pages-settings.home-settings');})->name('edit.home');
         Route::get('/about-settings', function(){ return view('adminpages.pages-settings.about-settings');})->name('edit.about');
@@ -80,8 +85,6 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::post('/updatepage', [PagesSettingController::class, 'updatePage'])->name('update.page');
         Route::post('/custom-code-store',[PagesSettingController::class, 'customCode'])->name('custom.code.store');
         Route::delete('/custom-code-delete',[PagesSettingController::class, 'customCodeDelete'])->name('custom.code.delete');
-
-        Route::get('/custom-code', [PagesSettingController::class, 'custom_code'])->name('custom.code');
 
 
         //category routes
