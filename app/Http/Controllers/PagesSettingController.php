@@ -118,10 +118,10 @@ class PagesSettingController extends Controller
         }
 
         $link = $r->link;
-
+        $file = 0;
         if ($r->hasFile('code_file')) {
             $file = $r->file('code_file');
-            $destinationPath = public_path('clientside/js-css-other/'); // Define the path where you want to save the file
+            $destinationPath = 'clientside/js-css-other/'; // Define the path where you want to save the file
             $fileName = $file->getClientOriginalName(); // Create a unique file name
 
             // Move the file to the public/custom_codes directory
@@ -129,11 +129,12 @@ class PagesSettingController extends Controller
 
             // Store the file path relative to the public directory
             $link = $destinationPath .'/'. $fileName;
-            
+            $file = 1;
         }
 
         CustomCode::create([
             'for' => $r->for,
+            'file' => $file,
             'type' => $r->type,
             'link' => $link
         ]);
@@ -142,9 +143,9 @@ class PagesSettingController extends Controller
     }
 
 
-    public function customCodeDelete($id)
+    public function customCodeDelete(Request $r)
     {
-        CustomCode::find($id)->delete;
+        CustomCode::find($r->id)->delete();
         return redirect()->back();
     }
 
