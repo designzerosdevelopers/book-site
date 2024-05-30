@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('custom_code', function (Blueprint $table) {
             $table->id();
             $table->string('type')->nullable();
+            $table->tinyInteger('file')->default(0);
             $table->string('for');
             $table->string('link')->nullable();
             $table->timestamps();
