@@ -11,7 +11,12 @@ class SiteviewHelper
 {
   public static function item($page = '', $limit = '')
   {
-    return Item::get();
+    $component = Component::find(1);
+    $data = $component->data;
+    $dataArray = json_decode($data, true);
+    $perpage = $dataArray['display_product'];
+
+    return Item::limit($perpage)->get();
   }
 
   public static function page($page)

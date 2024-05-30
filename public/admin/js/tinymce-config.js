@@ -73,3 +73,7 @@ function initializeTinyMCE(selector, fileUploadEndpoint) {
 
 initializeTinyMCE('#editor1', '/updatepage');
 initializeTinyMCE('#editor2', '/updatepage');
+
+
+
+
