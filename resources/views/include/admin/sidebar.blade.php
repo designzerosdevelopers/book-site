@@ -18,7 +18,7 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.navbar') }}">NavBar</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.footer') }}">Footer</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{{ route('custom.code') }}">Custom code</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('edit.codelinks') }}">Custom code</a></li>
             {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('edit.item.design') }}">Item Design</a></li> --}}
             <li class="nav-item"> <a class="nav-link" href="{{ route('edit.theme') }}">Theme settings</a></li>
           </ul>
