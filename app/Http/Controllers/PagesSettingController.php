@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 class PagesSettingController extends Controller
 {
@@ -24,7 +25,7 @@ class PagesSettingController extends Controller
     {
 
         $css = \App\Helpers\SiteviewHelper::page('site')->css;
-
+          
         if ($r->page == 'home') {
 
             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
@@ -95,8 +96,19 @@ class PagesSettingController extends Controller
                 'css' => $css,
             ]);
         }
+        $css; // Ensure $css contains the CSS data
 
-        return redirect()->back();
+        try {
+            // Specify the file path where you want to write the CSS data
+            $filePath = 'clientside/js-css-other/style.css'; // Update the path as needed
+            file_put_contents($filePath, $css, LOCK_EX);
+        
+            // Redirect back to the previous page
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // Log or handle the error appropriately
+            return $e->getMessage(); // For debugging purposes, you can return the error message
+        }
     }
 
     public function customCode(Request $r)
@@ -128,7 +140,7 @@ class PagesSettingController extends Controller
             $file->move($destinationPath, $fileName);
 
             // Store the file path relative to the public directory
-            $link = $destinationPath .'/'. $fileName;
+            $link = $destinationPath . '/' . $fileName;
             $file = 1;
         }
 
@@ -145,8 +157,19 @@ class PagesSettingController extends Controller
 
     public function customCodeDelete(Request $r)
     {
-        CustomCode::find($r->id)->delete();
-        return redirect()->back();
+        $link = CustomCode::find($r->id)->first();
+
+        if ($link) {
+            // Check if the file exists and delete it using unlink
+            $filePath = public_path($link->link); // Assuming the link is a relative path from the public directory
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+
+            // Optionally delete the record from the database
+            CustomCode::find($r->id)->delete();
+        }
+        return redirect()->back()->with('success', 'Deleted successfully.');
     }
 
     public function dashboard()
@@ -440,7 +463,7 @@ class PagesSettingController extends Controller
     {
 
         $data = Categories::all();
-        $categories =  $data->toArray();
+        $categories = $data->toArray();
         return view('adminpages.categories', compact('categories'));
     }
 
@@ -555,7 +578,7 @@ class PagesSettingController extends Controller
 
         // Check for empty cells
         foreach ($csvData as $idx => $row) {
-            foreach ($row as  $value) {
+            foreach ($row as $value) {
                 if ($value === "") {
                     return redirect()->back()->with('error', 'Empty cell found at (Row ' . ($idx + 2) . '). Please fill in the missing data.');
                 }
@@ -846,4 +869,5 @@ class PagesSettingController extends Controller
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
     }
+
 }
