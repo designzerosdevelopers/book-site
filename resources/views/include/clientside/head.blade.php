@@ -15,15 +15,14 @@
             <link href="{{ $links->link }}" rel="stylesheet">
         @endif
     @endforeach
-    {{-- @foreach (\App\Helpers\SiteviewHelper::customCode('JavaScript', 'For Head Section') as $links)
-   <link href="{{asset($links->link)}}" rel="stylesheet">
-   @endforeach --}}
 
-    {{-- <link href="{{asset('clientside/css/product-detail.css')}}" rel="stylesheet"> --}}
-    {{-- <link href="{{asset('clientside/css/bootstrap.min.css')}}" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('clientside/css/tiny-slider.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{asset('clientside/css/style.css')}}" rel="stylesheet"> --}}
+    @foreach (\App\Helpers\SiteviewHelper::customCode('JavaScript', 'For Footer Section') as $links)
+    @if ($links->file == 1)
+    <script src="{{ asset($links->link) }}"></script>
+    @else
+    <script src="{{ $links->link }}"></script>
+    @endif
+    @endforeach
 
     <title>Digital store</title>
     <style>

@@ -128,7 +128,7 @@ class PagesSettingController extends Controller
             $file->move($destinationPath, $fileName);
 
             // Store the file path relative to the public directory
-            $link = $destinationPath .'/'. $fileName;
+            $link = $destinationPath . '/' . $fileName;
             $file = 1;
         }
 
@@ -145,8 +145,19 @@ class PagesSettingController extends Controller
 
     public function customCodeDelete(Request $r)
     {
-        CustomCode::find($r->id)->delete();
-        return redirect()->back();
+        $link =  CustomCode::find($r->id)->first();
+
+        if ($link) {
+            // Check if the file exists and delete it using unlink
+            $filePath = public_path($link->link); // Assuming the link is a relative path from the public directory
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+
+            // Optionally delete the record from the database
+            CustomCode::find($r->id)->delete();
+        }
+        return redirect()->back()->with('success', 'Deleted successfully.');
     }
 
     public function dashboard()
