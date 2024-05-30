@@ -192,8 +192,6 @@ class StripeController extends Controller
             return redirect()->back()->withErrors($validator); 
         }
         
-        
-
         Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
 
         $session = Session::create([

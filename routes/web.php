@@ -81,9 +81,6 @@ Route::get('/passwordreset', [SiteViewController::class, 'passwordreset']);
         Route::post('/custom-code-store',[PagesSettingController::class, 'customCode'])->name('custom.code.store');
         Route::delete('/custom-code-delete',[PagesSettingController::class, 'customCodeDelete'])->name('custom.code.delete');
 
-        Route::get('/custom-code', [PagesSettingController::class, 'custom_code'])->name('custom.code');
-
-
         //category routes
         Route::get('/indexcategories', [PagesSettingController::class, 'indexcategories'])->name('indexcategories');
         Route::put('/updatecategory/{id}', [PagesSettingController::class, 'updatecategory'])->name('updatecategory');

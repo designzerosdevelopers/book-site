@@ -858,10 +858,4 @@ class PagesSettingController extends Controller
         return redirect()->back()->with('success', 'Settings updated successfully');
     }
 
-    public function custom_code()
-    {
-        $links = Customcode::get();
-        return view('adminpages.custom_code', compact('links'));
-
-    }
 }
