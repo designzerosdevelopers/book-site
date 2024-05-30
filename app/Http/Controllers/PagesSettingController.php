@@ -9,6 +9,7 @@ use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Home;
+use App\Models\Customcode;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -23,24 +24,24 @@ class PagesSettingController extends Controller
     {
 
         $css = \App\Helpers\SiteviewHelper::page('site')->css;
-        
+
         if ($r->page == 'home') {
 
-             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
-             $css = preg_replace('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->title_size . '$3', $css);
-             $css = preg_replace('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->price_color . '$3', $css);
-             $css = preg_replace('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->price_size . '$3', $css);
-             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
-             $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
+            $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
+            $css = preg_replace('/(\.item-title\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->title_size . '$3', $css);
+            $css = preg_replace('/(\.item-price\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->price_color . '$3', $css);
+            $css = preg_replace('/(\.item-price\s*{[^}]*?font-size:\s*)([^;]+)(\s* !important\s*;\s*[^}]*})/i', '$1$2' . '0' . $r->price_size . '$3', $css);
+            $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?height:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_height . '$3', $css);
+            $css = preg_replace('/(\.item-thumbnail-size\s*{\s*.*?width:\s*)([^;]+)(.*?})/s', '$1$2' . '0' . $r->image_width . '$3', $css);
 
             Component::where('name', 'home')->update([
                 'data' => [
                     'display_product' => $r->display_product,
                     'product_section_title' => $r->section_title,
                     'product_section_description' => $r->section_description,
-                    'product_section_button'=> $r->section_button_name,
-                    'product_section_button_url'=> $r->section_button_url,
-                    ]
+                    'product_section_button' => $r->section_button_name,
+                    'product_section_button_url' => $r->section_button_url,
+                ]
             ]);
 
             Component::where('name', 'site')->update([
@@ -78,14 +79,14 @@ class PagesSettingController extends Controller
 
             Component::where('name', 'productdetail')->update([
                 'data' => [
-                    'product_button_name'=> $r->product_button_name,
-                    ]
+                    'product_button_name' => $r->product_button_name,
+                ]
             ]);
             Component::where('name', 'site')->update([
                 'css' => $css,
             ]);
 
-        }else {
+        } else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
@@ -336,7 +337,8 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
-    public function upload_image(Request $request){
+    public function upload_image(Request $request)
+    {
 
     }
 
@@ -395,7 +397,7 @@ class PagesSettingController extends Controller
     {
 
         $data = Categories::all();
-        $categories =  $data->toArray();
+        $categories = $data->toArray();
         return view('adminpages.categories', compact('categories'));
     }
 
@@ -510,7 +512,7 @@ class PagesSettingController extends Controller
 
         // Check for empty cells
         foreach ($csvData as $idx => $row) {
-            foreach ($row as  $value) {
+            foreach ($row as $value) {
                 if ($value === "") {
                     return redirect()->back()->with('error', 'Empty cell found at (Row ' . ($idx + 2) . '). Please fill in the missing data.');
                 }
@@ -800,5 +802,12 @@ class PagesSettingController extends Controller
 
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
+    }
+
+    public function custom_code()
+    {
+        $links = Customcode::get();
+        return view('adminpages.custom_code', compact('links'));
+
     }
 }

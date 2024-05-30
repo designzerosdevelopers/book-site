@@ -5,7 +5,9 @@ namespace App\Helpers;
 use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Item;
+use App\Models\Customcode;
 use App\Helpers\HtmlEasyDom;
+use Illuminate\Support\Facades\DB;
 
 class SiteviewHelper
 {
@@ -29,9 +31,9 @@ class SiteviewHelper
     if (!empty($items)) {
       $dom = new \DOMDocument();
       $dom->loadHTML(\App\Helpers\SiteviewHelper::page('cart')->html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-      $totalprice = (float)00.00;
+      $totalprice = (float) 00.00;
       foreach ($items as $item) {
-        $totalprice += (float)$item['item_price'];
+        $totalprice += (float) $item['item_price'];
       }
 
       $dom->getElementById("subtotal")->nodeValue = "$$totalprice";
@@ -146,4 +148,15 @@ class SiteviewHelper
     $items = json_decode(request()->cookie('cart'), true) ?? [];
     return $items;
   }
+
+
+
+  public static function customcode($column)
+  {
+    if ($column == 'css') {
+      return asset('clientside/css/bootstrap.min.css');
+  }
+    // return DB::table('customcode')->first()->{$column};
+  }
+
 }
