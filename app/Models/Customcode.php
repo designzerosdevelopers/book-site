@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customcode extends Model
+class CustomCode extends Model
 {
     use HasFactory;
-    protected $table = 'customcode'; 
-    protected $fillable = ['link','type'];
+   Protected $table = "custom_code";
+   Protected $fillable =['for','type', 'file', 'link'];
+
 }
