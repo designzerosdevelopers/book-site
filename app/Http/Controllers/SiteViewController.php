@@ -236,7 +236,7 @@ class SiteViewController extends Controller
                 Session::flush();
 
                 try {
-                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email,));
+                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, ));
 
                     Session::flash('email_sent');
                 } catch (\Exception $e) {
@@ -265,11 +265,11 @@ class SiteViewController extends Controller
 
     public function books(Request $request)
     {
+
         $component = Component::find(4);
         $data = $component->data;
         $dataArray = json_decode($data, true);
         $perpage = $dataArray['display_product'];
-
 
         $category = '';
         if ($request->input('all')) {
@@ -281,9 +281,9 @@ class SiteViewController extends Controller
                 $response .= '<div class="product-item mt-5  pt-5">';
                 $response .= '<a style="text-decoration: none;" href="' . $item->slug . '">';
                 $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
-                $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
+                $response .= '<h3 class="item-title">' . e($item->name) . '</h3>';
                 $response .= '<div>';
-                $response .= '<strong class="product-price">$' . number_format($item->price, 2) . '</strong>';
+                $response .= '<strong class="item-price">$' . number_format($item->price, 2) . '</strong>';
                 $response .= '</div>';
                 $response .= '</a>';
                 $response .= '<a href="' . route('add.product', ['id' => encrypt($item->id)]) . '">';

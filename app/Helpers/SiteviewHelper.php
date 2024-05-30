@@ -11,7 +11,12 @@ class SiteviewHelper
 {
   public static function item($page = '', $limit = '')
   {
-    return Item::get();
+    $component = Component::find(1);
+    $data = $component->data;
+    $dataArray = json_decode($data, true);
+    $perpage = $dataArray['display_product'];
+
+    return Item::limit($perpage)->get();
   }
 
   public static function page($page)
@@ -29,9 +34,9 @@ class SiteviewHelper
     if (!empty($items)) {
       $dom = new \DOMDocument();
       $dom->loadHTML(\App\Helpers\SiteviewHelper::page('cart')->html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-      $totalprice = (float)00.00;
+      $totalprice = (float) 00.00;
       foreach ($items as $item) {
-        $totalprice += (float)$item['item_price'];
+        $totalprice += (float) $item['item_price'];
       }
 
       $dom->getElementById("subtotal")->nodeValue = "$$totalprice";

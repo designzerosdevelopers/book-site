@@ -85,8 +85,14 @@ class SetupController extends Controller
         }
 
         if (Schema::hasTable('users')) {
-            Session::flash('db_success', 'Database setup successful');
-            return redirect()->route('register');
+
+            $userWithRole1 = User::where('role', 1)->exists();
+            if ($userWithRole1) {
+                return redirect()->route('index');
+            } else {
+                Session::flash('db_success', 'Database setup successful');
+                return redirect()->route('register');
+            }
         }
     }
 }
