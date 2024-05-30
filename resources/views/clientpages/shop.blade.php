@@ -93,7 +93,8 @@
                     url: "{{ route('books') }}",
                     type: "GET",
                     data: {
-                        'all': true
+                        'all': true,
+                        'requestpage':'shop'
                     },
                     success: function(response) {
                         $('#items-container').html(response);
@@ -118,7 +119,8 @@
                             url: "{{ route('books') }}",
                             type: "GET",
                             data: {
-                                'category': category
+                                'category': category,
+                                'requestpage':'shop'
                             },
                             success: function(response) {
                                 $('#items-container').html(response);
@@ -148,11 +150,11 @@
                     url: "{{ route('books') }}",
                     type: "GET",
                     data: {
-                        category: category
+                        category: category,
+                        'requestpage':'shop'
                     },
                     success: function(response) {
                         $('#items-container').html(response).show();
-                        console.log('response for category selection' + response);
                     },
                     error: function(xhr) {
                         console.log(xhr.responseText);
@@ -172,11 +174,11 @@
                         url: '/books',
                         type: 'GET',
                         data: {
-                            page: page
+                            page: page,
+                            'requestpage':'shop'
                         },
                         success: function(response) {
                             // $('#items-container').html(response);
-                            console.log('response for page changing' + response);
 
                         },
                         error: function(xhr, status, error) {
@@ -191,12 +193,11 @@
                         url: '/books',
                         type: 'GET',
                         data: {
-                            search: page
+                            search: page,
+                            'requestpage':'shop'
                         },
                         success: function(response) {
                             $('#items-container').html(response)
-                            console.log('response for search' + response);
-
                         },
                         error: function(xhr, status, error) {
                             // Handle errors here
@@ -210,12 +211,11 @@
                         type: 'GET',
                         data: {
                             page: page,
-                            category: category
+                            category: category,
+                            'requestpage':'shop'
                         },
                         success: function(response) {
                             $('#items-container').html(response)
-                            console.log('response for page changing for ' +
-                                response);
                         },
                         error: function(xhr, status, error) {
                             // Handle errors here
@@ -235,7 +235,8 @@
                     url: '/books',
                     method: 'GET',
                     data: {
-                        query: searchQuery
+                        query: searchQuery,
+                        'requestpage':'shop'
                     },
                     success: function(response) {
                         $('#items-container').html(response);
