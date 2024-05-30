@@ -57,6 +57,7 @@
                     <thead>
                         <tr>
                             <th> Section </th>
+                            <th> Type </th>
                             <th> Action </th>
                             <th> link</th>
                         </tr>
@@ -66,6 +67,7 @@
                             @foreach (\App\Helpers\SiteviewHelper::customCode() as $link)
                                 <tr>
                                     <td>{{ $link->for }}</td>
+                                    <td>{{ $link->type }}</td>
                                     <td>
                                         <form action="{{ route('custom.code.delete', ['id' => $link->id]) }}" method="POST"
                                             onsubmit="return confirm('Are you sure you want to delete this link?');">
