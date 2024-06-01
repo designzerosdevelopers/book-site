@@ -41,6 +41,6 @@ class ExampleMail extends Mailable
                         'customerName' => $this->customerName,
                         'randomPassword' => $this->randomPassword,
                         'email' => $this->recipientEmail
-                    ]);
+                    ])->subject('Purchase Confirmation from DigitalStore');
     }
 }

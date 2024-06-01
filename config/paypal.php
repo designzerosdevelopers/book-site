@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'mode' => env('PAYPAL_MODE', 'sandbox'), // The PayPal mode: 'sandbox' or 'live'
+    'mode' => env('PAYPAL_MODE', 'sandbox'),
     'sandbox' => [
-        'client_id' => 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r',
-        'client_secret' => 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP',
+        'client_id' => 'AdxZA-198yt8P_cm0Rbu_ibEITPH4XN3qmGIjIgZjngwl59frswSSvuDr3rRAwYN-JedwiTW0vshFGZp',
+        'client_secret' => 'EPbGm8InqJBTa0zNLFe7DdXvpEuSkqAgn9CEf6OxdGbOZpUn7GQYefbyqE6m9VFRYQ-3yV8k4JtRIg0G',
     ],
     'live' => [
         'client_id' => env('PAYPAL_LIVE_CLIENT_ID'),
