@@ -111,8 +111,7 @@ class StripeController extends Controller
         // executes the function if transaction is sucessful
         public function successTransaction(Request $request)
         {
-
-            $provider = new PayPalClient;
+           $provider = new PayPalClient;
             $provider->setApiCredentials(config('paypal'));
             $provider->getAccessToken();
             $response = $provider->capturePaymentOrder($request['token']);
