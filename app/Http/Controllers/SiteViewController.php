@@ -93,9 +93,10 @@ class SiteViewController extends Controller
 
     public function checkout(request $request)
     {
+        $subtotal = 0;
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
         foreach ($cartItems as $value) {
-            $subtotal = $value['item_price'];
+            $subtotal += $value['item_price'];
         }
 
         $stripeIds = [1, 2];
@@ -112,8 +113,6 @@ class SiteViewController extends Controller
             'paypal' => $paypal,
             'stripe' => $stripe
         ]);
-
-        // return view('clientpages.checkout');
     }
 
 
@@ -158,6 +157,7 @@ class SiteViewController extends Controller
     public function user(Request $request)
     {
 
+
         if (!empty(session('requestData'))) {
 
             // Retrieve data from session
@@ -191,12 +191,27 @@ class SiteViewController extends Controller
                 Session::flush();
 
                 try {
-                    Mail::to($email)->send(new PostPurchaseMail($customer_name, $email));
+                    // Define the mail configuration
+                    $config = [
+                        'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
+                        'port' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT'), // Specify the port number
+                        'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
+                        'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
+                        'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
+                        'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
+                    ];
+
+                    config([
+                        'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
+                    ]);
+
+                    Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
 
                     Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
                 } catch (\Exception $e) {
                 }
             } else {
+
                 // Generate random password
                 $randomPassword = Str::random(8);
                 $hashedPassword = Hash::driver('bcrypt')->make($randomPassword);
@@ -236,7 +251,22 @@ class SiteViewController extends Controller
                 Session::flush();
 
                 try {
-                    Mail::to($email)->send(new ExampleMail($customer_name, $randomPassword, $email, ));
+
+                    // Define the mail configuration
+                    $config = [
+                        'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
+                        'port' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT'), // Specify the port number
+                        'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
+                        'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
+                        'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
+                        'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
+                    ];
+
+                    config([
+                        'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
+                    ]);
+
+                    Mail::mailer('smtp')->to($email)->send(new ExampleMail($customer_name, $randomPassword, $email));
 
                     Session::flash('email_sent');
                 } catch (\Exception $e) {

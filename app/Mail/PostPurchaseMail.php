@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PostPurchaseMail extends Mailable
 {
@@ -37,6 +36,6 @@ class PostPurchaseMail extends Mailable
         return $this->view('emails.postpurchase')->with([
                         'customerName' => $this->customerName,
                         'email' => $this->recipientEmail
-                    ]);
+                    ])->subject('Purchase Confirmation from DigitalStore');
     }
 }
