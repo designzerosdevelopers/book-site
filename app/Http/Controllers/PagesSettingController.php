@@ -799,9 +799,9 @@ class PagesSettingController extends Controller
         
         foreach ($settings as $setting) {
             switch ($setting->key) {
-                case 'STRIPE_KEY':
+                
                 case 'STRIPE_SECRET':
-                case 'STRIPE_MODE':
+            
                     $stripeSettings[] = $setting;
                     break;
                 case 'PAYPAL_KEY':
