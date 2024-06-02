@@ -190,7 +190,7 @@ class SiteViewController extends Controller
                 // Remove all data from the session
                 Session::flush();
 
-                try {
+                
                     // Define the mail configuration
                     $config = [
                         'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
@@ -205,6 +205,7 @@ class SiteViewController extends Controller
                         'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
                     ]);
 
+                    try {
                     Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
 
                     Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
@@ -250,7 +251,7 @@ class SiteViewController extends Controller
                 // Remove all data from the session
                 Session::flush();
 
-                try {
+                
 
                     // Define the mail configuration
                     $config = [
@@ -265,7 +266,8 @@ class SiteViewController extends Controller
                     config([
                         'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
                     ]);
-
+                    
+                    try {
                     Mail::mailer('smtp')->to($email)->send(new ExampleMail($customer_name, $randomPassword, $email));
 
                     Session::flash('email_sent');
