@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Http\Request;
@@ -27,6 +28,8 @@ class StripeController extends Controller
 
 
     /**
+
+    /**
      * create transaction.
      *
      * @return \Illuminate\Http\Response
@@ -42,6 +45,25 @@ class StripeController extends Controller
      */
 
     //  process transaction
+    public function paypalcharge(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'f_name' => 'required|string|max:255',
+            'l_name' => 'required|string|max:255',
+            'address1' => 'required|string|max:255',
+            'state_country' => 'required|string|max:255',
+            'postal_zip' => 'required|string|max:255',
+            'email_address' => 'required|email|max:255',
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->redirectBackToCheckoutWithError($validator);
+        }
+        // Access the array
+        $requestData = $request->all();
+
     public function paypalcharge(Request $request)
     {
 
@@ -181,6 +203,9 @@ class StripeController extends Controller
                     ->where('item_id', $itemId)
                     ->pluck('item_id')
                     ->toArray();
+                    ->where('item_id', $itemId)
+                    ->pluck('item_id')
+                    ->toArray();
                 if (!empty($existingItems)) {
                     foreach ($existingItems as $itemId) {
                         $bookName = Item::where('id', $itemId)->value('name');
@@ -207,6 +232,7 @@ class StripeController extends Controller
         // Optionally, you can store the entire request data as well
         session(['requestData' => $requestData]);
 
+
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
@@ -215,11 +241,15 @@ class StripeController extends Controller
             'postal_zip' => 'required|string|max:255',
             'email_address' => 'required|email|max:255',
             'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0',
         ]);
+
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
+            return redirect()->back()->withErrors($validator);
         }
+
 
         Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
 
@@ -232,6 +262,7 @@ class StripeController extends Controller
                         'product_data' => [
                             'name' => "book",
                         ],
+                        'unit_amount' => str_replace('.', '', $request->amount),
                         'unit_amount' => str_replace('.', '', $request->amount),
                     ],
                     'quantity' => 1,
