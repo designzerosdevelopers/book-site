@@ -835,8 +835,6 @@ class PagesSettingController extends Controller
     {
         $mailSettings = [];
         $updateData = [
-            'STRIPE_MODE' => $request->STRIPE_MODE,
-            'STRIPE_KEY' => $request->STRIPE_KEY,
             'STRIPE_SECRET' => $request->STRIPE_SECRET,
             'PAYPAL_MODE' => $request->PAYPAL_MODE,
             'PAYPAL_KEY' => $request->PAYPAL_KEY,
@@ -852,9 +850,9 @@ class PagesSettingController extends Controller
         ];
 
         foreach ($updateData as $key => $value) {
-            if (!is_null($value)) {
-                Settings::where('key', $key)->update(['value' => $value]);
-            }
+         
+            Settings::where('key', $key)->update(['value' => $value]);
+            
         }
         // Fetch data from the database (example)
         $mailSettings = Settings::all();
