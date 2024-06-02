@@ -188,7 +188,7 @@ class SiteViewController extends Controller
 
                 // Remove all data from the session
                 Session::flush();
-
+                try {
                 
                     // Define the mail configuration
                     $config = [
@@ -204,10 +204,14 @@ class SiteViewController extends Controller
                         'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
                     ]);
 
-                    try {
-                    Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
-
-                    Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
+                   
+                    $emalsendstatus = Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
+                     if($emalsendstatus){
+                        Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
+                     }else{
+                        Session::flash('repurchases', 'Your purchase was successful! You can now download your book');
+                     }
+                   
                 } catch (\Exception $e) {
                 }
             } else {
@@ -249,30 +253,53 @@ class SiteViewController extends Controller
 
                 // Remove all data from the session
                 Session::flush();
-
+               
                     // Define the mail configuration
-                    $config = [
-                        'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
-                        'port' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT'), // Specify the port number
-                        'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
-                        'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
-                        'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
-                        'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
-                    ];
+                    // Retrieve SMTP configuration settings
+                    $host = \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST');
+                    $port = \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT');
+                    $fromAddress = \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS');
+                    $fromName = \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME');
+                    $encryption = \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION');
+                    $username = \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME');
+                    $password = \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD');
 
-                    config([
-                        'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
-                    ]);
+                    // Check if any required SMTP parameter is missing or empty
+                    if (!empty($host) || !empty($port) || !empty($fromAddress) || !empty($fromName) || !empty($encryption) || !empty($username) || !empty($password)) {
+                       
+                        // Configure mailer
+                        $config = [
+                            'host' => $host,
+                            'port' => $port,
+                            'from' => ['address' => $fromAddress, 'name' => $fromName],
+                            'encryption' => $encryption,
+                            'username' => $username,
+                            'password' => $password,
+                        ];
 
-                    try {
-                    Mail::mailer('smtp')->to($email)->send(new ExampleMail($customer_name, $randomPassword, $email));
+                        config([
+                            'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
+                        ]);
 
-                    Session::flash('email_sent');
-                } catch (\Exception $e) {
+                        try {
+                            // Send email
+                            $emalsendstatus = Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
 
-                    // Log the exception or handle it as per your application's requirement
-                    Session::flash('error');
-                }
+                            if ($emalsendstatus) {
+                                Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
+                            } else {
+                                Session::flash('repurchases', 'Your purchase was successful! You can now download your book');
+                            }
+
+                            Session::flash('email_sent', true); // Flash success message
+                        } catch (\Exception $e) {
+                            // Log the exception or handle it as per your application's requirement
+                            Log::error('Email sending failed: '.$e->getMessage()); // Example: Logging the error
+
+                            Session::flash('error', 'There was an error while sending an email. Please try again later.'); // Flash an error message
+                        }
+                    } 
+
             }
 
             event(new Registered($user));
