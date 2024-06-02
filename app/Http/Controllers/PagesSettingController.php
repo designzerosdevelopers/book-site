@@ -792,31 +792,42 @@ class PagesSettingController extends Controller
     public function settingsindex()
     {
         $settings = Settings::get(["key", "value", "display_name"]);
+
         $stripeSettings = [];
         $paypalSettings = [];
-        $paypalSettings = [];
         $mailSettings = [];
-
+        
         foreach ($settings as $setting) {
-            if ($setting->key === 'STRIPE_KEY' || $setting->key === 'STRIPE_SECRET') {
-                $stripeSettings[] = $setting;
-            } elseif ($setting->key === 'PAYPAL_KEY' || $setting->key === 'PAYPAL_SECRET') {
-                $paypalSettings[] = $setting;
+            switch ($setting->key) {
+                case 'STRIPE_KEY':
+                case 'STRIPE_SECRET':
+                case 'STRIPE_MODE':
+                    $stripeSettings[] = $setting;
+                    break;
+                case 'PAYPAL_KEY':
+                case 'PAYPAL_SECRET':
+                case 'PAYPAL_MODE':
+                    $paypalSettings[] = $setting;
+                    break;
+                case 'MAIL_MAILER':
+                case 'MAIL_HOST':
+                case 'MAIL_PORT':
+                case 'MAIL_USERNAME':
+                case 'MAIL_PASSWORD':
+                case 'MAIL_ENCRYPTION':
+                case 'MAIL_FROM_ADDRESS':
+                case 'MAIL_FROM_NAME':
+                    $mailSettings[] = $setting;
+                    break;
             }
         }
-
-
-        foreach ($settings as $setting) {
-            if (
-                $setting->key === 'MAIL_MAILER' || $setting->key === 'MAIL_HOST' || $setting->key === 'MAIL_PORT' ||
-                $setting->key === 'MAIL_USERNAME' || $setting->key === 'MAIL_PASSWORD' || $setting->key === 'MAIL_ENCRYPTION' ||
-                $setting->key === 'MAIL_FROM_ADDRESS' || $setting->key === 'MAIL_FROM_NAME'
-            ) {
-                $mailSettings[] = $setting;
-            }
-        }
-
-        return view("adminpages.setting", ['stripeSettings' => $stripeSettings, 'paypalSettings' => $paypalSettings, 'mailSettings' => $mailSettings]);
+        
+        return view("adminpages.setting", [
+            'stripeSettings' => $stripeSettings,
+            'paypalSettings' => $paypalSettings,
+            'mailSettings' => $mailSettings
+        ]);
+        
     }
 
 
@@ -824,8 +835,10 @@ class PagesSettingController extends Controller
     {
         $mailSettings = [];
         $updateData = [
+            'STRIPE_MODE' => $request->STRIPE_MODE,
             'STRIPE_KEY' => $request->STRIPE_KEY,
             'STRIPE_SECRET' => $request->STRIPE_SECRET,
+            'PAYPAL_MODE' => $request->PAYPAL_MODE,
             'PAYPAL_KEY' => $request->PAYPAL_KEY,
             'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
             'MAIL_MAILER' => $request->MAIL_MAILER,

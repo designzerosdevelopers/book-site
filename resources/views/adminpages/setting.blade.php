@@ -31,7 +31,6 @@
                     <form method="POST" action="{{ route('update.settings') }}">
                         @csrf
                         <div class="form-group">
-                        
                             <label for="">{{ $paypalSetting['display_name'] }}</label>
                             <input type="text" class="form-control" name="{{ $paypalSetting['key'] }}" value="{{ $paypalSetting['value'] }}">
                         </div>
