@@ -45,24 +45,7 @@ class StripeController extends Controller
      */
 
     //  process transaction
-    public function paypalcharge(Request $request)
-    {
-
-        $validator = Validator::make($request->all(), [
-            'f_name' => 'required|string|max:255',
-            'l_name' => 'required|string|max:255',
-            'address1' => 'required|string|max:255',
-            'state_country' => 'required|string|max:255',
-            'postal_zip' => 'required|string|max:255',
-            'email_address' => 'required|email|max:255',
-            'amount' => 'required|numeric|min:0',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->redirectBackToCheckoutWithError($validator);
-        }
-        // Access the array
-        $requestData = $request->all();
+   
 
     public function paypalcharge(Request $request)
     {
@@ -203,9 +186,8 @@ class StripeController extends Controller
                     ->where('item_id', $itemId)
                     ->pluck('item_id')
                     ->toArray();
-                    ->where('item_id', $itemId)
-                    ->pluck('item_id')
-                    ->toArray();
+                   
+                   
                 if (!empty($existingItems)) {
                     foreach ($existingItems as $itemId) {
                         $bookName = Item::where('id', $itemId)->value('name');
