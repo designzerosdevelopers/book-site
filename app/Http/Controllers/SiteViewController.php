@@ -99,12 +99,13 @@ class SiteViewController extends Controller
             $subtotal += $value['item_price'];
         }
 
-        $stripeIds = [1, 2];
+        $stripeIds = [1];
         $stripeSettings = Settings::find($stripeIds)->pluck('value');
         $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
 
         $paypalIds = [3, 4];
         $paypalSettings = Settings::find($paypalIds)->pluck('value');
+
         $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
 
         return view('clientpages.checkout', [
@@ -156,8 +157,6 @@ class SiteViewController extends Controller
 
     public function user(Request $request)
     {
-
-
         if (!empty(session('requestData'))) {
 
             // Retrieve data from session
