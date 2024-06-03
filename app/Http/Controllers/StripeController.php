@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use App\Models\User;
 use App\Models\Item;
-use App\Models\Settings;
 use App\Models\Purchase;
 use App\Helpers\SiteviewHelper;
 use PayPalHttp\HttpException;
@@ -26,8 +23,6 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 class StripeController extends Controller
 {
 
-
-    /**
 
     /**
      * create transaction.
@@ -45,8 +40,6 @@ class StripeController extends Controller
      */
 
     //  process transaction
-   
-
     public function paypalcharge(Request $request)
     {
 
@@ -70,35 +63,28 @@ class StripeController extends Controller
         // Optionally, you can store the entire request data as well
         session(['requestData' => $requestData]);
 
-
-        
-        $paypalSettings = Settings::whereIn('key', ['PAYPAL_KEY', 'PAYPAL_SECRET', 'PAYPAL_MODE'])
-        ->select('key', 'value')
-        ->get()
-        ->pluck('value', 'key');
-
-
         $provider = new PayPalClient;
         $credentials = [
-            'mode' => $paypalSettings['PAYPAL_MODE'],
+            'mode' => 'sandbox',
             'payment_action' => 'authorize',
             'locale' => 'en_US',
             'validate_ssl' => true,
             'notify_url' => request()->getSchemeAndHttpHost() . '/paypal/ipn',
             'currency' => 'USD',
             'sandbox' => [
-                'client_id' => $paypalSettings['PAYPAL_KEY'],
-                'client_secret' => $paypalSettings['PAYPAL_SECRET'],
+                'client_id' => 'AfgOp3rxqMmXTJ6bhQ2ATyvxHm6sD9_bBT0OBN8hc78qXWkMTKkAar1kMRulgtdIz-wwhVe6wSeX757g',
+                'client_secret' => 'ECd1prbCs13pAQnE_eUVUBzVa8UA_9Kj96agQoG6aAaGmHMiGyhTblbdd2AgeTdIAzdyLeo3YzcfxjT2',
             ],
             'live' => [
-                'client_id' => $paypalSettings['PAYPAL_KEY'],
-                'client_secret' => $paypalSettings['PAYPAL_SECRET'],
+                'client_id' => 'AfgOp3rxqMmXTJ6bhQ2ATyvxHm6sD9_bBT0OBN8hc78qXWkMTKkAar1kMRulgtdIz-wwhVe6wSeX757g',
+                'client_secret' => 'ECd1prbCs13pAQnE_eUVUBzVa8UA_9Kj96agQoG6aAaGmHMiGyhTblbdd2AgeTdIAzdyLeo3YzcfxjT2',
             ]
 
         ];
 
         $provider->setApiCredentials($credentials);
-        $paypalToken = $provider->getAccessToken();
+
+        $provider->getAccessToken();
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
@@ -114,8 +100,6 @@ class StripeController extends Controller
                 ]
             ]
         ]);
-
-        
         if (isset($response['id']) && $response['id'] != null) {
             // redirect to approve href
             foreach ($response['links'] as $links) {
@@ -124,12 +108,12 @@ class StripeController extends Controller
                 }
             }
             return redirect()
-            ->back()
-            ->with('payment_option_error', 'Something went wrong with this payment option.');
+                ->route('createTransaction')
+                ->with('error', 'Something went wrong.');
         } else {
             return redirect()
-                ->back()
-                ->with('payment_option_error', 'Something went wrong with this payment option.');
+                ->route('createTransaction')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
 
@@ -139,40 +123,46 @@ class StripeController extends Controller
     }
 
 
-    /**
-     * success transaction.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // executes the function if transaction is sucessful
     public function successTransaction(Request $request)
     {
+
         $provider = new PayPalClient;
+        $credentials = [
+            'mode' => 'sandbox',
+            'payment_action' => 'authorize',
+            'locale' => 'en_US',
+            'validate_ssl' => true,
+            'notify_url' => request()->getSchemeAndHttpHost() . '/paypal/ipn',
+            'currency' => 'USD',
+            'sandbox' => [
+                'client_id' => 'AfgOp3rxqMmXTJ6bhQ2ATyvxHm6sD9_bBT0OBN8hc78qXWkMTKkAar1kMRulgtdIz-wwhVe6wSeX757g',
+                'client_secret' => 'ECd1prbCs13pAQnE_eUVUBzVa8UA_9Kj96agQoG6aAaGmHMiGyhTblbdd2AgeTdIAzdyLeo3YzcfxjT2',
+            ],
+            'live' => [
+                'client_id' => 'AfgOp3rxqMmXTJ6bhQ2ATyvxHm6sD9_bBT0OBN8hc78qXWkMTKkAar1kMRulgtdIz-wwhVe6wSeX757g',
+                'client_secret' => 'ECd1prbCs13pAQnE_eUVUBzVa8UA_9Kj96agQoG6aAaGmHMiGyhTblbdd2AgeTdIAzdyLeo3YzcfxjT2',
+            ]
+
+        ];
+        $provider->setApiCredentials($credentials);
         $provider->getAccessToken();
         $response = $provider->capturePaymentOrder($request['token']);
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             return redirect()->route('user');
         } else {
             return redirect()
-                ->back()
-                ->with('payment_option_error', 'Something went wrong with this payment option.');
+                ->route('createTransaction')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
-    /**
-     * cancel transaction.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function cancelTransaction(Request $request)
     {
         return redirect()
-        ->back()
-        ->with('payment_option_error', 'The trasaction has been cancelled.');
+            ->route('createTransaction')
+            ->with('error', $response['message'] ?? 'You have canceled the transaction.');
     }
-
-
-
-
 
     public function stripecharge(Request $request)
     {
@@ -186,8 +176,6 @@ class StripeController extends Controller
                     ->where('item_id', $itemId)
                     ->pluck('item_id')
                     ->toArray();
-                   
-                   
                 if (!empty($existingItems)) {
                     foreach ($existingItems as $itemId) {
                         $bookName = Item::where('id', $itemId)->value('name');
@@ -202,18 +190,9 @@ class StripeController extends Controller
             }
         }
 
-
-        // Access the array
+        
         $requestData = $request->all();
-
-        // // Loop through the request data and add to session
-        // foreach ($requestData as $key => $value) {
-        //     session([$key => $value]);
-        // }
-
-        // Optionally, you can store the entire request data as well
         session(['requestData' => $requestData]);
-
 
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
@@ -223,15 +202,11 @@ class StripeController extends Controller
             'postal_zip' => 'required|string|max:255',
             'email_address' => 'required|email|max:255',
             'amount' => 'required|numeric|min:0',
-            'amount' => 'required|numeric|min:0',
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
-            return redirect()->back()->withErrors($validator);
         }
-
 
         Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
 
@@ -244,7 +219,6 @@ class StripeController extends Controller
                         'product_data' => [
                             'name' => "book",
                         ],
-                        'unit_amount' => str_replace('.', '', $request->amount),
                         'unit_amount' => str_replace('.', '', $request->amount),
                     ],
                     'quantity' => 1,
