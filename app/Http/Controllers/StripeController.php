@@ -65,19 +65,19 @@ class StripeController extends Controller
 
         $provider = new PayPalClient;
         $credentials = [
-            'mode' => 'sandbox',
+            'mode' => SiteviewHelper::getsettings('PAYPAL_MODE'),
             'payment_action' => 'authorize',
             'locale' => 'en_US',
             'validate_ssl' => true,
             'notify_url' => request()->getSchemeAndHttpHost() . '/paypal/ipn',
             'currency' => 'USD',
             'sandbox' => [
-                'client_id' => 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r',
-                'client_secret' => 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP',
+                'client_id' => SiteviewHelper::getsettings('PAYPAL_KEY'),
+                'client_secret' => SiteviewHelper::getsettings('PAYPAL_SECRET'),
             ],
             'live' => [
-                'client_id' => 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r',
-                'client_secret' => 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP',
+                'client_id' => SiteviewHelper::getsettings('PAYPAL_KEY'),
+                'client_secret' => SiteviewHelper::getsettings('PAYPAL_SECRET'),
             ]
 
         ];
@@ -107,13 +107,9 @@ class StripeController extends Controller
                     return redirect()->away($links['href']);
                 }
             }
-            return redirect()
-                ->route('createTransaction')
-                ->with('error', 'Something went wrong.');
+            abort(500, 'Server error with this payment system');
         } else {
-            return redirect()
-                ->route('createTransaction')
-                ->with('error', $response['message'] ?? 'Something went wrong.');
+            abort(500, 'Server error with this payment system');
         }
     }
 
@@ -134,19 +130,19 @@ class StripeController extends Controller
 
         $provider = new PayPalClient;
         $credentials = [
-            'mode' => 'sandbox',
+            'mode' => SiteviewHelper::getsettings('PAYPAL_MODE'),
             'payment_action' => 'authorize',
             'locale' => 'en_US',
             'validate_ssl' => true,
             'notify_url' => request()->getSchemeAndHttpHost() . '/paypal/ipn',
             'currency' => 'USD',
             'sandbox' => [
-                'client_id' => 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r',
-                'client_secret' => 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP',
+                'client_id' => SiteviewHelper::getsettings('PAYPAL_KEY'),
+                'client_secret' => SiteviewHelper::getsettings('PAYPAL_SECRET'),
             ],
             'live' => [
-                'client_id' => 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r',
-                'client_secret' => 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP',
+                'client_id' => SiteviewHelper::getsettings('PAYPAL_KEY'),
+                'client_secret' => SiteviewHelper::getsettings('PAYPAL_SECRET'),
             ]
 
         ];
@@ -156,18 +152,15 @@ class StripeController extends Controller
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             return redirect()->route('user');
         } else {
-            return redirect()
-                ->route('createTransaction')
-                ->with('error', $response['message'] ?? 'Something went wrong.');
+            abort(500, 'Server error with this payment system');
         }
     }
 
 
     public function cancelTransaction(Request $request)
     {
-        return redirect()
-            ->route('createTransaction')
-            ->with('error', $response['message'] ?? 'You have canceled the transaction.');
+        abort(499, 'You have canceled the transaction.');
+
     }
 
     public function stripecharge(Request $request)
@@ -242,6 +235,6 @@ class StripeController extends Controller
 
     public function cancel(Request $request)
     {
-        return 'Payment Cancelled.';
+        abort(499, 'You have canceled the transaction.');
     }
 }
