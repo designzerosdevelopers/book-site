@@ -24,10 +24,11 @@ return new class extends Migration
             });
 
 
+
             // Retrieve keys and display names
             $stripeKeys = [
+                'STRIPE_KEY' => 'Stripe key',
                 'STRIPE_SECRET' => 'Stripe secret',
-                'PAYPAL_MODE' => 'Paypal Mode',
                 'PAYPAL_KEY' => 'Paypal key',
                 'PAYPAL_SECRET' => 'Paypal secret',
                 'MAIL_MAILER' => 'Mail mailer',

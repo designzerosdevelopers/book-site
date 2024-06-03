@@ -16,9 +16,31 @@ Route::get('register', [App\Http\Controllers\Auth\RegisteredUserController::clas
     ->name('register');
 Route::post('register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
 
+Route::get('mail', function () {
+
+
+    // Define the mail configuration
+    $config = [
+        'driver' => 'smtp',
+        'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
+        'port' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT'), // Specify the port number
+        'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
+        'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
+        'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
+        'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
+    ];
+
+    $customerName = 'John Doe';
+    $recipientEmail = 'recipient@example.com';
+    config([
+        'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
+    ]);
+    
+    Mail::mailer('smtp')->to($recipientEmail)->send(new PostPurchaseMail($customerName, $recipientEmail));
+
+});
 
 Route::middleware('check.database')->group(function () {
-    // Your routes here
     // Your routes here
     Route::get('createTransaction', [StripeController::class, 'createTransaction'])->name('createTransaction');
     Route::get('process-transaction', [StripeController::class, 'processTransaction'])->name('processTransaction');
