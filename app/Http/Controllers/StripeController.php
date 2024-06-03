@@ -24,11 +24,6 @@ class StripeController extends Controller
 {
 
 
-    /**
-     * create transaction.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function createTransaction()
     {
         return view('transaction');
@@ -161,7 +156,6 @@ class StripeController extends Controller
             return redirect()->back()->with('alert', 'Something went wrong with this payment system');
         }
     }
-
 
     public function cancelTransaction(Request $request)
     {
