@@ -19,6 +19,9 @@ Route::post('register', [App\Http\Controllers\Auth\RegisteredUserController::cla
 
 Route::middleware('check.database')->group(function () {
     // Your routes here
+    // Your routes here
+    Route::get('createTransaction', [StripeController::class, 'createTransaction'])->name('createTransaction');
+    Route::get('process-transaction', [StripeController::class, 'processTransaction'])->name('processTransaction');
     Route::get('success-transaction', [StripeController::class, 'successTransaction'])->name('successTransaction');
     Route::get('cancel-transaction', [StripeController::class, 'cancelTransaction'])->name('cancelTransaction');
     Route::post('/paypalcharge', [StripeController::class, 'paypalcharge'])->name('paypalcharge');
