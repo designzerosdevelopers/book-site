@@ -63,6 +63,12 @@ class StripeController extends Controller
         // Optionally, you can store the entire request data as well
         session(['requestData' => $requestData]);
 
+        $clientId = SiteviewHelper::getsettings('PAYPAL_KEY');
+        $clientSecret = SiteviewHelper::getsettings('PAYPAL_SECRET');
+
+        if (empty($clientId) || empty($clientSecret)) {
+            return redirect()->back()->with('alert', 'Something went wrong with this payment system');
+        }
         $provider = new PayPalClient;
         $credentials = [
             'mode' => SiteviewHelper::getsettings('PAYPAL_MODE'),
@@ -107,9 +113,9 @@ class StripeController extends Controller
                     return redirect()->away($links['href']);
                 }
             }
-            abort(500, 'Server error with this payment system');
+            return redirect()->back()->with('alert', 'Something went wrong with this payment system');
         } else {
-            abort(500, 'Server error with this payment system');
+            return redirect()->back()->with('alert', 'Something went wrong with this payment system');
         }
     }
 
@@ -152,15 +158,14 @@ class StripeController extends Controller
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             return redirect()->route('user');
         } else {
-            abort(500, 'Server error with this payment system');
+            return redirect()->back()->with('alert', 'Something went wrong with this payment system');
         }
     }
 
 
     public function cancelTransaction(Request $request)
     {
-        abort(499, 'You have canceled the transaction.');
-
+        return redirect()->back()->with('alert', 'You have canceled the transaction');
     }
 
     public function stripecharge(Request $request)
@@ -189,7 +194,7 @@ class StripeController extends Controller
             }
         }
 
-        
+
         $requestData = $request->all();
         session(['requestData' => $requestData]);
 
@@ -207,34 +212,47 @@ class StripeController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-        Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
+        try {
+            // Set Stripe API key
+            Stripe::setApiKey(SiteviewHelper::getsettings('STRIPE_SECRET'));
 
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [
-                [
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => [
-                            'name' => "book",
+            // Create a session
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'usd',
+                            'product_data' => [
+                                'name' => "book",
+                            ],
+                            'unit_amount' => str_replace('.', '', $request->amount),
                         ],
-                        'unit_amount' => str_replace('.', '', $request->amount),
+                        'quantity' => 1,
                     ],
-                    'quantity' => 1,
                 ],
-            ],
-            'customer_email' => $request->email_address,
-            'mode' => 'payment',
-            'success_url' => route('user'),
-            'cancel_url' => route('checkout.cancel'),
-        ]);
+                'customer_email' => $request->email_address,
+                'mode' => 'payment',
+                'success_url' => route('user'),
+                'cancel_url' => route('checkout.cancel'),
+            ]);
 
-        return redirect()->to($session->url);
+            // If everything is successful, redirect to success URL
+            return redirect($session->url);
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
+            // Handle invalid API key error
+            // Redirect back with an error message
+            return redirect()->back()->with('alert', 'Something went wrong with this payment system');
+        } catch (\Exception $e) {
+            // Handle other errors
+            // Redirect back with an error message
+            return redirect()->back()->with('alert', 'Something went wrong with this payment system');
+        }
     }
 
 
     public function cancel(Request $request)
     {
-        abort(499, 'You have canceled the transaction.');
+        return redirect()->back()->with('alert', 'You have canceled the transaction');
     }
 }
