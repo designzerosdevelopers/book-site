@@ -99,6 +99,7 @@ class SiteViewController extends Controller
             $subtotal += $value['item_price'];
         }
 
+
         $stripeIds = [1];
         $stripeSettings = Settings::find($stripeIds)->pluck('value');
         $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
@@ -157,6 +158,8 @@ class SiteViewController extends Controller
 
     public function user(Request $request)
     {
+
+
         if (!empty(session('requestData'))) {
 
             // Retrieve data from session
@@ -188,8 +191,8 @@ class SiteViewController extends Controller
 
                 // Remove all data from the session
                 Session::flush();
+
                 try {
-                
                     // Define the mail configuration
                     $config = [
                         'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
@@ -204,14 +207,9 @@ class SiteViewController extends Controller
                         'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
                     ]);
 
-                   
-                    $emalsendstatus = Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
-                     if($emalsendstatus){
-                        Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
-                     }else{
-                        Session::flash('repurchases', 'Your purchase was successful! You can now download your book');
-                     }
-                   
+                    Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
+
+                    Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
                 } catch (\Exception $e) {
                 }
             } else {
@@ -245,7 +243,7 @@ class SiteViewController extends Controller
                 // Remove cart cookie
                 if (isset($_COOKIE['cart'])) {
                     unset($_COOKIE['cart']);
-                    setcookie('cart', '', time() - 3600, '/');
+                    setcookie('cart', '', time() - 3600, '/'); // expire the cart cookie
                 }
 
                 $user = User::where('email', $email)->first();
@@ -253,53 +251,31 @@ class SiteViewController extends Controller
 
                 // Remove all data from the session
                 Session::flush();
-               
+
+                try {
+
                     // Define the mail configuration
-                    // Retrieve SMTP configuration settings
-                    $host = \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST');
-                    $port = \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT');
-                    $fromAddress = \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS');
-                    $fromName = \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME');
-                    $encryption = \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION');
-                    $username = \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME');
-                    $password = \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD');
+                    $config = [
+                        'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
+                        'port' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT'), // Specify the port number
+                        'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
+                        'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
+                        'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
+                        'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
+                    ];
 
-                    // Check if any required SMTP parameter is missing or empty
-                    if (!empty($host) || !empty($port) || !empty($fromAddress) || !empty($fromName) || !empty($encryption) || !empty($username) || !empty($password)) {
-                       
-                        // Configure mailer
-                        $config = [
-                            'host' => $host,
-                            'port' => $port,
-                            'from' => ['address' => $fromAddress, 'name' => $fromName],
-                            'encryption' => $encryption,
-                            'username' => $username,
-                            'password' => $password,
-                        ];
+                    config([
+                        'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
+                    ]);
 
-                        config([
-                            'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
-                        ]);
+                    Mail::mailer('smtp')->to($email)->send(new ExampleMail($customer_name, $randomPassword, $email));
 
-                        try {
-                            // Send email
-                            $emalsendstatus = Mail::mailer('smtp')->to($email)->send(new PostPurchaseMail($customer_name, $email));
+                    Session::flash('email_sent');
+                } catch (\Exception $e) {
 
-                            if ($emalsendstatus) {
-                                Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
-                            } else {
-                                Session::flash('repurchases', 'Your purchase was successful! Your account is created to download your book next');
-                            }
-
-                            Session::flash('email_sent', true); // Flash success message
-                        } catch (\Exception $e) {
-
-                            // Log::error('Email sending failed: '.$e->getMessage());
-
-                            Session::flash('error', 'There was an error while sending an email. Please try again later.');
-                        }
-                    } 
-
+                    // Log the exception or handle it as per your application's requirement
+                    Session::flash('error');
+                }
             }
 
             event(new Registered($user));
@@ -452,6 +428,123 @@ class SiteViewController extends Controller
                 return $response;
             }
         }
+
+
+
+
+        // if ($request->ajax()) {
+        //     if ($request->ajax()) {
+        //         if ($request->has('page')) {
+        //             return 'reached';
+        //             $page = $request->query('page'); // Extract the page number
+        //             $category = $request->query('category'); // Extract the category
+        //             return $category;
+
+        //             $allItems = Item::paginate(1, ['*'], 'page', $page);
+        //             $response = '';
+
+        //             foreach ($allItems as $item) {
+        //                 $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
+        //                 $response .= '<div class="product-item">';
+        //                 $response .= '<a style="text-decoration: none;" href="#">';
+        //                 $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+        //                 $response .= '<h3 class="product-title">' . e($item->name) . '</h3>';
+        //                 $response .= '<div>';
+        //                 $response .= '<strong class="product-price">$' . number_format($item->price, 2) . '</strong>';
+        //                 $response .= '</div>';
+        //                 $response .= '</a>';
+        //                 $response .= '<a href="' . route('cart', ['id' => $item->id]) . '">';
+        //                 $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
+        //                 $response .= '<p style="margin: 0;">Add to Cart</p>';
+        //                 $response .= '</button>';
+        //                 $response .= '</a>';
+        //                 $response .= '</div>';
+        //                 $response .= '</div>';
+        //             }
+
+        //             $response .= '<div class="row">';
+        //             $response .= '<div class="col-md-12 text-center">';
+        //             $response .= '<nav aria-label="Page navigation example">';
+        //             $response .= '<ul class="pagination justify-content-center">';
+
+        //             if ($allItems->onFirstPage()) {
+        //                 $response .= '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>';
+        //             } else {
+        //                 $response .= '<li class="page-item"><a class="page-link" href="' . $allItems->previousPageUrl() . '" tabindex="-1" aria-disabled="true">Previous</a></li>';
+        //             }
+
+        //             foreach ($allItems->getUrlRange(1, $allItems->lastPage()) as $pageNumber => $url) {
+        //                 $response .= '<li class="page-item ' . ($pageNumber == $allItems->currentPage() ? 'active' : '') . '">';
+        //                 $response .= '<a class="page-link" href="' . $url . '">' . $pageNumber . '</a>';
+        //                 $response .= '</li>';
+        //             }
+
+        //             if ($allItems->hasMorePages()) {
+        //                 $response .= '<li class="page-item"><a class="page-link" href="' . $allItems->nextPageUrl() . '">Next</a></li>';
+        //             } else {
+        //                 $response .= '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+        //             }
+
+        //             $response .= '</ul>';
+        //             $response .= '</nav>';
+        //             $response .= '</div>';
+        //             $response .= '</div>';
+
+        //             return $response;
+        //         }
+        //     }
+
+
+        //     if ($request->has('all')) {
+        //         return 'all';
+        //         $allItems = Item::paginate(1);
+        //         $response = '';
+
+        //         foreach ($allItems as $item) {
+        //             $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
+        //             $response .= '<div class="product-item">';
+        //             $response .= '<a style="text-decoration: none;" href="">';
+        //             $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+        //             $response .= '<h3 class="product-title">' . $item->name . '</h3>';
+        //             $response .= '<div>';
+        //             $response .= '<strong class="product-price">$' . $item->price . '</strong>';
+        //             $response .= '</div>';
+        //             $response .= '</a>';
+        //             $response .= '<a href="' . route('cart', ['id' => $item->id]) . '">';
+        //             $response .= '<button class="btn btn-primary" style="font-size: 12px; padding: 5px 10px;">';
+        //             $response .= '<p style="margin: 0;">Add to Cart</p>';
+        //             $response .= '</button>';
+        //             $response .= '</a>';
+        //             $response .= '</div>';
+        //             $response .= '</div>';
+        //         }
+
+        //         $response .= '<div class="row">';
+        //         $response .= '<div class="col-md-12 text-center">';
+        //         $response .= '<nav aria-label="Page navigation example">';
+        //         $response .= '<ul class="pagination justify-content-center">';
+        //         $response .= '<li class="page-item ' . ($allItems->previousPageUrl() ? '' : 'disabled') . '">';
+        //         $response .= '<a class="page-link" href="' . $allItems->previousPageUrl() . '" tabindex="-1" aria-disabled="true">Previous</a>';
+        //         $response .= '</li>';
+
+        //         foreach ($allItems->getUrlRange(1, $allItems->lastPage()) as $page => $url) {
+        //             $response .= '<li class="page-item ' . ($page == $allItems->currentPage() ? 'active' : '') . '">';
+        //             $response .= '<a class="page-link" href="' . $url . '">' . $page . '</a>';
+        //             $response .= '</li>';
+        //         }
+
+        //         $response .= '<li class="page-item ' . ($allItems->nextPageUrl() ? '' : 'disabled') . '">';
+        //         $response .= '<a class="page-link" href="' . $allItems->nextPageUrl() . '">Next</a>';
+        //         $response .= '</li>';
+        //         $response .= '</ul>';
+        //         $response .= '</nav>';
+        //         $response .= '</div>';
+        //         $response .= '</div>';
+
+        //         return $response;
+        //     }
+        // }
+
 
 
     }
