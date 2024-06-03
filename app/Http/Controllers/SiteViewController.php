@@ -288,15 +288,15 @@ class SiteViewController extends Controller
                             if ($emalsendstatus) {
                                 Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
                             } else {
-                                Session::flash('repurchases', 'Your purchase was successful! You can now download your book');
+                                Session::flash('repurchases', 'Your purchase was successful! Your account is created to download your book next');
                             }
 
                             Session::flash('email_sent', true); // Flash success message
                         } catch (\Exception $e) {
-                            // Log the exception or handle it as per your application's requirement
-                            Log::error('Email sending failed: '.$e->getMessage()); // Example: Logging the error
 
-                            Session::flash('error', 'There was an error while sending an email. Please try again later.'); // Flash an error message
+                            // Log::error('Email sending failed: '.$e->getMessage());
+
+                            Session::flash('error', 'There was an error while sending an email. Please try again later.');
                         }
                     } 
 

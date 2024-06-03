@@ -30,7 +30,7 @@
                                     <label for="fname" class="text-black">First Name <span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('f_name') is-invalid @enderror"
-                                        id="fname" name="f_name" value="{{ old('f_name') }}" required>
+                                        id="fname" name="f_name" value="ali" required>
                                     @error('f_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -43,7 +43,7 @@
                                     <label for="lname" class="text-black">Last Name <span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('l_name') is-invalid @enderror"
-                                        id="lname" name="l_name" value="{{ old('l_name') }}" required>
+                                        id="lname" name="l_name" value="Saqib" required>
                                     @error('l_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -58,7 +58,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('address1') is-invalid @enderror"
                                             id="address" name="address1" placeholder="Street address"
-                                            value="{{ old('address1') }}" required>
+                                            value="Mirpur" required>
                                         @error('address1')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -76,11 +76,11 @@
                                 <!-- State / Country -->
                                 <div class="form-group row">
                                     <div class="col-md-6">
-                                        <label for="state_country" class="text-black">State / Country <span
+                                        <label for="state_country" class="text-black">Country <span
                                                 class="text-danger">*</span></label>
                                         <input type="text"
                                             class="form-control @error('state_country') is-invalid @enderror"
-                                            id="state_country" name="state_country" value="{{ old('state_country') }}"
+                                            id="state_country" name="state_country" value="pakistan"
                                             required>
                                         @error('state_country')
                                             <span class="invalid-feedback" role="alert">
@@ -91,10 +91,10 @@
 
                                     <!-- Postal / Zip -->
                                     <div class="col-md-6">
-                                        <label for="postal_zip" class="text-black">Postal / Zip <span
+                                        <label for="postal_zip" class="text-black">Zip <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('postal_zip') is-invalid @enderror"
-                                            id="postal_zip" name="postal_zip" value="{{ old('postal_zip') }}" required>
+                                            id="postal_zip" name="postal_zip" value="23423" required>
                                         @error('postal_zip')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -110,7 +110,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text"
                                             class="form-control @error('email_address') is-invalid @enderror"
-                                            id="email_address" name="email_address" value="{{ old('email_address') }}"
+                                            id="email_address" name="email_address" value="saqib@gmail.com"
                                             required>
                                         @error('email_address')
                                             <span class="invalid-feedback" role="alert">
@@ -175,15 +175,6 @@
                                                 @endphp
                                             @endforeach
 
-                                            <tr>
-                                                <td><strong>Total</strong></td>
-                                                <td>${{ number_format($totalPrice, 2) }}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                                                <td>${{ number_format($totalPrice, 2) }}</td>
-                                            </tr>
                                             <tr>
                                                 <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
                                                 <td>${{ number_format($totalPrice, 2) }}</td> </strong></td>
