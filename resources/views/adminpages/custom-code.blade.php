@@ -83,7 +83,7 @@
                         @else
                             <td></td>
                             <td></td>
-                            <td>No item</td>
+                            <td>No files</td>
                             <td></td>
                             <td></td>
                         @endif
@@ -91,5 +91,40 @@
                 </table>
             </div>
         </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route('custom.code.store') }}" method="post">
+                    @csrf
+                    <h5 class="card-title">CSS</h5>
+                    <textarea name="css" class="form-control" rows="25" placeholder="Enter your custom CSS here...">{{File::get('clientside/js-css-other/custom.css')}}</textarea>
+                    <div class="form-group row mt-3">
+                        <div class="col-sm-10">
+                            <button type="submit" name="action" value="save_css"
+                                class="btn btn-gradient-success me-2">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route('custom.code.store') }}" method="post">
+                    @csrf
+                    <h5 class="card-title">JS/JQuery</h5>
+                    <textarea name="js" class="form-control" rows="25"
+                        placeholder="Enter your custom JavaScript/Jquery here...">{{File::get('clientside/js-css-other/custom.js')}}</textarea>
+
+                    <div class="form-group row mt-3">
+                        <div class="col-sm-10">
+                            <button type="submit" name="action" value="save_js"
+                                class="btn btn-gradient-success me-2">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </form>
     </div>
 @stop

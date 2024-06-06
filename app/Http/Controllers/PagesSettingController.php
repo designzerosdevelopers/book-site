@@ -18,14 +18,15 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class PagesSettingController extends Controller
 {
     public function themeUpdate(Request $r)
     {
 
-        $css = \App\Helpers\SiteviewHelper::page('site')->css;
-          
+        $css = File::get('clientside/js-css-other/style.css');
+
         if ($r->page == 'home') {
 
             $css = preg_replace('/(\.item-title\s*{[^}]*?color:\s*)([^;]+)(\s* !important\s*;\s*})/i', '$1' . $r->title_color . '$3', $css);
@@ -44,10 +45,8 @@ class PagesSettingController extends Controller
                     'product_section_button_url' => $r->section_button_url,
                 ]
             ]);
+            File::put('clientside/js-css-other/style.css', $css);
 
-            Component::where('name', 'site')->update([
-                'css' => $css,
-            ]);
         } elseif ($r->page == 'shop') {
 
             Component::where('name', 'shop')->update([
@@ -57,9 +56,7 @@ class PagesSettingController extends Controller
 
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->iconBG . '$3', $css);
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->textColor . '$3', $css);
-            Component::where('name', 'site')->update([
-                'css' => $css,
-            ]);
+            File::put('clientside/js-css-other/style.css', $css);
 
             Component::where('name', 'contact')->update([
                 'data' => [
@@ -82,9 +79,7 @@ class PagesSettingController extends Controller
                     'product_button_name' => $r->product_button_name,
                 ]
             ]);
-            Component::where('name', 'site')->update([
-                'css' => $css,
-            ]);
+            File::put('clientside/js-css-other/style.css', $css);
         } else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
@@ -92,9 +87,7 @@ class PagesSettingController extends Controller
             $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
 
-            Component::where('name', 'site')->update([
-                'css' => $css,
-            ]);
+            File::put('clientside/js-css-other/style.css', $css);
         }
         $css; // Ensure $css contains the CSS data
 
@@ -102,7 +95,7 @@ class PagesSettingController extends Controller
             // Specify the file path where you want to write the CSS data
             $filePath = 'clientside/js-css-other/style.css'; // Update the path as needed
             file_put_contents($filePath, $css, LOCK_EX);
-        
+
             // Redirect back to the previous page
             return redirect()->back();
         } catch (\Exception $e) {
@@ -113,43 +106,53 @@ class PagesSettingController extends Controller
 
     public function customCode(Request $r)
     {
-        // Validate input
-        $r->validate([
-            'type' => 'required|string',
-            'for' => 'required|string',
-            'link' => 'nullable|string',
-            'code_file' => 'nullable|file',
-        ]);
 
-        if ($r->hasFile('code_file') && $r->link) {
-            return redirect()->back()->with('error', 'Please provide either a link or a file, not both.');
+        if ($r->action == 'save_css') {
+            $filePath = public_path('clientside/js-css-other/custom.css');
+            File::put($filePath, $r->css);
+        } elseif ($r->action == 'save_js') {
+            $filePath = public_path('clientside/js-css-other/custom.js');
+            File::put($filePath, $r->js);
+        } else {
+
+            // Validate input
+            $r->validate([
+                'type' => 'required|string',
+                'for' => 'required|string',
+                'link' => 'nullable|string',
+                'code_file' => 'nullable|file',
+            ]);
+
+            if ($r->hasFile('code_file') && $r->link) {
+                return redirect()->back()->with('error', 'Please provide either a link or a file, not both.');
+            }
+
+            if (!$r->hasFile('code_file') && !$r->link) {
+                return redirect()->back()->with('error', 'Please provide either a link or a file.');
+            }
+
+            $link = $r->link;
+            $file = 0;
+            if ($r->hasFile('code_file')) {
+                $file = $r->file('code_file');
+                $destinationPath = 'clientside/js-css-other/'; // Define the path where you want to save the file
+                $fileName = $file->getClientOriginalName(); // Create a unique file name
+
+                // Move the file to the public/custom_codes directory
+                $file->move($destinationPath, $fileName);
+
+                // Store the file path relative to the public directory
+                $link = $destinationPath . '/' . $fileName;
+                $file = 1;
+            }
+
+            CustomCode::create([
+                'for' => $r->for,
+                'file' => $file,
+                'type' => $r->type,
+                'link' => $link
+            ]);
         }
-
-        if (!$r->hasFile('code_file') && !$r->link) {
-            return redirect()->back()->with('error', 'Please provide either a link or a file.');
-        }
-
-        $link = $r->link;
-        $file = 0;
-        if ($r->hasFile('code_file')) {
-            $file = $r->file('code_file');
-            $destinationPath = 'clientside/js-css-other/'; // Define the path where you want to save the file
-            $fileName = $file->getClientOriginalName(); // Create a unique file name
-
-            // Move the file to the public/custom_codes directory
-            $file->move($destinationPath, $fileName);
-
-            // Store the file path relative to the public directory
-            $link = $destinationPath . '/' . $fileName;
-            $file = 1;
-        }
-
-        CustomCode::create([
-            'for' => $r->for,
-            'file' => $file,
-            'type' => $r->type,
-            'link' => $link
-        ]);
 
         return redirect()->back()->with('success', 'Custom code saved successfully.');
     }
@@ -270,9 +273,9 @@ class PagesSettingController extends Controller
         ]);
 
 
-        
+
         $slug = Str::slug($validatedData['name']);
-        
+
         $uniqueSlug = $slug;
         $counter = 1;
         while (Item::where('slug', $uniqueSlug)->exists()) {
@@ -796,12 +799,12 @@ class PagesSettingController extends Controller
         $stripeSettings = [];
         $paypalSettings = [];
         $mailSettings = [];
-        
+
         foreach ($settings as $setting) {
             switch ($setting->key) {
-                
+
                 case 'STRIPE_SECRET':
-            
+
                     $stripeSettings[] = $setting;
                     break;
                 case 'PAYPAL_KEY':
@@ -821,13 +824,12 @@ class PagesSettingController extends Controller
                     break;
             }
         }
-        
+
         return view("adminpages.setting", [
             'stripeSettings' => $stripeSettings,
             'paypalSettings' => $paypalSettings,
             'mailSettings' => $mailSettings
         ]);
-        
     }
 
 
@@ -850,9 +852,8 @@ class PagesSettingController extends Controller
         ];
 
         foreach ($updateData as $key => $value) {
-         
+
             Settings::where('key', $key)->update(['value' => $value]);
-            
         }
         // Fetch data from the database (example)
         $mailSettings = Settings::all();
@@ -879,5 +880,4 @@ class PagesSettingController extends Controller
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
     }
-
 }
