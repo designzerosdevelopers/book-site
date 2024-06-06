@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+
 return new class extends Migration
 {
     /**
@@ -30,6 +31,14 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [
+                'type' => 'Stylesheet',
+                'file' => 1,
+                'for' => 'For Head Section',
+                'link' => 'clientside/js-css-other//style.css',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'type' => 'JavaScript',
                 'file' => 1,
                 'for' => 'For Footer Section',
@@ -38,7 +47,7 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [
-                'type' => 'JavaScript',
+                'type' => 'Stylesheet',
                 'file' => 0,
                 'for' => 'For Head Section',
                 'link' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',

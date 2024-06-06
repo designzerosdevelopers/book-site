@@ -8,6 +8,7 @@
 
 
     <!-- Bootstrap CSS -->
+    <link href="{{ asset('clientside/js-css-other/custom.css') }}" rel="stylesheet">
     @foreach (\App\Helpers\SiteviewHelper::customCode('Stylesheet', 'For Head Section') as $links)
         @if ($links->file == 1)
             <link href="{{ asset($links->link) }}" rel="stylesheet">
@@ -16,20 +17,18 @@
         @endif
     @endforeach
 
-    @foreach (\App\Helpers\SiteviewHelper::customCode('JavaScript', 'For Footer Section') as $links)
-    @if ($links->file == 1)
-    <script src="{{ asset($links->link) }}"></script>
-    @else
-    <script src="{{ $links->link }}"></script>
-    @endif
+    @foreach (\App\Helpers\SiteviewHelper::customCode('JavaScript', 'For Head Section') as $links)
+        @if ($links->file == 1)
+            <script src="{{ asset($links->link) }}"></script>
+        @else
+            <script src="{{ $links->link }}"></script>
+        @endif
     @endforeach
 
     <title>Digital store</title>
 
     <style>
-
-
-        {!! App\Helpers\SiteviewHelper::page('site')->css !!} .cart-item {
+        .cart-item {
             position: relative;
         }
 

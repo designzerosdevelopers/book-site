@@ -1,11 +1,9 @@
-
-
 /*
-* Template Name: UntreeStore
-* Template Author: Untree.co
-* Author URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/
+                            * Template Name: UntreeStore
+                            * Template Author: Untree.co
+                            * Author URI: https://untree.co/
+                            * License: https://creativecommons.org/licenses/by/3.0/
+                            */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 body {
@@ -27,7 +25,7 @@ a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
-  color: #eff2f1;
+  color: #2f2f2f;
   text-decoration: underline;
 }
 
@@ -41,7 +39,7 @@ a.more {
 }
 
 .custom-navbar {
-  background: #3b5d50 !important ;
+  background: #3b5d50 !important;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -55,23 +53,23 @@ a.more {
 
 /* Medium devices (tablets, 768px and up) */
 @media (max-width: 768px) {
-    .custom-navbar .navbar-brand {
-        font-size: 28px;
-    }
+  .custom-navbar .navbar-brand {
+    font-size: 28px;
+  }
 }
 
 /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) {
-    .custom-navbar .navbar-brand {
-        font-size: 24px;
-    }
+  .custom-navbar .navbar-brand {
+    font-size: 24px;
+  }
 }
 
 /* Extra small devices (phones, less than 576px) */
 @media (max-width: 375px) {
-    .custom-navbar .navbar-brand {
-        font-size: 20px;
-    }
+  .custom-navbar .navbar-brand {
+    font-size: 20px;
+  }
 }
 
 
@@ -99,7 +97,7 @@ a.more {
 
 .custom-navbar .custom-navbar-nav li a {
   font-weight: 500;
-  color: #eff2f1;
+  color: #ffffff !important;
   opacity: .5;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
@@ -194,7 +192,7 @@ a.more {
 
 .hero h1 {
   font-weight: 700;
-  color: #eff2f1;
+  color: #ffffff;
   margin-bottom: 30px;
   font-size: 28px;
 }
@@ -269,7 +267,7 @@ a.more {
   padding: 12px 30px;
   border-radius: 30px;
   color: #ffffff;
-  background: #3b5d50;
+  background: #2f2f2f;
   border-color: #2f2f2f;
 }
 
@@ -576,7 +574,7 @@ a.more {
 
 .popular-product .product-item-sm a {
   text-decoration: none;
-  color: #eff2f1;
+  color: #2f2f2f;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
@@ -803,7 +801,7 @@ a.more {
 
 .footer-section a {
   text-decoration: none;
-  color: #eff2f1;
+  color: #2f2f2f;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
@@ -914,7 +912,7 @@ a.more {
   line-height: 40px;
   display: inline-block;
   background: #dce5e4;
-  color: #eff2f1;
+  color: #3b5d50;
   border-radius: 50%;
 }
 
@@ -1005,7 +1003,7 @@ textarea {
   text-align: center;
   border-width: 0px !important;
   vertical-align: middle;
-  color: #eff2f1;
+  color: rgba(0, 0, 0, 0.8);
   font-size: 18px;
 }
 
@@ -1066,12 +1064,12 @@ textarea {
 
 .item-title {
   font-size: 24px !important;
-  color: #ff9494 !important;
+  color: #828282 !important;
 }
 
 .item-price {
   font-size: 18px !important;
-  color: #77cadf !important;
+  color: #878787 !important;
 }
 
 .product-details {
