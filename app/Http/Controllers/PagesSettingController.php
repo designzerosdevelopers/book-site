@@ -165,9 +165,14 @@ class PagesSettingController extends Controller
         if ($link) {
             // Check if the file exists and delete it using unlink
             $filePath = public_path($link->link); // Assuming the link is a relative path from the public directory
+
             if (file_exists($filePath)) {
-                unlink($filePath);
+                $pathInfo = pathinfo($filePath);
+                $newFileName = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . 'bks_' . $pathInfo['basename'];
+                
+                rename($filePath, $newFileName);
             }
+            
 
             // Optionally delete the record from the database
             CustomCode::find($r->id)->delete();
