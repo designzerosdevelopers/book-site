@@ -25,7 +25,7 @@ a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
-  color: #2f2f2f;
+  color: #eff2f1;
   text-decoration: underline;
 }
 
@@ -39,7 +39,7 @@ a.more {
 }
 
 .custom-navbar {
-  background: #3b5d50 !important;
+  background: #3b5d50 !important ;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -97,7 +97,7 @@ a.more {
 
 .custom-navbar .custom-navbar-nav li a {
   font-weight: 500;
-  color: #ffffff !important;
+  color: #eff2f1;
   opacity: .5;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
@@ -192,7 +192,7 @@ a.more {
 
 .hero h1 {
   font-weight: 700;
-  color: #ffffff;
+  color: #eff2f1;
   margin-bottom: 30px;
   font-size: 28px;
 }
@@ -267,7 +267,7 @@ a.more {
   padding: 12px 30px;
   border-radius: 30px;
   color: #ffffff;
-  background: #2f2f2f;
+  background: #3b5d50;
   border-color: #2f2f2f;
 }
 
@@ -574,7 +574,7 @@ a.more {
 
 .popular-product .product-item-sm a {
   text-decoration: none;
-  color: #2f2f2f;
+  color: #eff2f1;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
@@ -801,7 +801,7 @@ a.more {
 
 .footer-section a {
   text-decoration: none;
-  color: #2f2f2f;
+  color: #eff2f1;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
@@ -912,7 +912,7 @@ a.more {
   line-height: 40px;
   display: inline-block;
   background: #dce5e4;
-  color: #3b5d50;
+  color: #eff2f1;
   border-radius: 50%;
 }
 
@@ -1003,7 +1003,7 @@ textarea {
   text-align: center;
   border-width: 0px !important;
   vertical-align: middle;
-  color: rgba(0, 0, 0, 0.8);
+  color: #eff2f1;
   font-size: 18px;
 }
 
