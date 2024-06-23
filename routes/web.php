@@ -7,7 +7,31 @@ use App\Http\Controllers\SiteViewController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PostPurchaseMail;
-use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Storage;
+
+Route::get('get', function(){
+    $files = Storage::disk('s3')->files('book_images');
+
+    return response()->json(['files' => $files]);
+
+});
+Route::get('remove', function(){
+    $path = 'book_images/65f69c18da56b.png';
+    Storage::disk('s3')->delete($path);
+
+    return response()->json(['message' => 'File deleted successfully']);
+    
+});
+Route::get('up', function(){
+
+    $file = $request->file('your-file-input-name');
+    $path = $file->store('folder-name', 's3');
+    // Get the URL of the uploaded file
+    $url = Storage::disk('s3')->url($path);
+    return response()->json(['url' => $url]);
+
+});
+
 
 Route::get('setup', [App\Http\Controllers\SetupController::class, 'create'])->name('setup.create');
 Route::post('check/database', [App\Http\Controllers\SetupController::class, 'setConfig'])->name('setup.config');
@@ -16,29 +40,6 @@ Route::get('register', [App\Http\Controllers\Auth\RegisteredUserController::clas
     ->name('register');
 Route::post('register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
 
-Route::get('mail', function () {
-
-
-    // Define the mail configuration
-    $config = [
-        'driver' => 'smtp',
-        'host' => \App\Helpers\SiteviewHelper::getsettings('MAIL_HOST'), // Specify your SMTP host
-        'port' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PORT'), // Specify the port number
-        'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
-        'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
-        'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
-        'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
-    ];
-
-    $customerName = 'John Doe';
-    $recipientEmail = 'recipient@example.com';
-    config([
-        'mail.mailers.smtp' => array_merge(config('mail.mailers.smtp'), $config)
-    ]);
-    
-    Mail::mailer('smtp')->to($recipientEmail)->send(new PostPurchaseMail($customerName, $recipientEmail));
-
-});
 
 Route::middleware('check.database')->group(function () {
     // Your routes here

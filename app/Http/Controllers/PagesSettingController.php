@@ -266,12 +266,20 @@ class PagesSettingController extends Controller
     public function storeitem(Request $request)
     {
 
+        $file = $request->file('image');
+        $path = $file->store('book_images', 's3');
+
+        // Get the URL of the uploaded file
+        $url = Storage::disk('s3')->url($path);
+        return response()->json(['url' => $url]);
+
+
         // Validate the incoming request data
         $validatedData = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
-            'bookfile' => 'required|file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
+            'bookfile' => 'required|file|mimes:pdf|max:20000', // Only PDF files allowed, max size is 20MB (20000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
 
@@ -294,6 +302,7 @@ class PagesSettingController extends Controller
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
 
+        
         // Move and get original file name for image
         $imageName = $validatedData['image']->getClientOriginalName();
         $validatedData['image']->move(public_path('book_images'), $imageName);
@@ -879,8 +888,6 @@ class PagesSettingController extends Controller
 
         // Cache the configuration
         Artisan::call('config:cache');
-
-
 
         // Flash a success message to the session
         return redirect()->back()->with('success', 'Settings updated successfully');
