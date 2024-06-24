@@ -794,12 +794,11 @@ class PagesSettingController extends Controller
         $stripeSettings = [];
         $paypalSettings = [];
         $mailSettings = [];
-
+        $awsSettings = [];
+        
         foreach ($settings as $setting) {
             switch ($setting->key) {
-
                 case 'STRIPE_SECRET':
-
                     $stripeSettings[] = $setting;
                     break;
                 case 'PAYPAL_KEY':
@@ -817,13 +816,23 @@ class PagesSettingController extends Controller
                 case 'MAIL_FROM_NAME':
                     $mailSettings[] = $setting;
                     break;
+                case 'AWS_ACCESS_KEY_ID':
+                case 'AWS_SECRET_ACCESS_KEY':
+                case 'AWS_REGION':
+                case 'AWS_BUCKET':
+                case 'AWS_URL':
+                    $awsSettings[] = $setting;
+                    break;
             }
         }
+
+
 
         return view("adminpages.setting", [
             'stripeSettings' => $stripeSettings,
             'paypalSettings' => $paypalSettings,
-            'mailSettings' => $mailSettings
+            'mailSettings' => $mailSettings,
+            'awsSettings' => $awsSettings
         ]);
     }
 
@@ -844,12 +853,18 @@ class PagesSettingController extends Controller
             'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
             'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
             'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
+            'AWS_ACCESS_KEY_ID' => $request->AWS_ACCESS_KEY_ID,
+            'AWS_SECRET_ACCESS_KEY' => $request->AWS_SECRET_ACCESS_KEY,
+            'AWS_REGION' => $request->AWS_REGION,
+            'AWS_BUCKET' => $request->AWS_BUCKET,
+            'AWS_URL' => $request->AWS_URL,
         ];
 
         foreach ($updateData as $key => $value) {
 
             Settings::where('key', $key)->update(['value' => $value]);
         }
+        
         // Fetch data from the database (example)
         $mailSettings = Settings::all();
 
