@@ -5,31 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesSettingController;
 use App\Http\Controllers\SiteViewController;
 use App\Http\Controllers\StripeController;
-use Illuminate\Support\Facades\Storage;
-
-Route::get('get', function(){
-    $files = Storage::disk('s3')->files('book_images');
-
-    return response()->json(['files' => $files]);
-
-});
-
-Route::get('remove', function(){
-    $path = 'book_images/65f69c18da56b.png';
-    Storage::disk('s3')->delete($path);
-
-    return response()->json(['message' => 'File deleted successfully']);
-    
-});
-Route::get('up', function(){
-
-    $file = $request->file('your-file-input-name');
-    $path = $file->store('folder-name', 's3');
-    // Get the URL of the uploaded file
-    $url = Storage::disk('s3')->url($path);
-    return response()->json(['url' => $url]);
-
-});
 
 
 Route::get('setup', [App\Http\Controllers\SetupController::class, 'create'])->name('setup.create');
