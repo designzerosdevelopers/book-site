@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesSettingController;
 use App\Http\Controllers\SiteViewController;
 use App\Http\Controllers\StripeController;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\PostPurchaseMail;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('get', function(){
@@ -15,6 +13,7 @@ Route::get('get', function(){
     return response()->json(['files' => $files]);
 
 });
+
 Route::get('remove', function(){
     $path = 'book_images/65f69c18da56b.png';
     Storage::disk('s3')->delete($path);

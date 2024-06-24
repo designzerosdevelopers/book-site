@@ -46,7 +46,6 @@ class PagesSettingController extends Controller
                 ]
             ]);
             File::put('clientside/js-css-other/style.css', $css);
-
         } elseif ($r->page == 'shop') {
 
             Component::where('name', 'shop')->update([
@@ -169,10 +168,10 @@ class PagesSettingController extends Controller
             if (file_exists($filePath)) {
                 $pathInfo = pathinfo($filePath);
                 $newFileName = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . 'bks_' . $pathInfo['basename'];
-                
+
                 rename($filePath, $newFileName);
             }
-            
+
 
             // Optionally delete the record from the database
             CustomCode::find($r->id)->delete();
@@ -212,7 +211,7 @@ class PagesSettingController extends Controller
         $last7days_item_count = DB::table('purchases')
             ->join('items', 'purchases.item_id', '=', 'items.id')
             ->whereBetween('purchases.created_at', [$last7DaysStartDate, $last7DaysEndDate])
-            ->count(); // Count the number of records returned by the query
+            ->count();
 
 
         $last30DaysSaleCount = DB::table('purchases')
@@ -223,9 +222,6 @@ class PagesSettingController extends Controller
         $users = DB::table('users')
             ->where('role', 0)
             ->get();
-
-
-
 
         return view('adminpages.dashboard', [
             // sales
@@ -265,27 +261,17 @@ class PagesSettingController extends Controller
 
     public function storeitem(Request $request)
     {
-
-        $file = $request->file('image');
-        $path = $file->store('book_images', 's3');
-
-        // Get the URL of the uploaded file
-        $url = Storage::disk('s3')->url($path);
-        return response()->json(['url' => $url]);
-
-
+        // $url =   \App\Helpers\SiteviewHelper::generatePresignedUrl('digitalstores3bucket', $path);
         // Validate the incoming request data
         $validatedData = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
-            'bookfile' => 'required|file|mimes:pdf|max:20000', // Only PDF files allowed, max size is 20MB (20000 KB)
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bookfile' => 'required|file|mimes:pdf|max:20000',
             'category' => 'required|string',
             'description' => 'required|string',
 
         ]);
-
-
 
         $slug = Str::slug($validatedData['name']);
 
@@ -302,16 +288,18 @@ class PagesSettingController extends Controller
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
 
-        
+
         // Move and get original file name for image
-        $imageName = $validatedData['image']->getClientOriginalName();
-        $validatedData['image']->move(public_path('book_images'), $imageName);
-        $item->image = $imageName;
+        $file = $request->file('image');
+        $path = $file->store('book_images', 's3');
+        $item->image = $path;
+        Storage::disk('s3')->url($path);
 
         // Move and get original file name for bookfile
-        $fileName = $validatedData['bookfile']->getClientOriginalName();
-        $validatedData['bookfile']->move(public_path('book_files'), $fileName);
-        $item->file = $fileName;
+        $file = $request->file('bookfile');
+        $path = $file->store('book_files', 's3');
+        $item->file = $path;
+        Storage::disk('s3')->url($path);
 
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
@@ -356,18 +344,21 @@ class PagesSettingController extends Controller
 
         // Check if a new image file is provided
         if ($request->hasFile('image')) {
-            // Move and get original file name for new image
-            $imageName = $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('book_images'), $imageName);
-            $item->image = $imageName;
+            Storage::disk('s3')->delete($item->image);
+            $file = $request->file('image');
+            $path = $file->store('book_images', 's3');
+            $item->image = $path;
+            Storage::disk('s3')->url($path);
         }
 
         // Check if a new file is provided
         if ($request->hasFile('bookfile')) {
-            // Move and get original file name for new file
-            $fileName = $request->file('bookfile')->getClientOriginalName();
-            $request->file('bookfile')->move(public_path('book_files'), $fileName);
-            $item->file = $fileName;
+            Storage::disk('s3')->delete($item->file);
+            $file = $request->file('bookfile');
+            $path = $file->store('book_files', 's3');
+            $item->file = $path;
+            Storage::disk('s3')->url($path);
+
         }
 
         $item->save();
@@ -389,18 +380,11 @@ class PagesSettingController extends Controller
         // Delete the purchase record
         $purchase->delete();
 
-        $imagePath = public_path('book_images/' . $item->image);
-        if (file_exists($imagePath)) {
-            unlink($imagePath); // Deletes the image file
-        }
+        $path = 'book_images/' . $item->image;
+        Storage::disk('s3')->delete($path);
 
-
-
-        // Delete file
-        $filePath = public_path('book_files/' . $item->file);
-        if (file_exists($filePath)) {
-            unlink($filePath); // Deletes the file
-        }
+        $path = 'book_files/' . $item->file;
+        Storage::disk('s3')->delete($path);
 
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
@@ -414,15 +398,12 @@ class PagesSettingController extends Controller
     public function indexhome()
     {
         // Fetch the pages data
-        $pages = Home::first(); // Retrieve the first pages record
+        $pages = Home::first();
 
         // Pass the data to the view
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
-    public function upload_image(Request $request)
-    {
-    }
 
     public function updatePage(Request $r)
     {

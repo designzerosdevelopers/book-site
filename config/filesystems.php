@@ -43,14 +43,7 @@ return [
             'throw' => false,
         ],
 
-        's3' => [
-            'driver' => 's3',
-            'key' => 'AKIAYEBWJ77NMDLRJ7E7',
-            'secret' => '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',
-            'region' => 'us-east-1',
-            'bucket' => 'digitalstores3bucket',
-            'url' => 'https://us-east-1.console.aws.amazon.com/s3/buckets/digitalstores3bucket?region=us-east-1&bucketType=general',
-        ],
+        's3' => App\Helpers\SiteviewHelper::s3config(),
 
     ],
 

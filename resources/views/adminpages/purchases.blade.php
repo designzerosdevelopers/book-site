@@ -36,14 +36,14 @@
             @foreach($cartItems as $item)
             <tr>
                 <td class="product-thumbnail">
-                    <img src="{{ asset('book_images/'.$item['image']) }}" alt="Image" class="img-fluid" width="30%">
+                    <img src="{{App\Helpers\SiteviewHelper::generates3url($item['image'])}}" alt="Image" class="img-fluid" width="30%">
                 </td>
                 <td class="product-name">
                     <h2 class="h5 text-black">{{ $item['name'] }}</h2>
                 </td>
                 <td id="price{{ $loop->index }}">${{ $item['price'] }}</td>
                 <td>
-                    <a href="" onclick="downloadFile('{{asset($item['file'])}}')" class="btn btn-success">Download</a>
+                    <a href="javascript:void(0)" onclick="downloadFile('{{App\Helpers\SiteviewHelper::generates3url($item['file'])}}')" class="btn btn-success">Download</a>
                 </td>
             </tr>
             @endforeach
