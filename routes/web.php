@@ -276,6 +276,6 @@ Route::get('/{product}', [SiteViewController::class, 'productDetail'])->name('pr
         // purchases routes
         Route::get('/purchases', [PagesSettingController::class, 'purchases'])->name('purchases.index');
     });
-});
+
 
 Route::get('/{product}', [SiteViewController::class, 'productDetail'])->name('product.detail');
