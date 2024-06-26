@@ -6,8 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Upload;
 use App\Models\Component;
 use App\Models\Settings;
+use App\Models\Upload;
+use App\Models\Component;
+use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
+use App\Models\Home;
+use App\Models\CustomCode;
+use App\Models\Purchase;
 use App\Models\Home;
 use App\Models\CustomCode;
 use App\Models\Purchase;
@@ -234,7 +240,11 @@ class PagesSettingController extends Controller
         // Fetch the pages data
         $items = Item::get(); // Retrieve the first pages record
 
+        // Fetch the pages data
+        $items = Item::get(); // Retrieve the first pages record
+
         // Pass the data to the view
+        return view('adminpages.item.index', ['items' => $items]);
         return view('adminpages.item.index', ['items' => $items]);
     }
 
@@ -243,6 +253,7 @@ class PagesSettingController extends Controller
         $categories = Categories::get();
 
         // Pass the data to the view
+        return view('adminpages.item.create', ['categories' => $categories]);
         return view('adminpages.item.create', ['categories' => $categories]);
     }
 
@@ -258,6 +269,7 @@ class PagesSettingController extends Controller
             'bookfile' => 'required|file|mimes:pdf|max:20000',
             'category' => 'required|string',
             'description' => 'required|string',
+
 
         ]);
 
@@ -292,7 +304,10 @@ class PagesSettingController extends Controller
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
         $item->slug = $uniqueSlug;
+        $item->slug = $uniqueSlug;
         $item->save();
+
+
 
 
 
@@ -305,6 +320,7 @@ class PagesSettingController extends Controller
         $categories = Categories::all();
         $item = Item::find($id);
         return view('adminpages.item.edit', compact('categories', 'item'));
+        return view('adminpages.item.edit', compact('categories', 'item'));
     }
 
     public function updateitem(Request $request, $id)
@@ -312,16 +328,22 @@ class PagesSettingController extends Controller
         // Retrieve the item by its ID
         $item = Item::find($id);
 
+
         // Validate the incoming request data
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
             'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
+            'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
 
+
         ]);
+
+
 
 
         // Update item attributes with the new data
@@ -329,6 +351,8 @@ class PagesSettingController extends Controller
         $item->price = $request->price;
         $item->category = $request->category;
         $item->description = $request->description;
+
+        // Check if a new image file is provided
 
         // Check if a new image file is provided
         if ($request->hasFile('image')) {
@@ -352,8 +376,11 @@ class PagesSettingController extends Controller
         $item->save();
 
 
+
+
         return redirect()->back()->with('success', 'Item updated successfully');
     }
+
 
 
     public function deleteitem($id)
@@ -383,12 +410,19 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.editmanu');
     }
 
+
+    public function editmanu()
+    {
+        return view('adminpages.editpages.editmanu');
+    }
+
     public function indexhome()
     {
         // Fetch the pages data
         $pages = Home::first();
 
         // Pass the data to the view
+        return view('adminpages.editpages.homesetting', compact('pages'));
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
@@ -444,12 +478,41 @@ class PagesSettingController extends Controller
     }
 
 
+
     public function indexcategories(Request $request)
     {
 
+
         $data = Categories::all();
         $categories = $data->toArray();
+        $categories = $data->toArray();
         return view('adminpages.categories', compact('categories'));
+    }
+
+    public function createcategory(Request $request)
+    {
+        $rules = [
+            'category_name' => 'required|string|max:255|unique:categories,category_name',
+        ];
+
+
+        // Custom validation messages
+        $messages = [
+            'category_name.required' => 'Category name is required.',
+            'category_name.unique' => 'Category name must be unique.',
+            // Add any other custom messages as needed
+        ];
+
+        // Validate the request
+        $validatedData = $request->validate($rules, $messages);
+
+        // Create a new category record
+        Categories::create([
+            'category_name' => $category_name = $request->category_name,
+        ]);
+
+        // Return a redirect response with a success message
+        return redirect()->back()->with('success', 'Record Created Successfully.');
     }
 
     public function createcategory(Request $request)
@@ -481,16 +544,19 @@ class PagesSettingController extends Controller
     public function updatecategory(Request $request)
     {
 
+
         // Validate the incoming request
         $request->validate([
             'category_name' => 'required|string|max:255',
         ]);
+
 
         try {
             // Update the category based on the provided ID
             $category = Categories::findOrFail($request->id);
             $category->category_name = $request->category_name;
             $category->save();
+
 
             // Optionally, you can return a success message or redirect the user
             return redirect()->back()->with('success', 'Category updated successfully');
@@ -503,10 +569,12 @@ class PagesSettingController extends Controller
     public function deletecategory(Request $request)
     {
 
+
         try {
             // Find the category based on the provided ID and delete it
             $category = Categories::findOrFail($request->id);
             $category->delete();
+
 
             // Optionally, you can return a success message or redirect the user
             return redirect()->back()->with('success', 'Category deleted successfully');
@@ -515,6 +583,7 @@ class PagesSettingController extends Controller
             return redirect()->back()->with('error', 'Error deleting category: ' . $e->getMessage());
         }
     }
+
 
 
 
@@ -529,10 +598,12 @@ class PagesSettingController extends Controller
     }
 
 
+
     public function CsvSave(Request $request)
     {
         // Validate the CSV file
         $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|file|mimes:txt,csv',
             'csv_file' => 'required|file|mimes:txt,csv',
         ]);
 
@@ -570,7 +641,46 @@ class PagesSettingController extends Controller
             }
         }
 
+        // Define the required columns
+        $requiredColumns = ['name', 'price', 'description', 'category'];
+
+        // Check if all required columns exist in the header
+        $missingColumns = array_diff($requiredColumns, $header);
+
+        if (!empty($missingColumns)) {
+            // Construct the error message
+            $errorMessage = 'The CSV file is missing the following column(s): ' . implode(', ', $missingColumns);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+        // Check for empty cells
+        foreach ($csvData as $idx => $row) {
+            foreach ($row as $value) {
+                if ($value === "") {
+                    return redirect()->back()->with('error', 'Empty cell found at (Row ' . ($idx + 2) . '). Please fill in the missing data.');
+                }
+            }
+        }
+
         // Process the CSV data and insert into the database
+        try {
+            DB::beginTransaction();
+
+
+
+            foreach ($csvData as $indx => $row) {
+
+
+                $itemData = [];
+                foreach ($header as $index => $columnName) {
+                    switch ($columnName) {
+                        case 'name':
+                        case 'price':
+                        case 'image':
+                        case 'file':
+                        case 'description':
+                            $itemData[$columnName] = $row[$index];
+                            break;
         try {
             DB::beginTransaction();
 
@@ -615,12 +725,44 @@ class PagesSettingController extends Controller
                             }
 
                             break;
+
+                            // Check if the category exists in the database
+                            $categoryId = Categories::where('category_name', $categoryName)->value('id');
+
+                            if ($categoryId) {
+                                // If the category exists, assign its ID to the item data
+                                $itemData['category'] = $categoryId;
+                            } else {
+                                // If the category doesn't exist, create it
+                                $newCategory = Categories::create(['category_name' => $categoryName]);
+
+                                // Check if the category was created successfully
+                                if ($newCategory) {
+                                    // Assign the newly created category's ID to the item data
+                                    $itemData['category'] = $newCategory->id;
+                                } else {
+                                    // Log error and skip insertion
+                                    Log::error("Failed to create category '$categoryName' for item '{$row['name']}'");
+                                    continue 2; // Skip to the next row
+                                }
+                            }
+
+                            break;
                     }
                 }
 
                 // Generate slug from name
                 $itemData['slug'] = Str::slug($itemData['name']);
+                }
 
+                // Generate slug from name
+                $itemData['slug'] = Str::slug($itemData['name']);
+
+                // Insert into the database
+                Item::create($itemData);
+            }
+
+            DB::commit();
                 // Insert into the database
                 Item::create($itemData);
             }
@@ -634,7 +776,17 @@ class PagesSettingController extends Controller
             Log::error("Error processing CSV file: " . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
         }
+            // Redirect back with a success message
+            return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error("Error processing CSV file: " . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
+        }
     }
+
+
+    public function ExportCsv()
 
 
     public function ExportCsv()
@@ -644,14 +796,223 @@ class PagesSettingController extends Controller
 
         // Fetch category data from the category table
         $categories = DB::table('categories')->pluck('category_name', 'id');
+        // Fetch specific columns from the database
+        $items = DB::table('items')->select('id', 'name', 'price', 'image', 'file', 'description', 'category')->get();
 
+        // Fetch category data from the category table
+        $categories = DB::table('categories')->pluck('category_name', 'id');
+
+        // Create CSV file content
+        $csvData = '';
         // Create CSV file content
         $csvData = '';
 
         // Add header row
         if (!empty($items)) {
             $csvData .= "id,name,price,image,file,description,category\n";
+        // Add header row
+        if (!empty($items)) {
+            $csvData .= "id,name,price,image,file,description,category\n";
 
+            // Add data rows
+            foreach ($items as $item) {
+                // Escape commas in description and category
+                $description = str_replace(',', ' ', $item->description);
+                $categoryName = isset($categories[$item->category]) ? $categories[$item->category] : '';
+
+                // Combine all fields into CSV format
+                $csvData .= "{$item->id},{$item->name},{$item->price},{$item->image},{$item->file},\"{$description}\",\"{$categoryName}\"\n";
+            }
+        }
+
+        // Set headers for CSV file download
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="items.csv"',
+        ];
+
+        // Return CSV file as response with appropriate headers
+        return response()->make($csvData, 200, $headers);
+    }
+
+    function uploadsindex()
+    {
+
+        $files = Upload::orderBy('created_at', 'desc')->get();
+        return view('adminpages.uploads', ['uploadedFiles' => $files]);
+    }
+
+    function saveuploads(Request $request)
+    {
+
+        if ($request->hasFile('uploadfiles')) {
+            $files = $request->file('uploadfiles');
+
+            foreach ($files as $file) {
+                // Validate file extension
+                $validator = Validator::make(['file' => $file], [
+                    'file' => 'mimes:pdf,jpeg,png,gif|required|max:2048', // Adjust max file size if needed
+                ]);
+
+                if ($validator->fails()) {
+                    // Flash validation errors to the session
+                    $request->session()->flash('upload_errors', $validator->errors()->all());
+                    return redirect()->back();
+                }
+
+                // Generate a unique filename
+                $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+
+                // Move each uploaded file to a new location
+                $file->move(public_path('uploads'), $filename);
+
+                // Save file information to the database
+                Upload::create([
+                    'file' => $filename,
+                ]);
+            }
+
+            // Set success message in session flash data
+            if (!$request->session()->has('success')) {
+                $request->session()->flash('success', 'Uploaded successfully!');
+            }
+
+            return redirect()->back();
+        } else {
+            return 'No file uploaded.';
+        }
+    }
+
+
+
+    public function deleteUploads(Request $request)
+    {
+        $id = $request->deleteid;
+        $upload = Upload::find($id); // Find the Upload model instance by its id
+
+        if ($upload) {
+            $file = public_path('uploads/') . $upload->file; // Construct the absolute file path
+
+            // Ensure that $file contains a safe path
+            if (file_exists($file)) {
+                if (unlink($file)) {
+                    $upload->delete(); // Delete the Upload
+                    // Redirect back to the previous page with success message
+                    return redirect()->back()->with('error', 'File deleted successfully');
+                } else {
+                    // Redirect back to the previous page with error message
+                    return redirect()->back()->with('error', 'Failed to delete file');
+                }
+            } else {
+                // Redirect back to the previous page with error message
+                return redirect()->back()->with('error', 'File not found or not writable');
+            }
+        } else {
+            // Redirect back to the previous page with error message
+            return redirect()->back()->with('error', 'Upload not found');
+        }
+    }
+
+    public function purchases()
+    {
+        // get user id from auth
+        $userid = Auth()->id();
+
+        // fetch from item table 
+        $itemIds = [];
+        $purchases = Purchase::where('user_id', $userid)->get();
+
+        foreach ($purchases as $purchase) {
+            $itemIds[] = $purchase->item_id;
+        }
+
+        // Retrieve items based on the collected item IDs
+        $items = Item::whereIn('id', $itemIds)->get();
+
+
+
+        // Return the view with cart data
+        return view('adminpages.purchases', [
+            'cartItems' => $items,
+        ]);
+    }
+
+    public function settingsindex()
+    {
+        $settings = Settings::get(["key", "value", "display_name"]);
+
+        $stripeSettings = [];
+        $paypalSettings = [];
+        $mailSettings = [];
+        $awsSettings = [];
+        
+        foreach ($settings as $setting) {
+            switch ($setting->key) {
+                case 'STRIPE_SECRET':
+                    $stripeSettings[] = $setting;
+                    break;
+                case 'PAYPAL_KEY':
+                case 'PAYPAL_SECRET':
+                case 'PAYPAL_MODE':
+                    $paypalSettings[] = $setting;
+                    break;
+                case 'MAIL_MAILER':
+                case 'MAIL_HOST':
+                case 'MAIL_PORT':
+                case 'MAIL_USERNAME':
+                case 'MAIL_PASSWORD':
+                case 'MAIL_ENCRYPTION':
+                case 'MAIL_FROM_ADDRESS':
+                case 'MAIL_FROM_NAME':
+                    $mailSettings[] = $setting;
+                    break;
+                case 'AWS_ACCESS_KEY_ID':
+                case 'AWS_SECRET_ACCESS_KEY':
+                case 'AWS_REGION':
+                case 'AWS_BUCKET':
+                case 'AWS_URL':
+                    $awsSettings[] = $setting;
+                    break;
+            }
+        }
+
+
+
+        return view("adminpages.setting", [
+            'stripeSettings' => $stripeSettings,
+            'paypalSettings' => $paypalSettings,
+            'mailSettings' => $mailSettings,
+            'awsSettings' => $awsSettings
+        ]);
+    }
+
+
+    public function updatesettings(Request $request)
+    {
+        $mailSettings = [];
+        $updateData = [
+            'STRIPE_SECRET' => $request->STRIPE_SECRET,
+            'PAYPAL_MODE' => $request->PAYPAL_MODE,
+            'PAYPAL_KEY' => $request->PAYPAL_KEY,
+            'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
+            'MAIL_MAILER' => $request->MAIL_MAILER,
+            'MAIL_HOST' => $request->MAIL_HOST,
+            'MAIL_PORT' => $request->MAIL_PORT,
+            'MAIL_USERNAME' => $request->MAIL_USERNAME,
+            'MAIL_PASSWORD' => $request->MAIL_PASSWORD,
+            'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
+            'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
+            'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
+            'AWS_ACCESS_KEY_ID' => $request->AWS_ACCESS_KEY_ID,
+            'AWS_SECRET_ACCESS_KEY' => $request->AWS_SECRET_ACCESS_KEY,
+            'AWS_REGION' => $request->AWS_REGION,
+            'AWS_BUCKET' => $request->AWS_BUCKET,
+            'AWS_URL' => $request->AWS_URL,
+        ];
+
+        foreach ($updateData as $key => $value) {
+
+            Settings::where('key', $key)->update(['value' => $value]);
             // Add data rows
             foreach ($items as $item) {
                 // Escape commas in description and category

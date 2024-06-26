@@ -31,7 +31,22 @@
         .cart-item {
             position: relative;
         }
+        .cart-item {
+            position: relative;
+        }
 
+        .cart-item .cart-count-container {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background-color: #ff6347;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .cart-item .cart-count-container {
             position: absolute;
             top: 0px;
@@ -49,6 +64,11 @@
             color: white;
             font-size: 14px;
         }
+        .cart-item .cart-count {
+            color: white;
+            font-size: 14px;
+        }
     </style>
+
 
 </head>

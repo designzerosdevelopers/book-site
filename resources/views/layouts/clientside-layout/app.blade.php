@@ -7,8 +7,17 @@
     @include('include.clientside.navbar')
     <!-- End Header/Navigation -->
 
+<body>
+    <!-- Start Header/Navigation -->
+    @include('include.clientside.navbar')
+    <!-- End Header/Navigation -->
+
+    @yield('content')
     @yield('content')
 
+    <!-- Start Footer Section -->
+    @include('include.clientside.footer')
+    <!-- End Footer Section -->
     <!-- Start Footer Section -->
     @include('include.clientside.footer')
     <!-- End Footer Section -->

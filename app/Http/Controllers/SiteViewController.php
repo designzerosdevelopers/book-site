@@ -9,7 +9,26 @@ use App\Models\Contact;
 use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Component;
+use App\Models\Home;
+use App\Models\About;
+use App\Models\Contact;
+use App\Models\Settings;
+use App\Models\Categories;
+use App\Models\Component;
 use App\Models\Item;
+use App\Models\User;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use App\Models\Purchase;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ExampleMail;
+use App\Mail\PostPurchaseMail;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -28,7 +47,16 @@ class SiteViewController extends Controller
 {
 
     public function productDetail($product)
+
+    public function productDetail($product)
     {
+        $item = Item::where('slug', $product)->first();
+
+        if (!$item) {
+            abort(404); // Send a 404 response if no item is found
+        }
+
+        return view('clientpages.productdetail', ['item' => $item]);
         $item = Item::where('slug', $product)->first();
 
         if (!$item) {
@@ -41,10 +69,17 @@ class SiteViewController extends Controller
 
 
     public function getProductsByCategory($category)
+
+
+    public function getProductsByCategory($category)
     {
         $products = Item::where('id', $category)->get();
         return response()->json($products);
+        $products = Item::where('id', $category)->get();
+        return response()->json($products);
     }
+
+
 
 
 
@@ -52,6 +87,15 @@ class SiteViewController extends Controller
     {
         return view('clientpages.blog');
     }
+
+
+    public function addCart($encryptedId)
+    {
+        $id = Crypt::decrypt($encryptedId);
+
+        $cart = json_decode(request()->cookie('cart'), true) ?? [];
+
+        $item = Item::find($id);
 
 
     public function addCart($encryptedId)
@@ -75,8 +119,13 @@ class SiteViewController extends Controller
         $response = Redirect::route('cart')
             ->withCookie(cookie('cart', json_encode($cart), 60));
 
+
+        $response = Redirect::route('cart')
+            ->withCookie(cookie('cart', json_encode($cart), 60));
+
         return $response;
     }
+
 
 
     public function removeFromCart($itemId)
@@ -86,6 +135,7 @@ class SiteViewController extends Controller
         unset($cartItems[$itemId]);
 
         $cookie = cookie('cart', json_encode($cartItems), 60 * 24 * 30);
+        $cookie = cookie('cart', json_encode($cartItems), 60 * 24 * 30);
 
         return redirect()->route('cart')->withCookie($cookie);
     }
@@ -94,7 +144,28 @@ class SiteViewController extends Controller
     public function checkout(request $request)
     {
         $subtotal = 0;
+        $subtotal = 0;
         $cartItems = json_decode(request()->cookie('cart'), true) ?? [];
+        foreach ($cartItems as $value) {
+            $subtotal += $value['item_price'];
+        }
+
+
+        $stripeIds = [1];
+        $stripeSettings = Settings::find($stripeIds)->pluck('value');
+        $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
+
+        $paypalIds = [5, 6];
+        $paypalSettings = Settings::find($paypalIds)->pluck('value');
+
+        $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');
+
+        return view('clientpages.checkout', [
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'paypal' => $paypal,
+            'stripe' => $stripe
+        ]);
         foreach ($cartItems as $value) {
             $subtotal += $value['item_price'];
         }
@@ -118,8 +189,11 @@ class SiteViewController extends Controller
     }
 
 
+
     public function contact()
     {
+        $data = Contact::first();
+        return view('clientpages.contact', ['contact' => $data]);
         $data = Contact::first();
         return view('clientpages.contact', ['contact' => $data]);
     }
@@ -130,6 +204,7 @@ class SiteViewController extends Controller
     {
         $cartItems = $request->cartItems;
         return view('clientpages.thankyou', ['cartItems' => $cartItems]);
+        return view('clientpages.thankyou', ['cartItems' => $cartItems]);
     }
 
     public function about()
@@ -137,8 +212,13 @@ class SiteViewController extends Controller
         $data = About::first();
         $pages = Home::first();
         return view('clientpages.about', ['data' => $data, 'pages' => $pages]);
+        $data = About::first();
+        $pages = Home::first();
+        return view('clientpages.about', ['data' => $data, 'pages' => $pages]);
     }
 
+    public function getCartItemCount()
+    {
     public function getCartItemCount()
     {
         $dataCookie = request()->cookie('cart');

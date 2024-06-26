@@ -67,10 +67,14 @@
                 <div class="intro-excerpt">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage()))
                     {{ App\Helpers\SiteviewHelper::homepage()->html }}
+                    @if (!empty(App\Helpers\SiteviewHelper::homepage()))
+                    {{ App\Helpers\SiteviewHelper::homepage()->html }}
                     @else
+                        No  Data
                         No  Data
                     @endif
                    
+                    <p><a href="{{ $data['button_1_url'] }}" class="btn btn-secondary me-2">{{ $data['button_1_name'] }}</a><a href="{{ $data['button_2_url'] }}" class="btn btn-white-outline">{{ $data['button_2_name'] }}</a></p>
                     <p><a href="{{ $data['button_1_url'] }}" class="btn btn-secondary me-2">{{ $data['button_1_name'] }}</a><a href="{{ $data['button_2_url'] }}" class="btn btn-white-outline">{{ $data['button_2_name'] }}</a></p>
                 </div>
             </div>
@@ -78,9 +82,12 @@
                 <div class="hero-img-wrap">
                     @if (!empty(App\Helpers\SiteviewHelper::homepage()))
                     <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="70%">
+                    @if (!empty(App\Helpers\SiteviewHelper::homepage()))
+                    <img src="{{ asset('clientside/images/'.App\Helpers\SiteviewHelper::homepage()->hero_image) }}" class="img-fluid" width="70%">
                     @else
                         No  Image
                     @endif
+        
         
                 </div>
             </div>
@@ -100,14 +107,19 @@
                     <h2 class="mb-4 section-title">{{ $data['ps_title'] }}</h2>
                     <p class="mb-4">{{ $data['ps_description'] }} </p>
                     <p><a href="" class="btn">Explore</a></p>
+                    <h2 class="mb-4 section-title">{{ $data['ps_title'] }}</h2>
+                    <p class="mb-4">{{ $data['ps_description'] }} </p>
+                    <p><a href="" class="btn">Explore</a></p>
                 </div>
                 <!-- End Column 1 -->
 
                 <!-- Start Column 2 -->
                 @foreach ($items as $item)
+                @foreach ($items as $item)
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <div class="product-item">
                         <a  style="text-decoration: none;" href="{{ route('product.details', ['id' => $item->id]) }}">
+                        <img src="{{asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
                         <img src="{{asset('book_images/'.$item->image)}}" class="img-fluid product-thumbnail">
                         <h3 class="product-title">{{$item->name}}</h3>
                         <div>
@@ -135,6 +147,8 @@
                 <div class="col-lg-6">
                     <h2 class="section-title">{{ $data['wcu_title'] }}</h2>
                     <p>{{ $data['wcu_description'] }}</p>
+                    <h2 class="section-title">{{ $data['wcu_title'] }}</h2>
+                    <p>{{ $data['wcu_description'] }}</p>
 
                     <div class="row my-5">
                         <div class="col-6 col-md-6">
@@ -142,6 +156,8 @@
                                 <div class="icon">
                                     <img src="{{asset('clientside/images/truck.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
+                                <h3>{{ $data['wcu_feature_1_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_1_description'] }}</p>
                                 <h3>{{ $data['wcu_feature_1_title'] }}</h3>
                                 <p>{{ $data['wcu_feature_1_description'] }}</p>
                             </div>
@@ -154,6 +170,8 @@
                                 </div>
                                 <h3>{{ $data['wcu_feature_2_title'] }}</h3>
                                 <p>{{ $data['wcu_feature_2_description'] }}</p>
+                                <h3>{{ $data['wcu_feature_2_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_2_description'] }}</p>
                             </div>
                         </div>
 
@@ -162,6 +180,8 @@
                                 <div class="icon">
                                     <img src="{{asset('clientside/images/support.svg')}}" alt="Image" class="imf-fluid">
                                 </div>
+                                <h3>{{ $data['wcu_feature_3_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_3_description'] }}</p>
                                 <h3>{{ $data['wcu_feature_3_title'] }}</h3>
                                 <p>{{ $data['wcu_feature_3_description'] }}</p>
                             </div>
@@ -174,6 +194,8 @@
                                 </div>
                                 <h3>{{ $data['wcu_feature_4_title'] }}</h3>
                                 <p>{{ $data['wcu_feature_4_description'] }}</p>
+                                <h3>{{ $data['wcu_feature_4_title'] }}</h3>
+                                <p>{{ $data['wcu_feature_4_description'] }}</p>
                             </div>
                         </div>
 
@@ -182,6 +204,7 @@
 
                 <div class="col-lg-5">
                     <div class="img-wrap">
+                        <img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
                         <img src="{{asset('clientside/images/'.$data['home_wcu_image'])}}" alt="Image" class="img-fluid">
                     </div>
                 </div>
@@ -205,8 +228,14 @@
                 <div class="col-lg-5 ps-lg-5">
                     <h2 class="section-title mb-4">{{ $data['wh_title'] }}</h2>
                     <p>{{ $data['wh_description'] }}</p>
+                    <h2 class="section-title mb-4">{{ $data['wh_title'] }}</h2>
+                    <p>{{ $data['wh_description'] }}</p>
                 
                     <ul class="list-unstyled custom-list my-4">
+                        <li>{{ $data['wh_feature_1'] }}</li>
+                        <li>{{ $data['wh_feature_2'] }}</li>
+                        <li>{{ $data['wh_feature_3'] }}</li>
+                        <li>{{ $data['wh_feature_4'] }}</li>
                         <li>{{ $data['wh_feature_1'] }}</li>
                         <li>{{ $data['wh_feature_2'] }}</li>
                         <li>{{ $data['wh_feature_3'] }}</li>
@@ -220,7 +249,10 @@
         </div>
     </div> --}}
 <!-- End We Help Section -->
+    </div> --}}
+<!-- End We Help Section -->
 
+{{-- <!-- Start Popular Product -->
 {{-- <!-- Start Popular Product -->
     <div class="popular-product">
         <div class="container">
@@ -272,6 +304,8 @@
 
 
 
+
+{{-- <!-- Start Blog Section -->
 {{-- <!-- Start Blog Section -->
     <div class="blog-section">
         <div class="container">
@@ -326,3 +360,4 @@
         </div>
     </div>
     <!-- End Blog Section -->	 --}}
+

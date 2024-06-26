@@ -4,6 +4,12 @@
 
 
 @stop --}}
+{{-- @extends('layouts.clientside-layout.app')
+@section('content')
+{{ App\Helpers\SiteViewHelper::getCart() }}
+
+
+@stop --}}
 
 @extends('layouts.clientside-layout.app')
 
@@ -30,6 +36,8 @@
             <div class="row mb-5">
                 <form class="col-md-12" method="post">
                     <div class="site-blocks-table">
+                        @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
+                            <table class="table mt-4">
                         @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
                             <table class="table mt-4">
                                 <thead>
@@ -62,6 +70,8 @@
                                             <td>
                                                 <a href="{{ route('remove.from.cart', ['id' => $item['item_id']]) }}"
                                                     class="btn btn-black btn-sm">X</a>
+                                                <a href="{{ route('remove.from.cart', ['id' => $item['item_id']]) }}"
+                                                    class="btn btn-black btn-sm">X</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -69,7 +79,11 @@
                             </table>
                         @else
                             <div class="empty-cart-message text-center mt-5 pt-5">
+                        @else
+                            <div class="empty-cart-message text-center mt-5 pt-5">
                                 <p class="empty-cart-text display-6">Your cart is empty.</p>
+                                <a href="{{ route('shop') }}" class="btn btn-green">Continue
+                                    Shopping</a>
                                 <a href="{{ route('shop') }}" class="btn btn-green">Continue
                                     Shopping</a>
                             </div>
@@ -77,6 +91,30 @@
                     </div>
                 </form>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <a href="{{ route('shop') }}" class="btn btn-outline-black btn-sm btn-block">Continue
+                                Shopping</a>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <label class="text-black h4" for="coupon">Coupon</label>
+                            <p>Enter your coupon code if you have one.</p>
+                        </div>
+                        <div class="col-md-8 mb-3 mb-md-0">
+                            <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-black">Apply Coupon</button>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
             <div class="row">
                 <div class="col-md-6">
                 @if (count(App\Helpers\SiteViewHelper::getCart()) > 0)
@@ -117,6 +155,9 @@
 
                                         <strong class="text-black"
                                             id="subtotal">${{ number_format($totalprice, 2) }}</strong>
+
+                                        <strong class="text-black"
+                                            id="subtotal">${{ number_format($totalprice, 2) }}</strong>
                                     </div>
                                 </div>
                                 <div class="row mb-5">
@@ -126,10 +167,15 @@
                                     <div class="col-md-6 text-right">
                                         <strong class="text-black"
                                             id="totalprice">${{ number_format($totalprice, 2) }}</strong>
+                                        <strong class="text-black"
+                                            id="totalprice">${{ number_format($totalprice, 2) }}</strong>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <form id="checkoutForm" method="get" action="{{ route('checkout') }}">
+                                            <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To
+                                                Checkout</button>
                                         <form id="checkoutForm" method="get" action="{{ route('checkout') }}">
                                             <button type="submit" class="btn btn-black btn-lg py-3 btn-block">Proceed To
                                                 Checkout</button>
@@ -139,6 +185,8 @@
                             </div>
                         </div>
                     </div>
+                @endif
+            </div>
                 @endif
             </div>
         </div>
