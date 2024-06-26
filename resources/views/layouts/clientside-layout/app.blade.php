@@ -13,7 +13,7 @@
     @include('include.clientside.footer')
     <!-- End Footer Section -->
 
-    <script src="{{ asset('clientside/js-css-other/custom.js') }}"></script>
+    <script src="{{ App\Helpers\SiteviewHelper::generates3url('clientside/js-css-other/custom.js') }}"></script>
 
     @foreach (\App\Helpers\SiteviewHelper::customCode('Stylesheet', 'For Footer Section') as $links)
         @if ($links->file == 1)

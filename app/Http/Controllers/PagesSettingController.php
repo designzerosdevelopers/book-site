@@ -25,7 +25,7 @@ class PagesSettingController extends Controller
     public function themeUpdate(Request $r)
     {
 
-        $css = File::get('clientside/js-css-other/style.css');
+        $css = \App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/style.css');
 
         if ($r->page == 'home') {
 
@@ -45,7 +45,6 @@ class PagesSettingController extends Controller
                     'product_section_button_url' => $r->section_button_url,
                 ]
             ]);
-            File::put('clientside/js-css-other/style.css', $css);
         } elseif ($r->page == 'shop') {
 
             Component::where('name', 'shop')->update([
@@ -55,7 +54,7 @@ class PagesSettingController extends Controller
 
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->iconBG . '$3', $css);
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->textColor . '$3', $css);
-            File::put('clientside/js-css-other/style.css', $css);
+            
 
             Component::where('name', 'contact')->update([
                 'data' => [
@@ -78,40 +77,28 @@ class PagesSettingController extends Controller
                     'product_button_name' => $r->product_button_name,
                 ]
             ]);
-            File::put('clientside/js-css-other/style.css', $css);
         } else {
+
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
 
-            File::put('clientside/js-css-other/style.css', $css);
         }
-        $css; // Ensure $css contains the CSS data
+        File::put('clientside/js-css-other/style.css', $css);
+        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css');
 
-        try {
-            // Specify the file path where you want to write the CSS data
-            $filePath = 'clientside/js-css-other/style.css'; // Update the path as needed
-            file_put_contents($filePath, $css, LOCK_EX);
-
-            // Redirect back to the previous page
-            return redirect()->back();
-        } catch (\Exception $e) {
-            // Log or handle the error appropriately
-            return $e->getMessage(); // For debugging purposes, you can return the error message
-        }
+        return  redirect()->back();
     }
 
     public function customCode(Request $r)
     {
 
         if ($r->action == 'save_css') {
-            $filePath = public_path('clientside/js-css-other/custom.css');
-            File::put($filePath, $r->css);
+             \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
         } elseif ($r->action == 'save_js') {
-            $filePath = public_path('clientside/js-css-other/custom.js');
-            File::put($filePath, $r->js);
+            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.js', $r->js);
         } else {
 
             // Validate input
@@ -134,14 +121,13 @@ class PagesSettingController extends Controller
             $file = 0;
             if ($r->hasFile('code_file')) {
                 $file = $r->file('code_file');
-                $destinationPath = 'clientside/js-css-other/'; // Define the path where you want to save the file
-                $fileName = $file->getClientOriginalName(); // Create a unique file name
+                $fileName = $file->getClientOriginalName(); // Get the original file name
+                
+                // Store the file on S3
+                 Storage::disk('s3')->putFileAs('clientside/js-css-other/', $file, $fileName);
 
-                // Move the file to the public/custom_codes directory
-                $file->move($destinationPath, $fileName);
-
-                // Store the file path relative to the public directory
-                $link = $destinationPath . '/' . $fileName;
+                // $file->move($destinationPath, $fileName);
+                // $link = $destinationPath . '/' . $fileName;
                 $file = 1;
             }
 
@@ -149,7 +135,7 @@ class PagesSettingController extends Controller
                 'for' => $r->for,
                 'file' => $file,
                 'type' => $r->type,
-                'link' => $link
+                'link' => 'clientside/js-css-other/'.$fileName
             ]);
         }
 
@@ -159,18 +145,20 @@ class PagesSettingController extends Controller
 
     public function customCodeDelete(Request $r)
     {
-        $link = CustomCode::find($r->id)->first();
+        $link = CustomCode::find($r->id);
 
-        if ($link) {
-            // Check if the file exists and delete it using unlink
-            $filePath = public_path($link->link); // Assuming the link is a relative path from the public directory
+        $filePath = $link->link;
 
-            if (file_exists($filePath)) {
-                $pathInfo = pathinfo($filePath);
-                $newFileName = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . 'bks_' . $pathInfo['basename'];
-
-                rename($filePath, $newFileName);
-            }
+        if (Storage::disk('s3')->exists($filePath)) {
+            $pathInfo = pathinfo($filePath);
+            $newFileName = $pathInfo['dirname'] . '/bks_' . $pathInfo['basename'];
+    
+            // Copy the file to the new location with the new name
+            Storage::disk('s3')->copy($filePath, $newFileName);
+    
+            // Delete the original file
+            Storage::disk('s3')->delete($filePath);
+    
 
 
             // Optionally delete the record from the database
