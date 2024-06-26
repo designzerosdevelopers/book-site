@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
+
 
 class PagesSettingController extends Controller
 {
@@ -87,9 +87,7 @@ class PagesSettingController extends Controller
 
         }
 
-        File::put('clientside/js-css-other/style.css', $css);
-        dd('d');
-        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css');
+        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css' , $css);
 
         return  redirect()->back();
     }
