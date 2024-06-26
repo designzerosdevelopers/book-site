@@ -86,7 +86,9 @@ class PagesSettingController extends Controller
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
 
         }
+
         File::put('clientside/js-css-other/style.css', $css);
+        dd('d');
         \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css');
 
         return  redirect()->back();
