@@ -826,33 +826,36 @@ class PagesSettingController extends Controller
 
 
     public function updateSettings(Request $request)
-    {
-        $updateData = [
-            'STRIPE_SECRET' => $request->STRIPE_SECRET,
-            'PAYPAL_MODE' => $request->PAYPAL_MODE,
-            'PAYPAL_KEY' => $request->PAYPAL_KEY,
-            'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
-            'MAIL_MAILER' => $request->MAIL_MAILER,
-            'MAIL_HOST' => $request->MAIL_HOST,
-            'MAIL_PORT' => $request->MAIL_PORT,
-            'MAIL_USERNAME' => $request->MAIL_USERNAME,
-            'MAIL_PASSWORD' => $request->MAIL_PASSWORD,
-            'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
-            'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
-            'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
-            'AWS_ACCESS_KEY_ID' => $request->AWS_ACCESS_KEY_ID,
-            'AWS_SECRET_ACCESS_KEY' => $request->AWS_SECRET_ACCESS_KEY,
-            'AWS_REGION' => $request->AWS_REGION,
-            'AWS_BUCKET' => $request->AWS_BUCKET,
-            'AWS_URL' => $request->AWS_URL,
-        ];
-    
-        foreach ($updateData as $key => $value) {
+{
+    $updateData = [
+        'STRIPE_SECRET' => $request->input('STRIPE_SECRET'),
+        'PAYPAL_MODE' => $request->input('PAYPAL_MODE'),
+        'PAYPAL_KEY' => $request->input('PAYPAL_KEY'),
+        'PAYPAL_SECRET' => $request->input('PAYPAL_SECRET'),
+        'MAIL_MAILER' => $request->input('MAIL_MAILER'),
+        'MAIL_HOST' => $request->input('MAIL_HOST'),
+        'MAIL_PORT' => $request->input('MAIL_PORT'),
+        'MAIL_USERNAME' => $request->input('MAIL_USERNAME'),
+        'MAIL_PASSWORD' => $request->input('MAIL_PASSWORD'),
+        'MAIL_ENCRYPTION' => $request->input('MAIL_ENCRYPTION'),
+        'MAIL_FROM_ADDRESS' => $request->input('MAIL_FROM_ADDRESS'),
+        'MAIL_FROM_NAME' => $request->input('MAIL_FROM_NAME'),
+        'AWS_ACCESS_KEY_ID' => $request->input('AWS_ACCESS_KEY_ID'),
+        'AWS_SECRET_ACCESS_KEY' => $request->input('AWS_SECRET_ACCESS_KEY'),
+        'AWS_REGION' => $request->input('AWS_REGION'),
+        'AWS_BUCKET' => $request->input('AWS_BUCKET'),
+        'AWS_URL' => $request->input('AWS_URL'),
+    ];
+
+    foreach ($updateData as $key => $value) {
+        if ($value !== null) { // Check if value is not null or empty
             Settings::where('key', $key)->update(['value' => $value]);
         }
-    
-       return redirect()->back()->with(['message', 'Settings updated successfully']);
     }
+
+   return redirect()->back()->with('message', 'Settings updated successfully');
+}
+
 
     public function generateCSV()
 {

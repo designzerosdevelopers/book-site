@@ -7,6 +7,9 @@ use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Item;
 use App\Models\CustomCode;
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+use Aws\Credentials\Credentials;
 
 class SiteviewHelper
 {
@@ -108,4 +111,72 @@ class SiteviewHelper
     }
   }
 
+  public static function s3config()
+  {
+    return [
+      'driver' => 's3',
+      'key' => self::getsettings('AWS_ACCESS_KEY_ID'),
+      'secret' => self::getsettings('AWS_SECRET_ACCESS_KEY'),
+      'region' => self::getsettings('AWS_REGION'),
+      'bucket' => self::getsettings('AWS_BUCKET'),
+      'url' => self::getsettings('AWS_URL'),
+    ];
+  }
+
+  public static function generates3url($objectKey)
+  {
+    // AWS credentials and region
+    $credentials = new Credentials(self::s3config()['key'], self::s3config()['secret']);
+    $region = self::s3config()['region'];
+
+    // S3 client
+    $s3Client = new S3Client([
+      'version' => 'latest',
+      'region' => $region,
+      'credentials' => $credentials
+    ]);
+
+    // Generate a pre-signed URL for the S3 object
+    $command = $s3Client->getCommand('GetObject', [
+      'Bucket' => self::s3config()['bucket'],
+      'Key' => $objectKey
+    ]);
+
+    // Create the pre-signed request
+    $request = $s3Client->createPresignedRequest($command, '+2 minutes');
+
+    // Get the pre-signed URL
+    $presignedUrl = (string)$request->getUri();
+
+    return $presignedUrl;
+  }
+
+  public static function getS3FileContent($objectKey)
+  {
+    // AWS credentials and region
+    $credentials = new Credentials(self::s3config()['key'], self::s3config()['secret']);
+    $region = self::s3config()['region'];
+
+    // S3 client
+    $s3Client = new S3Client([
+      'version' => 'latest',
+      'region' => $region,
+      'credentials' => $credentials
+    ]);
+
+    try {
+      // Get the object from S3
+      $result = $s3Client->getObject([
+        'Bucket' => self::s3config()['bucket'],
+        'Key' => $objectKey
+      ]);
+
+      // Return the file content
+      return $result['Body']->getContents();
+    } catch (S3Exception $e) {
+      // Handle exception
+      echo "Error fetching file from S3: " . $e->getMessage();
+      return null; // or handle the error appropriately
+    }
+  }
 }
