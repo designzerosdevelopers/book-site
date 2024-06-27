@@ -305,10 +305,6 @@ class PagesSettingController extends Controller
         $item->slug = $uniqueSlug;
         $item->save();
 
-
-
-
-
         // Redirect the user or return a response indicating success
         return redirect()->route('indexitem')->with('success', 'Item added successfully!');
     }
@@ -340,8 +336,6 @@ class PagesSettingController extends Controller
 
 
         ]);
-
-
 
 
         // Update item attributes with the new data
