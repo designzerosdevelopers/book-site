@@ -783,10 +783,6 @@ class PagesSettingController extends Controller
         }
     }
 
-
-    public function ExportCsv()
-
-
     public function ExportCsv()
     {
         // Fetch specific columns from the database
