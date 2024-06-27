@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 
 class PagesSettingController extends Controller
@@ -25,7 +23,6 @@ class PagesSettingController extends Controller
     public function themeUpdate(Request $r)
     {
 
-        $css = \App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/style.css');
         $css = \App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/style.css');
 
         if ($r->page == 'home') {
@@ -98,9 +95,7 @@ class PagesSettingController extends Controller
 
         if ($r->action == 'save_css') {
             \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
-            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
         } elseif ($r->action == 'save_js') {
-            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.js', $r->js);
             \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.js', $r->js);
         } else {
 
@@ -151,9 +146,7 @@ class PagesSettingController extends Controller
     public function customCodeDelete(Request $r)
     {
         $link = CustomCode::find($r->id);
-        $link = CustomCode::find($r->id);
 
-        $filePath = $link->link;
         $filePath = $link->link;
 
         if (\App\Helpers\SiteviewHelper::s3awsAccess()->exists($filePath)) {
