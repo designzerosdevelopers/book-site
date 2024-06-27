@@ -165,8 +165,6 @@ class PagesSettingController extends Controller
             // Delete the original file
             Storage::disk('s3')->delete($filePath);
     
-
-
             // Optionally delete the record from the database
             CustomCode::find($r->id)->delete();
         }
