@@ -3,17 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Upload;
-use App\Models\Component;
 use App\Models\Settings;
 use App\Models\Upload;
 use App\Models\Component;
-use App\Models\Settings;
 use App\Models\Categories;
 use App\Models\Item;
-use App\Models\Home;
-use App\Models\CustomCode;
-use App\Models\Purchase;
 use App\Models\Home;
 use App\Models\CustomCode;
 use App\Models\Purchase;
@@ -60,7 +54,7 @@ class PagesSettingController extends Controller
 
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->iconBG . '$3', $css);
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->textColor . '$3', $css);
-            
+
 
             Component::where('name', 'contact')->update([
                 'data' => [
@@ -90,10 +84,9 @@ class PagesSettingController extends Controller
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
-
         }
 
-        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css' , $css);
+        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css', $css);
 
         return  redirect()->back();
     }
@@ -102,7 +95,7 @@ class PagesSettingController extends Controller
     {
 
         if ($r->action == 'save_css') {
-             \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
+            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
         } elseif ($r->action == 'save_js') {
             \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.js', $r->js);
         } else {
@@ -128,9 +121,9 @@ class PagesSettingController extends Controller
             if ($r->hasFile('code_file')) {
                 $file = $r->file('code_file');
                 $fileName = $file->getClientOriginalName(); // Get the original file name
-                
+
                 // Store the file on S3
-                 Storage::disk('s3')->putFileAs('clientside/js-css-other/', $file, $fileName);
+                Storage::disk('s3')->putFileAs('clientside/js-css-other/', $file, $fileName);
 
                 // $file->move($destinationPath, $fileName);
                 // $link = $destinationPath . '/' . $fileName;
@@ -141,7 +134,7 @@ class PagesSettingController extends Controller
                 'for' => $r->for,
                 'file' => $file,
                 'type' => $r->type,
-                'link' => 'clientside/js-css-other/'.$fileName
+                'link' => 'clientside/js-css-other/' . $fileName
             ]);
         }
 
@@ -158,13 +151,13 @@ class PagesSettingController extends Controller
         if (Storage::disk('s3')->exists($filePath)) {
             $pathInfo = pathinfo($filePath);
             $newFileName = $pathInfo['dirname'] . '/bks_' . $pathInfo['basename'];
-    
+
             // Copy the file to the new location with the new name
             Storage::disk('s3')->copy($filePath, $newFileName);
-    
+
             // Delete the original file
             Storage::disk('s3')->delete($filePath);
-    
+
             // Optionally delete the record from the database
             CustomCode::find($r->id)->delete();
         }
@@ -235,14 +228,10 @@ class PagesSettingController extends Controller
 
     public function indexitem()
     {
-        // Fetch the pages data
-        $items = Item::get(); // Retrieve the first pages record
 
         // Fetch the pages data
         $items = Item::get(); // Retrieve the first pages record
 
-        // Pass the data to the view
-        return view('adminpages.item.index', ['items' => $items]);
         return view('adminpages.item.index', ['items' => $items]);
     }
 
@@ -252,13 +241,11 @@ class PagesSettingController extends Controller
 
         // Pass the data to the view
         return view('adminpages.item.create', ['categories' => $categories]);
-        return view('adminpages.item.create', ['categories' => $categories]);
     }
 
 
     public function storeitem(Request $request)
     {
-        // $url =   \App\Helpers\SiteviewHelper::generatePresignedUrl('digitalstores3bucket', $path);
         // Validate the incoming request data
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -314,7 +301,6 @@ class PagesSettingController extends Controller
         $categories = Categories::all();
         $item = Item::find($id);
         return view('adminpages.item.edit', compact('categories', 'item'));
-        return view('adminpages.item.edit', compact('categories', 'item'));
     }
 
     public function updateitem(Request $request, $id)
@@ -336,7 +322,6 @@ class PagesSettingController extends Controller
 
 
         ]);
-
 
         // Update item attributes with the new data
         $item->name = $request->name;
@@ -362,13 +347,9 @@ class PagesSettingController extends Controller
             $path = $file->store('book_files', 's3');
             $item->file = $path;
             Storage::disk('s3')->url($path);
-
         }
 
         $item->save();
-
-
-
 
         return redirect()->back()->with('success', 'Item updated successfully');
     }
@@ -402,19 +383,12 @@ class PagesSettingController extends Controller
         return view('adminpages.editpages.editmanu');
     }
 
-
-    public function editmanu()
-    {
-        return view('adminpages.editpages.editmanu');
-    }
-
     public function indexhome()
     {
         // Fetch the pages data
         $pages = Home::first();
 
         // Pass the data to the view
-        return view('adminpages.editpages.homesetting', compact('pages'));
         return view('adminpages.editpages.homesetting', compact('pages'));
     }
 
@@ -507,31 +481,6 @@ class PagesSettingController extends Controller
         return redirect()->back()->with('success', 'Record Created Successfully.');
     }
 
-    public function createcategory(Request $request)
-    {
-        $rules = [
-            'category_name' => 'required|string|max:255|unique:categories,category_name',
-        ];
-
-
-        // Custom validation messages
-        $messages = [
-            'category_name.required' => 'Category name is required.',
-            'category_name.unique' => 'Category name must be unique.',
-            // Add any other custom messages as needed
-        ];
-
-        // Validate the request
-        $validatedData = $request->validate($rules, $messages);
-
-        // Create a new category record
-        Categories::create([
-            'category_name' => $category_name = $request->category_name,
-        ]);
-
-        // Return a redirect response with a success message
-        return redirect()->back()->with('success', 'Record Created Successfully.');
-    }
 
     public function updatecategory(Request $request)
     {
@@ -597,32 +546,32 @@ class PagesSettingController extends Controller
         $validator = Validator::make($request->all(), [
             'csv_file' => 'required|file|mimes:txt,csv',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
+
         // Retrieve the uploaded CSV file
         $csvFile = $request->file('csv_file');
-    
+
         // Read the CSV file
         $csvData = array_map('str_getcsv', file($csvFile));
-    
+
         // Extract header row from CSV
         $header = array_shift($csvData);
-    
+
         // Define the required columns
         $requiredColumns = ['name', 'price', 'description', 'category'];
-    
+
         // Check if all required columns exist in the header
         $missingColumns = array_diff($requiredColumns, $header);
-    
+
         if (!empty($missingColumns)) {
             // Construct the error message
             $errorMessage = 'The CSV file is missing the following column(s): ' . implode(', ', $missingColumns);
             return redirect()->back()->with('error', $errorMessage);
         }
-    
+
         // Check for empty cells
         foreach ($csvData as $idx => $row) {
             foreach ($row as $value) {
@@ -631,11 +580,11 @@ class PagesSettingController extends Controller
                 }
             }
         }
-    
+
         // Process the CSV data and insert into the database
         try {
             DB::beginTransaction();
-    
+
             foreach ($csvData as $row) {
                 $itemData = [];
                 foreach ($header as $index => $columnName) {
@@ -650,17 +599,17 @@ class PagesSettingController extends Controller
                         case 'category':
                             // Fetch category ID based on the given category name
                             $categoryName = $row[$index];
-    
+
                             // Check if the category exists in the database
                             $categoryId = Categories::where('category_name', $categoryName)->value('id');
-    
+
                             if ($categoryId) {
                                 // If the category exists, assign its ID to the item data
                                 $itemData['category'] = $categoryId;
                             } else {
                                 // If the category doesn't exist, create it
                                 $newCategory = Categories::create(['category_name' => $categoryName]);
-    
+
                                 // Check if the category was created successfully
                                 if ($newCategory) {
                                     // Assign the newly created category's ID to the item data
@@ -671,20 +620,20 @@ class PagesSettingController extends Controller
                                     continue 2; // Skip to the next row
                                 }
                             }
-    
+
                             break;
                     }
                 }
-    
+
                 // Generate slug from name
                 $itemData['slug'] = Str::slug($itemData['name']);
-    
+
                 // Insert into the database
                 Item::create($itemData);
             }
-    
+
             DB::commit();
-    
+
             // Redirect back with a success message
             return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
         } catch (\Exception $e) {
@@ -702,20 +651,10 @@ class PagesSettingController extends Controller
 
         // Fetch category data from the category table
         $categories = DB::table('categories')->pluck('category_name', 'id');
-        // Fetch specific columns from the database
-        $items = DB::table('items')->select('id', 'name', 'price', 'image', 'file', 'description', 'category')->get();
-
-        // Fetch category data from the category table
-        $categories = DB::table('categories')->pluck('category_name', 'id');
 
         // Create CSV file content
         $csvData = '';
-        // Create CSV file content
-        $csvData = '';
 
-        // Add header row
-        if (!empty($items)) {
-            $csvData .= "id,name,price,image,file,description,category\n";
         // Add header row
         if (!empty($items)) {
             $csvData .= "id,name,price,image,file,description,category\n";
@@ -741,16 +680,15 @@ class PagesSettingController extends Controller
         return response()->make($csvData, 200, $headers);
     }
 
+
     function uploadsindex()
     {
-
         $files = Upload::orderBy('created_at', 'desc')->get();
         return view('adminpages.uploads', ['uploadedFiles' => $files]);
     }
 
     function saveuploads(Request $request)
     {
-
         if ($request->hasFile('uploadfiles')) {
             $files = $request->file('uploadfiles');
 
@@ -851,7 +789,7 @@ class PagesSettingController extends Controller
         $paypalSettings = [];
         $mailSettings = [];
         $awsSettings = [];
-        
+
         foreach ($settings as $setting) {
             switch ($setting->key) {
                 case 'STRIPE_SECRET':
@@ -940,207 +878,4 @@ class PagesSettingController extends Controller
         return response()->make($csvData, 200, $headers);
     }
 
-    function uploadsindex()
-    {
-
-        $files = Upload::orderBy('created_at', 'desc')->get();
-        return view('adminpages.uploads', ['uploadedFiles' => $files]);
-    }
-
-    function saveuploads(Request $request)
-    {
-
-        if ($request->hasFile('uploadfiles')) {
-            $files = $request->file('uploadfiles');
-
-            foreach ($files as $file) {
-                // Validate file extension
-                $validator = Validator::make(['file' => $file], [
-                    'file' => 'mimes:pdf,jpeg,png,gif|required|max:2048', // Adjust max file size if needed
-                ]);
-
-                if ($validator->fails()) {
-                    // Flash validation errors to the session
-                    $request->session()->flash('upload_errors', $validator->errors()->all());
-                    return redirect()->back();
-                }
-
-                // Generate a unique filename
-                $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
-
-                // Move each uploaded file to a new location
-                $file->move(public_path('uploads'), $filename);
-
-                // Save file information to the database
-                Upload::create([
-                    'file' => $filename,
-                ]);
-            }
-
-            // Set success message in session flash data
-            if (!$request->session()->has('success')) {
-                $request->session()->flash('success', 'Uploaded successfully!');
-            }
-
-            return redirect()->back();
-        } else {
-            return 'No file uploaded.';
-        }
-    }
-
-
-
-    public function deleteUploads(Request $request)
-    {
-        $id = $request->deleteid;
-        $upload = Upload::find($id); // Find the Upload model instance by its id
-
-        if ($upload) {
-            $file = public_path('uploads/') . $upload->file; // Construct the absolute file path
-
-            // Ensure that $file contains a safe path
-            if (file_exists($file)) {
-                if (unlink($file)) {
-                    $upload->delete(); // Delete the Upload
-                    // Redirect back to the previous page with success message
-                    return redirect()->back()->with('error', 'File deleted successfully');
-                } else {
-                    // Redirect back to the previous page with error message
-                    return redirect()->back()->with('error', 'Failed to delete file');
-                }
-            } else {
-                // Redirect back to the previous page with error message
-                return redirect()->back()->with('error', 'File not found or not writable');
-            }
-        } else {
-            // Redirect back to the previous page with error message
-            return redirect()->back()->with('error', 'Upload not found');
-        }
-    }
-
-    public function purchases()
-    {
-        // get user id from auth
-        $userid = Auth()->id();
-
-        // fetch from item table 
-        $itemIds = [];
-        $purchases = Purchase::where('user_id', $userid)->get();
-
-        foreach ($purchases as $purchase) {
-            $itemIds[] = $purchase->item_id;
-        }
-
-        // Retrieve items based on the collected item IDs
-        $items = Item::whereIn('id', $itemIds)->get();
-
-
-
-        // Return the view with cart data
-        return view('adminpages.purchases', [
-            'cartItems' => $items,
-        ]);
-    }
-
-    public function settingsindex()
-    {
-        $settings = Settings::get(["key", "value", "display_name"]);
-
-        $stripeSettings = [];
-        $paypalSettings = [];
-        $mailSettings = [];
-        $awsSettings = [];
-        
-        foreach ($settings as $setting) {
-            switch ($setting->key) {
-                case 'STRIPE_SECRET':
-                    $stripeSettings[] = $setting;
-                    break;
-                case 'PAYPAL_KEY':
-                case 'PAYPAL_SECRET':
-                case 'PAYPAL_MODE':
-                    $paypalSettings[] = $setting;
-                    break;
-                case 'MAIL_MAILER':
-                case 'MAIL_HOST':
-                case 'MAIL_PORT':
-                case 'MAIL_USERNAME':
-                case 'MAIL_PASSWORD':
-                case 'MAIL_ENCRYPTION':
-                case 'MAIL_FROM_ADDRESS':
-                case 'MAIL_FROM_NAME':
-                    $mailSettings[] = $setting;
-                    break;
-                case 'AWS_ACCESS_KEY_ID':
-                case 'AWS_SECRET_ACCESS_KEY':
-                case 'AWS_REGION':
-                case 'AWS_BUCKET':
-                case 'AWS_URL':
-                    $awsSettings[] = $setting;
-                    break;
-            }
-        }
-
-
-
-        return view("adminpages.setting", [
-            'stripeSettings' => $stripeSettings,
-            'paypalSettings' => $paypalSettings,
-            'mailSettings' => $mailSettings,
-            'awsSettings' => $awsSettings
-        ]);
-    }
-
-
-    public function updatesettings(Request $request)
-    {
-        $mailSettings = [];
-        $updateData = [
-            'STRIPE_SECRET' => $request->STRIPE_SECRET,
-            'PAYPAL_MODE' => $request->PAYPAL_MODE,
-            'PAYPAL_KEY' => $request->PAYPAL_KEY,
-            'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
-            'MAIL_MAILER' => $request->MAIL_MAILER,
-            'MAIL_HOST' => $request->MAIL_HOST,
-            'MAIL_PORT' => $request->MAIL_PORT,
-            'MAIL_USERNAME' => $request->MAIL_USERNAME,
-            'MAIL_PASSWORD' => $request->MAIL_PASSWORD,
-            'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
-            'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
-            'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
-            'AWS_ACCESS_KEY_ID' => $request->AWS_ACCESS_KEY_ID,
-            'AWS_SECRET_ACCESS_KEY' => $request->AWS_SECRET_ACCESS_KEY,
-            'AWS_REGION' => $request->AWS_REGION,
-            'AWS_BUCKET' => $request->AWS_BUCKET,
-            'AWS_URL' => $request->AWS_URL,
-        ];
-
-        foreach ($updateData as $key => $value) {
-
-            Settings::where('key', $key)->update(['value' => $value]);
-        }
-        
-        // Fetch data from the database (example)
-        $mailSettings = Settings::all();
-
-        // Create a separate array to hold the mail configuration settings
-        $configSettings = [];
-
-        foreach ($mailSettings as $setting) {
-            // Check if the setting key matches any of the mail configuration keys
-            if (in_array($setting->key, ['MAIL_MAILER', 'MAIL_HOST', 'MAIL_PORT', 'MAIL_USERNAME', 'MAIL_PASSWORD', 'MAIL_ENCRYPTION', 'MAIL_FROM_ADDRESS', 'MAIL_FROM_NAME'])) {
-                // Add the setting to the configuration settings array
-                $configSettings[$setting->key] = $setting->value;
-            }
-        }
-
-        // Dynamically update the mail configuration
-        config(["mail.mailers.smtp" => $configSettings]);
-
-        // Cache the configuration
-        Artisan::call('config:cache');
-
-        // Flash a success message to the session
-        return redirect()->back()->with('success', 'Settings updated successfully');
-    }
 }
