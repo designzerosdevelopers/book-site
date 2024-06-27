@@ -776,17 +776,7 @@ class PagesSettingController extends Controller
             Log::error("Error processing CSV file: " . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
         }
-            // Redirect back with a success message
-            return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error("Error processing CSV file: " . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
-        }
     }
-
-
-    public function ExportCsv()
 
 
     public function ExportCsv()
