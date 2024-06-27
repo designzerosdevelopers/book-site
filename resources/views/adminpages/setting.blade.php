@@ -56,6 +56,22 @@
                 </form>   
             </div>
         </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <h3>AWS Configuration</h3>
+                <form method="POST" action="{{ route('update.settings') }}">
+                    @csrf
+                    @foreach ($awsSettings as $aws)
+                        <div class="form-group">
+                            <label for="">{{ $aws['display_name'] }}</label>
+                            <input type="text" class="form-control" name="{{ $aws['key'] }}" value="{{ $aws['value'] }}">
+                        </div>
+                    @endforeach  
+                    <button type="submit" class="btn btn-success">Save</button>
+                </form>   
+            </div>
+        </div>
     </div>
 @stop
 
