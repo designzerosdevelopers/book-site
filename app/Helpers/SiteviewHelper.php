@@ -10,6 +10,7 @@ use App\Models\CustomCode;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use Aws\Credentials\Credentials;
+use Illuminate\Support\Facades\Storage;
 
 class SiteviewHelper
 {
@@ -178,5 +179,32 @@ class SiteviewHelper
       echo "Error fetching file from S3: " . $e->getMessage();
       return null; // or handle the error appropriately
     }
+  }
+
+  public static function updateS3File($objectKey, $css)
+  {
+
+    File::put($objectKey, $css);
+    Storage::disk('s3')->put($objectKey, file_get_contents(public_path($objectKey)));
+    return true;
+  }
+
+  public static function s3awsAccess()
+  {
+
+    // Set the custom disk configuration
+    config([
+      'filesystems.disks.s3_custom' => [
+        'driver' => 's3',
+        'key' => self::getsettings('AWS_ACCESS_KEY_ID'),
+        'secret' => self::getsettings('AWS_SECRET_ACCESS_KEY'),
+        'region' => self::getsettings('AWS_REGION'),
+        'bucket' => self::getsettings('AWS_BUCKET'),
+        'url' => self::getsettings('AWS_URL'),
+      ],
+    ]);
+
+    // Use the custom disk for Storage facade operations
+    return Storage::disk('s3_custom');
   }
 }

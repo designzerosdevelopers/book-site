@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 
 class PagesSettingController extends Controller
@@ -54,7 +52,7 @@ class PagesSettingController extends Controller
 
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->iconBG . '$3', $css);
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->textColor . '$3', $css);
-
+            
 
             Component::where('name', 'contact')->update([
                 'data' => [
@@ -84,8 +82,9 @@ class PagesSettingController extends Controller
             $css = preg_replace('/(a\s*{\s*)(.*?color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
             $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
-        }
 
+            
+        }
         \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css', $css);
 
         return  redirect()->back();
@@ -123,8 +122,10 @@ class PagesSettingController extends Controller
                 $fileName = $file->getClientOriginalName(); // Get the original file name
 
                 // Store the file on S3
-                Storage::disk('s3')->putFileAs('clientside/js-css-other/', $file, $fileName);
+                \App\Helpers\SiteviewHelper::s3awsAccess()->putFileAs('clientside/js-css-other/', $file, $fileName);
 
+                // $file->move($destinationPath, $fileName);
+                // $link = $destinationPath . '/' . $fileName;
                 // $file->move($destinationPath, $fileName);
                 // $link = $destinationPath . '/' . $fileName;
                 $file = 1;
@@ -148,15 +149,15 @@ class PagesSettingController extends Controller
 
         $filePath = $link->link;
 
-        if (Storage::disk('s3')->exists($filePath)) {
+        if (\App\Helpers\SiteviewHelper::s3awsAccess()->exists($filePath)) {
             $pathInfo = pathinfo($filePath);
             $newFileName = $pathInfo['dirname'] . '/bks_' . $pathInfo['basename'];
 
             // Copy the file to the new location with the new name
-            Storage::disk('s3')->copy($filePath, $newFileName);
+            \App\Helpers\SiteviewHelper::s3awsAccess()->copy($filePath, $newFileName);
 
             // Delete the original file
-            Storage::disk('s3')->delete($filePath);
+            \App\Helpers\SiteviewHelper::s3awsAccess('clientside/js-css-other/style.css')->delete($filePath);
 
             // Optionally delete the record from the database
             CustomCode::find($r->id)->delete();
@@ -252,8 +253,11 @@ class PagesSettingController extends Controller
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'bookfile' => 'required|file|mimes:pdf|max:20000',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bookfile' => 'required|file|mimes:pdf|max:20000',
             'category' => 'required|string',
             'description' => 'required|string',
+
 
 
         ]);
@@ -274,20 +278,22 @@ class PagesSettingController extends Controller
         $item->price = $validatedData['price'];
 
 
+
         // Move and get original file name for image
         $file = $request->file('image');
         $path = $file->store('book_images', 's3');
         $item->image = $path;
-        Storage::disk('s3')->url($path);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
 
         // Move and get original file name for bookfile
         $file = $request->file('bookfile');
         $path = $file->store('book_files', 's3');
         $item->file = $path;
-        Storage::disk('s3')->url($path);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
 
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
+        $item->slug = $uniqueSlug;
         $item->slug = $uniqueSlug;
         $item->slug = $uniqueSlug;
         $item->save();
@@ -333,20 +339,20 @@ class PagesSettingController extends Controller
 
         // Check if a new image file is provided
         if ($request->hasFile('image')) {
-            Storage::disk('s3')->delete($item->image);
+            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
             $file = $request->file('image');
             $path = $file->store('book_images', 's3');
             $item->image = $path;
-            Storage::disk('s3')->url($path);
+            \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
 
         // Check if a new file is provided
         if ($request->hasFile('bookfile')) {
-            Storage::disk('s3')->delete($item->file);
+            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
             $file = $request->file('bookfile');
             $path = $file->store('book_files', 's3');
             $item->file = $path;
-            Storage::disk('s3')->url($path);
+            \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
 
         $item->save();
@@ -369,10 +375,10 @@ class PagesSettingController extends Controller
         $purchase->delete();
 
         $path = 'book_images/' . $item->image;
-        Storage::disk('s3')->delete($path);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
 
         $path = 'book_files/' . $item->file;
-        Storage::disk('s3')->delete($path);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
 
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
@@ -726,6 +732,7 @@ class PagesSettingController extends Controller
             return 'No file uploaded.';
         }
     }
+
 
     public function deleteUploads(Request $request)
     {
