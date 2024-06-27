@@ -727,8 +727,6 @@ class PagesSettingController extends Controller
         }
     }
 
-
-
     public function deleteUploads(Request $request)
     {
         $id = $request->deleteid;
@@ -772,8 +770,6 @@ class PagesSettingController extends Controller
 
         // Retrieve items based on the collected item IDs
         $items = Item::whereIn('id', $itemIds)->get();
-
-
 
         // Return the view with cart data
         return view('adminpages.purchases', [
@@ -819,8 +815,6 @@ class PagesSettingController extends Controller
                     break;
             }
         }
-
-
 
         return view("adminpages.setting", [
             'stripeSettings' => $stripeSettings,
@@ -877,6 +871,4 @@ class PagesSettingController extends Controller
         // Return CSV file as response with appropriate headers
         return response()->make($csvData, 200, $headers);
     }
-
-
 }
