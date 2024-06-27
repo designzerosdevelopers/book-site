@@ -97,7 +97,7 @@
                 <form action="{{ route('custom.code.store') }}" method="post">
                     @csrf
                     <h5 class="card-title">CSS</h5>
-                    <textarea name="css" class="form-control" rows="25" placeholder="Enter your custom CSS here...">{{App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/custom.css')}}</textarea>
+                    <textarea name="css" class="form-control" rows="25" placeholder="Enter your custom CSS here...">{{File::get('clientside/js-css-other/custom.css')}}</textarea>
                     <div class="form-group row mt-3">
                         <div class="col-sm-10">
                             <button type="submit" name="action" value="save_css"
@@ -114,7 +114,7 @@
                     @csrf
                     <h5 class="card-title">JS/JQuery</h5>
                     <textarea name="js" class="form-control" rows="25"
-                        placeholder="Enter your custom JavaScript/Jquery here...">{{App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/custom.js')}}</textarea>
+                        placeholder="Enter your custom JavaScript/Jquery here...">{{File::get('clientside/js-css-other/custom.js')}}</textarea>
 
                     <div class="form-group row mt-3">
                         <div class="col-sm-10">

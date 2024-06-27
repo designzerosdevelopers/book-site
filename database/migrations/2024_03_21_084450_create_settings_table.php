@@ -38,14 +38,8 @@ return new class extends Migration
                 'MAIL_PASSWORD' => 'Mail password',
                 'MAIL_ENCRYPTION' => 'Mail encryption',
                 'MAIL_FROM_ADDRESS' => 'Mail from address',
-                'MAIL_FROM_NAME' => 'Mail from name',
-                'AWS_ACCESS_KEY_ID' => 'AWS Access Key ID',
-                'AWS_SECRET_ACCESS_KEY' => 'AWS Secret Access Key',
-                'AWS_REGION' => 'AWS Region',
-                'AWS_BUCKET' => 'AWS Bucket',
-                'AWS_URL' => 'AWS URL'
+                'MAIL_FROM_NAME' => 'Mail from name'
             ];
-            
 
             // Create an array to hold the data for bulk insertion
             $data = [];
