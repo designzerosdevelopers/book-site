@@ -25,7 +25,7 @@ class PagesSettingController extends Controller
     public function themeUpdate(Request $r)
     {
 
-        $css = File::get('clientside/js-css-other/style.css');
+        $css = \App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/style.css');
 
         if ($r->page == 'home') {
 
@@ -45,8 +45,6 @@ class PagesSettingController extends Controller
                     'product_section_button_url' => $r->section_button_url,
                 ]
             ]);
-            File::put('clientside/js-css-other/style.css', $css);
-
         } elseif ($r->page == 'shop') {
 
             Component::where('name', 'shop')->update([
@@ -56,7 +54,7 @@ class PagesSettingController extends Controller
 
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->iconBG . '$3', $css);
             $css = preg_replace('/(\.service .service-icon\s*{\s*.*?color:\s*)([^;]+)(.*?})/s', '$1' . $r->textColor . '$3', $css);
-            File::put('clientside/js-css-other/style.css', $css);
+            
 
             Component::where('name', 'contact')->update([
                 'data' => [
@@ -79,7 +77,6 @@ class PagesSettingController extends Controller
                     'product_button_name' => $r->product_button_name,
                 ]
             ]);
-            File::put('clientside/js-css-other/style.css', $css);
         } else {
             $css = preg_replace('/(\.hero\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->hero_color . '$3', $css);
             $css = preg_replace('/(body\s*{\s*)(.*?background-color:\s*)([^;]+)(.*?})/s', '$1$2' . $r->bg_color . '$4', $css);
@@ -87,32 +84,20 @@ class PagesSettingController extends Controller
             $css = preg_replace('/(\.custom-navbar\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->navbar_color . ' !important $3', $css);
             $css = preg_replace('/(\.footer-section\s*{\s*.*?background:\s*)([^;]+)(.*?})/s', '$1' . $r->footer_color . '$3', $css);
 
-            File::put('clientside/js-css-other/style.css', $css);
+            
         }
-        $css; // Ensure $css contains the CSS data
+        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css', $css);
 
-        try {
-            // Specify the file path where you want to write the CSS data
-            $filePath = 'clientside/js-css-other/style.css'; // Update the path as needed
-            file_put_contents($filePath, $css, LOCK_EX);
-
-            // Redirect back to the previous page
-            return redirect()->back();
-        } catch (\Exception $e) {
-            // Log or handle the error appropriately
-            return $e->getMessage(); // For debugging purposes, you can return the error message
-        }
+        return  redirect()->back();
     }
 
     public function customCode(Request $r)
     {
 
         if ($r->action == 'save_css') {
-            $filePath = public_path('clientside/js-css-other/custom.css');
-            File::put($filePath, $r->css);
+            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
         } elseif ($r->action == 'save_js') {
-            $filePath = public_path('clientside/js-css-other/custom.js');
-            File::put($filePath, $r->js);
+            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.js', $r->js);
         } else {
 
             // Validate input
@@ -135,14 +120,13 @@ class PagesSettingController extends Controller
             $file = 0;
             if ($r->hasFile('code_file')) {
                 $file = $r->file('code_file');
-                $destinationPath = 'clientside/js-css-other/'; // Define the path where you want to save the file
-                $fileName = $file->getClientOriginalName(); // Create a unique file name
+                $fileName = $file->getClientOriginalName(); // Get the original file name
 
-                // Move the file to the public/custom_codes directory
-                $file->move($destinationPath, $fileName);
+                // Store the file on S3
+                \App\Helpers\SiteviewHelper::s3awsAccess()->putFileAs('clientside/js-css-other/', $file, $fileName);
 
-                // Store the file path relative to the public directory
-                $link = $destinationPath . '/' . $fileName;
+                // $file->move($destinationPath, $fileName);
+                // $link = $destinationPath . '/' . $fileName;
                 $file = 1;
             }
 
@@ -160,19 +144,19 @@ class PagesSettingController extends Controller
 
     public function customCodeDelete(Request $r)
     {
-        $link = CustomCode::find($r->id)->first();
+        $link = CustomCode::find($r->id);
 
-        if ($link) {
-            // Check if the file exists and delete it using unlink
-            $filePath = public_path($link->link); // Assuming the link is a relative path from the public directory
+        $filePath = $link->link;
 
-            if (file_exists($filePath)) {
-                $pathInfo = pathinfo($filePath);
-                $newFileName = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . 'bks_' . $pathInfo['basename'];
-                
-                rename($filePath, $newFileName);
-            }
-            
+        if (\App\Helpers\SiteviewHelper::s3awsAccess()->exists($filePath)) {
+            $pathInfo = pathinfo($filePath);
+            $newFileName = $pathInfo['dirname'] . '/bks_' . $pathInfo['basename'];
+
+            // Copy the file to the new location with the new name
+            \App\Helpers\SiteviewHelper::s3awsAccess()->copy($filePath, $newFileName);
+
+            // Delete the original file
+            \App\Helpers\SiteviewHelper::s3awsAccess('clientside/js-css-other/style.css')->delete($filePath);
 
             // Optionally delete the record from the database
             CustomCode::find($r->id)->delete();
@@ -265,19 +249,17 @@ class PagesSettingController extends Controller
 
     public function storeitem(Request $request)
     {
-
         // Validate the incoming request data
         $validatedData = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
-            'bookfile' => 'required|file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bookfile' => 'required|file|mimes:pdf|max:20000',
             'category' => 'required|string',
             'description' => 'required|string',
 
+
         ]);
-
-
 
         $slug = Str::slug($validatedData['name']);
 
@@ -294,22 +276,24 @@ class PagesSettingController extends Controller
         $item->name = $validatedData['name'];
         $item->price = $validatedData['price'];
 
+
         // Move and get original file name for image
-        $imageName = $validatedData['image']->getClientOriginalName();
-        $validatedData['image']->move(public_path('book_images'), $imageName);
-        $item->image = $imageName;
+        $file = $request->file('image');
+        $path = $file->store('book_images', 's3');
+        $item->image = $path;
+        \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
 
         // Move and get original file name for bookfile
-        $fileName = $validatedData['bookfile']->getClientOriginalName();
-        $validatedData['bookfile']->move(public_path('book_files'), $fileName);
-        $item->file = $fileName;
+        $file = $request->file('bookfile');
+        $path = $file->store('book_files', 's3');
+        $item->file = $path;
+        \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
 
         $item->category = $validatedData['category'];
         $item->description = $validatedData['description'];
         $item->slug = $uniqueSlug;
+        $item->slug = $uniqueSlug;
         $item->save();
-
-
 
         // Redirect the user or return a response indicating success
         return redirect()->route('indexitem')->with('success', 'Item added successfully!');
@@ -347,18 +331,20 @@ class PagesSettingController extends Controller
 
         // Check if a new image file is provided
         if ($request->hasFile('image')) {
-            // Move and get original file name for new image
-            $imageName = $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('book_images'), $imageName);
-            $item->image = $imageName;
+            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
+            $file = $request->file('image');
+            $path = $file->store('book_images', 's3');
+            $item->image = $path;
+            \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
 
         // Check if a new file is provided
         if ($request->hasFile('bookfile')) {
-            // Move and get original file name for new file
-            $fileName = $request->file('bookfile')->getClientOriginalName();
-            $request->file('bookfile')->move(public_path('book_files'), $fileName);
-            $item->file = $fileName;
+            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
+            $file = $request->file('bookfile');
+            $path = $file->store('book_files', 's3');
+            $item->file = $path;
+            \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
 
         $item->save();
@@ -380,18 +366,11 @@ class PagesSettingController extends Controller
         // Delete the purchase record
         $purchase->delete();
 
-        $imagePath = public_path('book_images/' . $item->image);
-        if (file_exists($imagePath)) {
-            unlink($imagePath); // Deletes the image file
-        }
+        $path = 'book_images/' . $item->image;
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
 
-
-
-        // Delete file
-        $filePath = public_path('book_files/' . $item->file);
-        if (file_exists($filePath)) {
-            unlink($filePath); // Deletes the file
-        }
+        $path = 'book_files/' . $item->file;
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
 
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
@@ -742,7 +721,6 @@ class PagesSettingController extends Controller
             return 'No file uploaded.';
         }
     }
-
 
 
     public function deleteUploads(Request $request)
