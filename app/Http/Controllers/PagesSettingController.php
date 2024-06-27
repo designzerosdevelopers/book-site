@@ -125,7 +125,6 @@ class PagesSettingController extends Controller
             if ($r->hasFile('code_file')) {
                 $file = $r->file('code_file');
                 $fileName = $file->getClientOriginalName(); // Get the original file name
-                $fileName = $file->getClientOriginalName(); // Get the original file name
 
                 // Store the file on S3
                 \App\Helpers\SiteviewHelper::s3awsAccess()->putFileAs('clientside/js-css-other/', $file, $fileName);
