@@ -602,34 +602,33 @@ class PagesSettingController extends Controller
         // Validate the CSV file
         $validator = Validator::make($request->all(), [
             'csv_file' => 'required|file|mimes:txt,csv',
-            'csv_file' => 'required|file|mimes:txt,csv',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+    
         // Retrieve the uploaded CSV file
         $csvFile = $request->file('csv_file');
-
+    
         // Read the CSV file
         $csvData = array_map('str_getcsv', file($csvFile));
-
+    
         // Extract header row from CSV
         $header = array_shift($csvData);
-
+    
         // Define the required columns
         $requiredColumns = ['name', 'price', 'description', 'category'];
-
+    
         // Check if all required columns exist in the header
         $missingColumns = array_diff($requiredColumns, $header);
-
+    
         if (!empty($missingColumns)) {
             // Construct the error message
             $errorMessage = 'The CSV file is missing the following column(s): ' . implode(', ', $missingColumns);
             return redirect()->back()->with('error', $errorMessage);
         }
-
+    
         // Check for empty cells
         foreach ($csvData as $idx => $row) {
             foreach ($row as $value) {
@@ -638,55 +637,12 @@ class PagesSettingController extends Controller
                 }
             }
         }
-
-        // Define the required columns
-        $requiredColumns = ['name', 'price', 'description', 'category'];
-
-        // Check if all required columns exist in the header
-        $missingColumns = array_diff($requiredColumns, $header);
-
-        if (!empty($missingColumns)) {
-            // Construct the error message
-            $errorMessage = 'The CSV file is missing the following column(s): ' . implode(', ', $missingColumns);
-            return redirect()->back()->with('error', $errorMessage);
-        }
-
-        // Check for empty cells
-        foreach ($csvData as $idx => $row) {
-            foreach ($row as $value) {
-                if ($value === "") {
-                    return redirect()->back()->with('error', 'Empty cell found at (Row ' . ($idx + 2) . '). Please fill in the missing data.');
-                }
-            }
-        }
-
+    
         // Process the CSV data and insert into the database
         try {
             DB::beginTransaction();
-
-
-
-            foreach ($csvData as $indx => $row) {
-
-
-                $itemData = [];
-                foreach ($header as $index => $columnName) {
-                    switch ($columnName) {
-                        case 'name':
-                        case 'price':
-                        case 'image':
-                        case 'file':
-                        case 'description':
-                            $itemData[$columnName] = $row[$index];
-                            break;
-        try {
-            DB::beginTransaction();
-
-
-
-            foreach ($csvData as $indx => $row) {
-
-
+    
+            foreach ($csvData as $row) {
                 $itemData = [];
                 foreach ($header as $index => $columnName) {
                     switch ($columnName) {
@@ -700,17 +656,17 @@ class PagesSettingController extends Controller
                         case 'category':
                             // Fetch category ID based on the given category name
                             $categoryName = $row[$index];
-
+    
                             // Check if the category exists in the database
                             $categoryId = Categories::where('category_name', $categoryName)->value('id');
-
+    
                             if ($categoryId) {
                                 // If the category exists, assign its ID to the item data
                                 $itemData['category'] = $categoryId;
                             } else {
                                 // If the category doesn't exist, create it
                                 $newCategory = Categories::create(['category_name' => $categoryName]);
-
+    
                                 // Check if the category was created successfully
                                 if ($newCategory) {
                                     // Assign the newly created category's ID to the item data
@@ -721,59 +677,20 @@ class PagesSettingController extends Controller
                                     continue 2; // Skip to the next row
                                 }
                             }
-
-                            break;
-
-                            // Check if the category exists in the database
-                            $categoryId = Categories::where('category_name', $categoryName)->value('id');
-
-                            if ($categoryId) {
-                                // If the category exists, assign its ID to the item data
-                                $itemData['category'] = $categoryId;
-                            } else {
-                                // If the category doesn't exist, create it
-                                $newCategory = Categories::create(['category_name' => $categoryName]);
-
-                                // Check if the category was created successfully
-                                if ($newCategory) {
-                                    // Assign the newly created category's ID to the item data
-                                    $itemData['category'] = $newCategory->id;
-                                } else {
-                                    // Log error and skip insertion
-                                    Log::error("Failed to create category '$categoryName' for item '{$row['name']}'");
-                                    continue 2; // Skip to the next row
-                                }
-                            }
-
+    
                             break;
                     }
                 }
-
+    
                 // Generate slug from name
                 $itemData['slug'] = Str::slug($itemData['name']);
-                }
-
-                // Generate slug from name
-                $itemData['slug'] = Str::slug($itemData['name']);
-
+    
                 // Insert into the database
                 Item::create($itemData);
             }
-
+    
             DB::commit();
-                // Insert into the database
-                Item::create($itemData);
-            }
-
-            DB::commit();
-
-            // Redirect back with a success message
-            return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error("Error processing CSV file: " . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
-        }
+    
             // Redirect back with a success message
             return redirect()->back()->with('status', 'CSV file uploaded and data saved to database.');
         } catch (\Exception $e) {
@@ -782,6 +699,7 @@ class PagesSettingController extends Controller
             return redirect()->back()->with('error', 'An error occurred while processing the CSV file.');
         }
     }
+
 
     public function ExportCsv()
     {
