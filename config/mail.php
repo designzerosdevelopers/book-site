@@ -73,7 +73,8 @@ return [
 
         'log' => [
             'transport' => 'log',
-            'channel' => env('MAIL_LOG_CHANNEL'),
+            'log_channel' => env('MAIL_LOG_CHANNEL', 'stack'),
+
         ],
 
         'array' => [
