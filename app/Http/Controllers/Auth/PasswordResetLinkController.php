@@ -71,7 +71,7 @@ class PasswordResetLinkController extends Controller
             return  redirect()->back()->with('status', __($status));
             Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('status',' Something went wrong'.$e);
+            return redirect()->back()->with('status',' Something went wrong');
         }
 
         
