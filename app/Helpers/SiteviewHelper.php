@@ -186,7 +186,6 @@ class SiteviewHelper
         'secret' => self::getsettings('AWS_SECRET_ACCESS_KEY'),
         'region' => self::getsettings('AWS_REGION'),
         'bucket' => self::getsettings('AWS_BUCKET'),
-        'url' => self::getsettings('AWS_URL'),
       ],
     ]);
 

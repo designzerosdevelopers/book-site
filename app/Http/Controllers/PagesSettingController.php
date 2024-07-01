@@ -244,9 +244,7 @@ class PagesSettingController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bookfile' => 'required|file|mimes:pdf|max:20000',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bookfile' => 'required|file|mimes:pdf|max:20000',
+            'bookfile' => 'required|file|mimes:pdf,jpg,png|max:20000',
             'category' => 'required|string',
             'description' => 'required|string',
 
@@ -313,8 +311,6 @@ class PagesSettingController extends Controller
             'price' => 'required|numeric',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
             'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
-            'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
 
@@ -331,18 +327,18 @@ class PagesSettingController extends Controller
         \App\Helpers\SiteviewHelper::s3awsAccess();
         // Check if a new image file is provided
         if ($request->hasFile('image')) {
-            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
+             \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
             $file = $request->file('image');
-            $path = $file->store('clientside/product-images', 's3');
+            $path = $file->store('clientside/product-images', 's3_custom');
             $item->image = $path;
             \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
 
         // Check if a new file is provided
         if ($request->hasFile('bookfile')) {
-            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
+             \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
             $file = $request->file('bookfile');
-            $path = $file->store('clientside/files', 's3');
+            $path = $file->store('clientside/files', 's3_custom');
             $item->file = $path;
             \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
@@ -366,11 +362,8 @@ class PagesSettingController extends Controller
         // Delete the purchase record
         $purchase->delete();
 
-        $path = 'clientside/product-images/' . $item->image;
-        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
-
-        $path = 'clientside/files/' . $item->file;
-        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
 
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
@@ -513,7 +506,6 @@ class PagesSettingController extends Controller
             // Find the category based on the provided ID and delete it
             $category = Categories::findOrFail($request->id);
             $category->delete();
-
 
             // Optionally, you can return a success message or redirect the user
             return redirect()->back()->with('success', 'Category deleted successfully');
@@ -847,10 +839,11 @@ class PagesSettingController extends Controller
         foreach ($updateData as $key => $value) {
             Settings::where('key', $key)->update(['value' => $value]);
         }
+        return redirect()->back()->with('message', 'Settings updated successfully');
+
     }
 
-   return redirect()->back()->with('message', 'Settings updated successfully');
-}
+
 
 
     public function generateCSV()
