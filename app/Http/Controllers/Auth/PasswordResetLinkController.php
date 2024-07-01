@@ -36,10 +36,6 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
     
-
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
         $token = Str::random(60);
         $hashedToken = bcrypt($token);
 
@@ -63,7 +59,7 @@ class PasswordResetLinkController extends Controller
                 'from' => ['address' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_ADDRESS'), 'name' => \App\Helpers\SiteviewHelper::getsettings('MAIL_FROM_NAME')],
                 'encryption' => \App\Helpers\SiteviewHelper::getsettings('MAIL_ENCRYPTION'), // Specify the encryption type (tls or ssl)
                 'username' => \App\Helpers\SiteviewHelper::getsettings('MAIL_USERNAME'), // Specify your SMTP username
-                'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_PASSWORD'), // Specify your SMTP password
+                'password' => \App\Helpers\SiteviewHelper::getsettings('MAIL_APP_PASSWORD'), // Specify your SMTP password
             ];
 
             config([
@@ -75,7 +71,7 @@ class PasswordResetLinkController extends Controller
             return  redirect()->back()->with('status', __($status));
             Session::flash('repurchases', 'Your purchase was successful! You can now download your book and check your email for further instructions.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('status',' Something went wrong');
+            return redirect()->back()->with('status',' Something went wrong'.$e);
         }
 
         
