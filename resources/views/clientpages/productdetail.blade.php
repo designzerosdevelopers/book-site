@@ -12,7 +12,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 product-detail-main-img img-wrap">
-                    <img src="{{asset('book_images/'.$item->image) }}" alt="Product Image" class="product-image">
+                    <img src="{{ App\Helpers\SiteviewHelper::generateS3Url($item->image) }}" alt="Product Image" class="product-image">
                 </div>
 
                 <div class="col-md-6">
@@ -27,9 +27,6 @@
                             {{App\Helpers\SiteviewHelper::style('productdetailsettings')['data']['product_button_name']}}
                         </button>
                     </a>
-                    
-                    
-                    
                 </div>
             </div>
         </div>

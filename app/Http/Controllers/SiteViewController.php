@@ -312,7 +312,7 @@ class SiteViewController extends Controller
                 $response .= '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">';
                 $response .= '<div class="product-item mt-5  pt-5">';
                 $response .= '<a style="text-decoration: none;" href="' . $item->slug . '">';
-                $response .= '<img src="' . asset('book_images/' . $item->image) . '" class="img-fluid product-thumbnail">';
+                $response .= '<img src="' . \App\Helpers\SiteviewHelper::generateS3Url($item->image) . '" class="img-fluid product-thumbnail">';
                 $response .= '<h3 class="item-title">' . e($item->name) . '</h3>';
                 $response .= '<div>';
                 $response .= '<strong class="item-price">$' . number_format($item->price, 2) . '</strong>';

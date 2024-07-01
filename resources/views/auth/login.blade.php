@@ -32,7 +32,7 @@
                   <div class="my-2 d-flex justify-content-between align-items-center">
                     <div class="form-check">
                       <label class="form-check-label text-muted">
-                        <input type="checkbox" class="form-check-input" id="remember_me" name="remember"> Remember me </label>
+                        {{-- <input type="checkbox" class="form-check-input" id="remember_me" name="remember"> Remember me </label> --}}
                     </div>
                     @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="auth-link text-black">Forgot password?</a>

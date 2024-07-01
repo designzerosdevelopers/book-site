@@ -20,41 +20,38 @@ return new class extends Migration
                 $table->string('key');
                 $table->string('display_name');
                 $table->string('value')->nullable(true);
+                $table->string('note')->nullable(true);
                 $table->timestamps();
             });
 
 
-
-            // Retrieve keys and display names
-            $stripeKeys = [
-                'STRIPE_KEY' => 'Stripe key',
-                'STRIPE_SECRET' => 'Stripe secret',
-                'PAYPAL_KEY' => 'Paypal key',
-                'PAYPAL_SECRET' => 'Paypal secret',
-                'MAIL_MAILER' => 'Mail mailer',
-                'MAIL_HOST' => 'Mail host',
-                'MAIL_PORT' => 'Mail port',
-                'MAIL_USERNAME' => 'Mail username',
-                'MAIL_PASSWORD' => 'Mail password',
-                'MAIL_ENCRYPTION' => 'Mail encryption',
-                'MAIL_FROM_ADDRESS' => 'Mail from address',
-                'MAIL_FROM_NAME' => 'Mail from name',
-                'AWS_ACCESS_KEY_ID' => 'AWS Access Key ID',
-                'AWS_SECRET_ACCESS_KEY' => 'AWS Secret Access Key',
-                'AWS_REGION' => 'AWS Region',
-                'AWS_BUCKET' => 'AWS Bucket',
-                'AWS_URL' => 'AWS URL'
+            $settings = [
+                'STRIPE_SECRET' => ['Stripe secret', 'Secret key used for Stripe API authentication'],
+                'PAYPAL_KEY' => ['Paypal key', 'API key used for PayPal payments'],
+                'PAYPAL_SECRET' => ['Paypal secret', 'Secret key used for PayPal API authentication'],
+                'MAIL_MAILER' => ['Mail mailer', 'Driver to be used for sending emails (e.g., smtp)'],
+                'MAIL_HOST' => ['Mail host', 'SMTP server host address (e.g., smtp.example.com)'],
+                'MAIL_PORT' => ['Mail port', '587 for TLS, 465 for SSL, 25 for standard SMTP without encryption'],
+                'MAIL_USERNAME' => ['Mail username', 'Username for authenticating with the mail server'],
+                'MAIL_APP_PASSWORD' => ['Mail app password', 'Password for authenticating with the mail server'],
+                'MAIL_ENCRYPTION' => ['Mail encryption', 'Encryption protocol to be used. Example: tls or ssl'],
+                'MAIL_FROM_ADDRESS' => ['Mail from address', 'Email address used as the "From" address in outgoing emails'],
+                'MAIL_FROM_NAME' => ['Mail from name', 'Name used as the "From" name in outgoing emails'],
+                'AWS_ACCESS_KEY_ID' => ['AWS Access Key ID', 'Access key ID for AWS services'],
+                'AWS_SECRET_ACCESS_KEY' => ['AWS Secret Access Key', 'Secret access key for AWS services'],
+                'AWS_REGION' => ['AWS Region', 'Region where your AWS resources are located (e.g., us-east-1)'],
+                'AWS_BUCKET' => ['AWS Bucket', 'Name of the AWS S3 bucket for storing files']
             ];
             
 
             // Create an array to hold the data for bulk insertion
             $data = [];
 
-            // Loop through the keys array
-            foreach ($stripeKeys as $key => $display) {
+            foreach ($settings as $key => $values) {
                 $data[] = [
                     'key' => $key,
-                    'display_name' => $display,
+                    'display_name' => $values[0], // Display name
+                    'note' => $values[1], // Note
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -63,13 +60,6 @@ return new class extends Migration
             // Insert records directly into the settings table
             DB::table('settings')->insert($data);
 
-            $valuekey = Settings::find(3);
-            $valuekey->value = 'AZpUqpvG8mms_t-YZiPnA6N0CR3ik8J8Wpl6eCSQIL70WtchCer8JWNIIs17u8exjG1Y1qES3twWsV7r';
-            $valuekey->save();
-
-            $valuesecret = Settings::find(4);
-            $valuesecret->value = 'EN3weUICqmd_XWb1oH2T_mj3tM9CtTofCVxVmefVt5UoqyXo4__q7jC7UmQgMcvrfJ63AAPvF-xHQnvP';
-            $valuesecret->save();
         }
     }
 
