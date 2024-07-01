@@ -855,9 +855,7 @@ class PagesSettingController extends Controller
     ];
 
     foreach ($updateData as $key => $value) {
-        if ($value !== null) { // Check if value is not null or empty
-            Settings::where('key', $key)->update(['value' => $value]);
-        }
+        Settings::where('key', $key)->update(['value' => $value]);
     }
 
    return redirect()->back()->with('message', 'Settings updated successfully');

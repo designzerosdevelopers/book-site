@@ -1,6 +1,6 @@
 @extends('layouts.admin-layout.guest')
 @section('content')
-<x-auth-session-status class="mb-4" :status="session('status')" />
+{{-- <x-auth-session-status class="mb-4" :status="session('status')" /> --}}
     <div class="container-scroller">
       <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="content-wrapper d-flex align-items-center auth">
@@ -10,6 +10,12 @@
                 <div class="brand-logo">
                   <img src="{{asset('admin/images/digital-store.jpg')}}" >
                 </div>
+                @if (session('status'))
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ session('status') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <h4>Hello! let's get started</h4>
                 <h6 class="font-weight-light">Sign in to continue.</h6>
                 <form method="POST" action="{{ route('login') }}" class="pt-3">
