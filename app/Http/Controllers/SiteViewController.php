@@ -104,7 +104,7 @@ class SiteViewController extends Controller
         $stripeSettings = Settings::find($stripeIds)->pluck('value');
         $stripe = $stripeSettings->isNotEmpty() && !$stripeSettings->contains('');
 
-        $paypalIds = [5, 6];
+        $paypalIds = [2, 3];
         $paypalSettings = Settings::find($paypalIds)->pluck('value');
 
         $paypal = $paypalSettings->isNotEmpty() && !$paypalSettings->contains('');

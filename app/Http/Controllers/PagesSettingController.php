@@ -847,9 +847,11 @@ class PagesSettingController extends Controller
         foreach ($updateData as $key => $value) {
             Settings::where('key', $key)->update(['value' => $value]);
         }
-    
-       return redirect()->back()->with(['message', 'Settings updated successfully']);
     }
+
+   return redirect()->back()->with('message', 'Settings updated successfully');
+}
+
 
     public function generateCSV()
 {

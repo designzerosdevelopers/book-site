@@ -40,6 +40,17 @@ Route::get('mail', function () {
 
 });
 
+
+Route::get('/test-email', function () {
+    Mail::raw('This is a test email', function ($message) {
+        $message->to('maqsoodmn03@gmail.com')
+                ->subject('Test Email');
+    });
+
+    return 'Email sent';
+});
+
+
 Route::middleware('check.database')->group(function () {
     // Your routes here
     Route::get('createTransaction', [StripeController::class, 'createTransaction'])->name('createTransaction');

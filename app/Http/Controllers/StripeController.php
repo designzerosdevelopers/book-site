@@ -38,6 +38,8 @@ class StripeController extends Controller
     public function paypalcharge(Request $request)
     {
 
+       
+
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
@@ -48,9 +50,13 @@ class StripeController extends Controller
             'amount' => 'required|numeric|min:0',
         ]);
 
+        
+
         if ($validator->fails()) {
             return $this->redirectBackToCheckoutWithError($validator);
         }
+
+       
         // Access the array
         $requestData = $request->all();
 
@@ -61,9 +67,12 @@ class StripeController extends Controller
         $clientId = SiteviewHelper::getsettings('PAYPAL_KEY');
         $clientSecret = SiteviewHelper::getsettings('PAYPAL_SECRET');
 
+       
         if (empty($clientId) || empty($clientSecret)) {
             return redirect()->back()->with('alert', 'Something went wrong with this payment system');
         }
+
+     
         $provider = new PayPalClient;
         $credentials = [
             'mode' => SiteviewHelper::getsettings('PAYPAL_MODE'),
@@ -82,6 +91,8 @@ class StripeController extends Controller
             ]
 
         ];
+
+        
 
         $provider->setApiCredentials($credentials);
 
