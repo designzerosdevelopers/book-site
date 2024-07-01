@@ -826,7 +826,7 @@ class PagesSettingController extends Controller
             'MAIL_HOST' => $request->MAIL_HOST,
             'MAIL_PORT' => $request->MAIL_PORT,
             'MAIL_USERNAME' => $request->MAIL_USERNAME,
-            'MAIL_APP_PASSWORD' => $request->MAIL_PASSWORD,
+            'MAIL_APP_PASSWORD' => $request->MAIL_APP_PASSWORD,
             'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
             'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
             'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
