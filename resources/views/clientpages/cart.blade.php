@@ -53,7 +53,7 @@
 
                                         <tr>
                                             <td class="product-thumbnail">
-                                                <img src="{{ asset('book_images/' . $item['item_image']) }}" alt="Image"
+                                                <img src="{{ App\Helpers\SiteviewHelper::generateS3Url($item['item_image']) }}" alt="Image"
                                                     class="img-fluid" width="25%">
                                             </td>
                                             <td class="product-name">

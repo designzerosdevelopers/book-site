@@ -22,7 +22,7 @@
                         </div>
                         @if(!empty($item->image))
                       
-                            <img src="{{asset('book_images/'.$item->image)}}" alt="Item image" style="max-width: 100px; max-height: 200px; margin-left: 15px;">
+                            <img src="{{ App\Helpers\SiteviewHelper::generateS3Url($item->image) }}" alt="Item image" style="max-width: 100px; max-height: 200px; margin-left: 15px;">
                         @endif
                     </div>
                     @if(session('success'))

@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\File;
 
 class PagesSettingController extends Controller
 {
     public function themeUpdate(Request $r)
     {
 
-        $css = \App\Helpers\SiteviewHelper::getS3FileContent('clientside/js-css-other/style.css');
+        $css = File::get('clientside/js-css-other/style.css');
 
         if ($r->page == 'home') {
 
@@ -85,7 +85,7 @@ class PagesSettingController extends Controller
 
             
         }
-        \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/style.css', $css);
+        File::put('clientside/js-css-other/style.css', $css);
 
         return  redirect()->back();
     }
@@ -94,9 +94,9 @@ class PagesSettingController extends Controller
     {
 
         if ($r->action == 'save_css') {
-            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.css', $r->css);
+            File::put('clientside/js-css-other/custom.css', $r->css);
         } elseif ($r->action == 'save_js') {
-            \App\Helpers\SiteviewHelper::updateS3File('clientside/js-css-other/custom.js', $r->js);
+            File::put('clientside/js-css-other/custom.js', $r->js);
         } else {
 
             // Validate input
@@ -120,22 +120,21 @@ class PagesSettingController extends Controller
             if ($r->hasFile('code_file')) {
                 $file = $r->file('code_file');
                 $fileName = $file->getClientOriginalName(); // Get the original file name
+                $destinationPath = 'clientside/js-css-other/';
 
-                // Store the file on S3
-                \App\Helpers\SiteviewHelper::s3awsAccess()->putFileAs('clientside/js-css-other/', $file, $fileName);
+                // // Store the file on S3
+                // \App\Helpers\SiteviewHelper::s3awsAccess()->putFileAs('clientside/js-css-other/', $file, $fileName);
 
-                // $file->move($destinationPath, $fileName);
-                // $link = $destinationPath . '/' . $fileName;
-                // $file->move($destinationPath, $fileName);
-                // $link = $destinationPath . '/' . $fileName;
+                $file->move($destinationPath, $fileName);
+                $link = $destinationPath . '/' . $fileName;
                 $file = 1;
             }
 
             CustomCode::create([
                 'for' => $r->for,
                 'file' => $file,
-                'type' => $r->type,
-                'link' => 'clientside/js-css-other/' . $fileName
+                'type' => $link,
+                'link' => $destinationPath.$fileName
             ]);
         }
 
@@ -149,17 +148,10 @@ class PagesSettingController extends Controller
 
         $filePath = $link->link;
 
-        if (\App\Helpers\SiteviewHelper::s3awsAccess()->exists($filePath)) {
+        if (file_exists($filePath)) {
             $pathInfo = pathinfo($filePath);
             $newFileName = $pathInfo['dirname'] . '/bks_' . $pathInfo['basename'];
-
-            // Copy the file to the new location with the new name
-            \App\Helpers\SiteviewHelper::s3awsAccess()->copy($filePath, $newFileName);
-
-            // Delete the original file
-            \App\Helpers\SiteviewHelper::s3awsAccess('clientside/js-css-other/style.css')->delete($filePath);
-
-            // Optionally delete the record from the database
+            rename($filePath, $newFileName);
             CustomCode::find($r->id)->delete();
         }
         return redirect()->back()->with('success', 'Deleted successfully.');
@@ -252,9 +244,7 @@ class PagesSettingController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bookfile' => 'required|file|mimes:pdf|max:20000',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bookfile' => 'required|file|mimes:pdf|max:20000',
+            'bookfile' => 'required|file|mimes:pdf,jpg,png|max:20000',
             'category' => 'required|string',
             'description' => 'required|string',
 
@@ -278,16 +268,16 @@ class PagesSettingController extends Controller
         $item->price = $validatedData['price'];
 
 
-
+        \App\Helpers\SiteviewHelper::s3awsAccess();
         // Move and get original file name for image
         $file = $request->file('image');
-        $path = $file->store('book_images', 's3');
+        $path = $file->store('clientside/product-images', 's3_custom');
         $item->image = $path;
         \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
 
         // Move and get original file name for bookfile
         $file = $request->file('bookfile');
-        $path = $file->store('book_files', 's3');
+        $path = $file->store('clientside/files', 's3_custom');
         $item->file = $path;
         \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
 
@@ -321,8 +311,6 @@ class PagesSettingController extends Controller
             'price' => 'required|numeric',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
             'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Max size is 2MB (2048 KB)
-            'bookfile' => 'file|mimes:pdf|max:10000', // Only PDF files allowed, max size is 10MB (10000 KB)
             'category' => 'required|string',
             'description' => 'required|string',
 
@@ -336,21 +324,21 @@ class PagesSettingController extends Controller
         $item->description = $request->description;
 
         // Check if a new image file is provided
-
+        \App\Helpers\SiteviewHelper::s3awsAccess();
         // Check if a new image file is provided
         if ($request->hasFile('image')) {
-            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
+             \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
             $file = $request->file('image');
-            $path = $file->store('book_images', 's3');
+            $path = $file->store('clientside/product-images', 's3_custom');
             $item->image = $path;
             \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
 
         // Check if a new file is provided
         if ($request->hasFile('bookfile')) {
-            \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
+             \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
             $file = $request->file('bookfile');
-            $path = $file->store('book_files', 's3');
+            $path = $file->store('clientside/files', 's3_custom');
             $item->file = $path;
             \App\Helpers\SiteviewHelper::s3awsAccess()->url($path);
         }
@@ -374,11 +362,8 @@ class PagesSettingController extends Controller
         // Delete the purchase record
         $purchase->delete();
 
-        $path = 'book_images/' . $item->image;
-        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
-
-        $path = 'book_files/' . $item->file;
-        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($path);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->image);
+        \App\Helpers\SiteviewHelper::s3awsAccess()->delete($item->file);
 
         return redirect()->route('indexitem')->with('error', 'Item deleted successfully.');
     }
@@ -521,7 +506,6 @@ class PagesSettingController extends Controller
             // Find the category based on the provided ID and delete it
             $category = Categories::findOrFail($request->id);
             $category->delete();
-
 
             // Optionally, you can return a success message or redirect the user
             return redirect()->back()->with('success', 'Category deleted successfully');
@@ -786,7 +770,7 @@ class PagesSettingController extends Controller
 
     public function settingsindex()
     {
-        $settings = Settings::get(["key", "value", "display_name"]);
+        $settings = Settings::get(["key", "value", "display_name","note"]);
 
         $stripeSettings = [];
         $paypalSettings = [];
@@ -807,7 +791,7 @@ class PagesSettingController extends Controller
                 case 'MAIL_HOST':
                 case 'MAIL_PORT':
                 case 'MAIL_USERNAME':
-                case 'MAIL_PASSWORD':
+                case 'MAIL_APP_PASSWORD':
                 case 'MAIL_ENCRYPTION':
                 case 'MAIL_FROM_ADDRESS':
                 case 'MAIL_FROM_NAME':
@@ -817,7 +801,6 @@ class PagesSettingController extends Controller
                 case 'AWS_SECRET_ACCESS_KEY':
                 case 'AWS_REGION':
                 case 'AWS_BUCKET':
-                case 'AWS_URL':
                     $awsSettings[] = $setting;
                     break;
             }
@@ -833,33 +816,34 @@ class PagesSettingController extends Controller
 
 
     public function updateSettings(Request $request)
-{
-    $updateData = [
-        'STRIPE_SECRET' => $request->input('STRIPE_SECRET'),
-        'PAYPAL_MODE' => $request->input('PAYPAL_MODE'),
-        'PAYPAL_KEY' => $request->input('PAYPAL_KEY'),
-        'PAYPAL_SECRET' => $request->input('PAYPAL_SECRET'),
-        'MAIL_MAILER' => $request->input('MAIL_MAILER'),
-        'MAIL_HOST' => $request->input('MAIL_HOST'),
-        'MAIL_PORT' => $request->input('MAIL_PORT'),
-        'MAIL_USERNAME' => $request->input('MAIL_USERNAME'),
-        'MAIL_PASSWORD' => $request->input('MAIL_PASSWORD'),
-        'MAIL_ENCRYPTION' => $request->input('MAIL_ENCRYPTION'),
-        'MAIL_FROM_ADDRESS' => $request->input('MAIL_FROM_ADDRESS'),
-        'MAIL_FROM_NAME' => $request->input('MAIL_FROM_NAME'),
-        'AWS_ACCESS_KEY_ID' => $request->input('AWS_ACCESS_KEY_ID'),
-        'AWS_SECRET_ACCESS_KEY' => $request->input('AWS_SECRET_ACCESS_KEY'),
-        'AWS_REGION' => $request->input('AWS_REGION'),
-        'AWS_BUCKET' => $request->input('AWS_BUCKET'),
-        'AWS_URL' => $request->input('AWS_URL'),
-    ];
+    {
+        $updateData = [
+            'STRIPE_SECRET' => $request->STRIPE_SECRET,
+            'PAYPAL_MODE' => $request->PAYPAL_MODE,
+            'PAYPAL_KEY' => $request->PAYPAL_KEY,
+            'PAYPAL_SECRET' => $request->PAYPAL_SECRET,
+            'MAIL_MAILER' => $request->MAIL_MAILER,
+            'MAIL_HOST' => $request->MAIL_HOST,
+            'MAIL_PORT' => $request->MAIL_PORT,
+            'MAIL_USERNAME' => $request->MAIL_USERNAME,
+            'MAIL_APP_PASSWORD' => $request->MAIL_APP_PASSWORD,
+            'MAIL_ENCRYPTION' => $request->MAIL_ENCRYPTION,
+            'MAIL_FROM_ADDRESS' => $request->MAIL_FROM_ADDRESS,
+            'MAIL_FROM_NAME' => $request->MAIL_FROM_NAME,
+            'AWS_ACCESS_KEY_ID' => $request->AWS_ACCESS_KEY_ID,
+            'AWS_SECRET_ACCESS_KEY' => $request->AWS_SECRET_ACCESS_KEY,
+            'AWS_REGION' => $request->AWS_REGION,
+            'AWS_BUCKET' => $request->AWS_BUCKET,
+        ];
+    
+        foreach ($updateData as $key => $value) {
+            Settings::where('key', $key)->update(['value' => $value]);
+        }
+        return redirect()->back()->with('message', 'Settings updated successfully');
 
-    foreach ($updateData as $key => $value) {
-        Settings::where('key', $key)->update(['value' => $value]);
     }
 
-   return redirect()->back()->with('message', 'Settings updated successfully');
-}
+
 
 
     public function generateCSV()

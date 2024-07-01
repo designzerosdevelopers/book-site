@@ -44,7 +44,7 @@
                     @if(!empty($items))
                     @foreach($items as $item)
                     <tr>
-                      <td><img src="{{asset('book_images/'.$item->image)}}" alt="image" /></td>
+                      <td><img src="{{ App\Helpers\SiteviewHelper::generateS3Url($item->image) }}" alt="image" /></td>
                       <td>{{$item->name}} </td>
                       <td>{{$item->slug}} </td>
                       <td>{{$item->price}} </td>
@@ -56,7 +56,7 @@
                           </button>
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               <!-- Dropdown Items -->
-                              <a class="dropdown-item" href="#">View</a>
+                              {{-- <a class="dropdown-item" href="#">View</a> --}}
                               <a class="dropdown-item" href="{{ route('edititem',['id'=>$item->id]) }}">Edit</a>
                               <form action="{{ route('deleteitem',['id'=>$item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                   @csrf
